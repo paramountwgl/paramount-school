@@ -19,7 +19,6 @@
 
         .profile-card { 
             max-width: 800px; 
-            /* Pushes the box down to make room for the title */
             margin: 80px auto 40px; 
             background: white; 
             padding: 30px; 
@@ -78,7 +77,7 @@
     <div style="text-align: center;">
         <img src="Shaik Tauseef Ali.png.jpeg" alt="Student Photo" class="student-photo">
         <h2 id="studentName" style="margin: 10px 0 5px;">Student Name</h2>
-        <span class="status-badge">Search to View Status</span>
+        <span class="status-badge" id="statusBadge">Search to View Status</span>
     </div>
 
     <div class="info-grid">
@@ -99,9 +98,9 @@
             <span id="RollNumber">---</span>
         </div>
         <div class="info-item">
-    <label>Parent Phone Number</label>
-    <span id="PhoneNumber">---</span>
-</div>
+            <label>Parent Phone Number</label>
+            <span id="PhoneNumber">---</span>
+        </div>
     </div>
     
     <div style="margin-top: 30px; text-align: center;">
@@ -116,10 +115,11 @@ const studentData = {
     "2203A51618": {
         name: "Shaik Tauseef Ali",
         class: "10th Grade - A",
-        father: "Mr. Shaik Ali",
+        father: "Mr. Shaik Ahmad",
         attendance: "95%",
         roll: "2203A51618",
-        phonenumber:"9550791538"
+        phonenumber: "9550791538",
+        status: "Active Student"
     },
     "2203A51611": {
         name: "Ayaan Khan",
@@ -127,7 +127,8 @@ const studentData = {
         father: "Mr. Mohammad Khan",
         attendance: "92%",
         roll: "2203A51611",
-        phonenumber:"8341039583"
+        phonenumber: "8341039583",
+        status: "Active Student"
     }
 };
 
@@ -142,6 +143,7 @@ function searchStudent() {
         document.getElementById('attendanceRate').innerText = student.attendance;
         document.getElementById('RollNumber').innerText = student.roll;
         document.getElementById('PhoneNumber').innerText = student.phonenumber;
+        document.getElementById('statusBadge').innerText = student.status;
     } else {
         alert("Roll Number not found. Please try again.");
     }

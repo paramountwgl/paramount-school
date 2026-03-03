@@ -274,15 +274,42 @@ mybutton.onclick = function() {
 };
 </script> 
  <div class="floating-video-box">
-    <video id="cornerVideo" controls autoplay muted loop playsinline poster="logo.png">
-        <source src="school-intro.mp4.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <iframe id="cornerYouTube" 
+            src="https://www.youtube.com/embed/rZo2y98KuAo?autoplay=1&mute=1&loop=1&playlist=YOUR_VIDEO_ID" 
+            frameborder="0" 
+            allow="autoplay; encrypted-media" 
+            allowfullscreen 
+            style="width: 100%; height: 150px; border-radius: 6px;">
+    </iframe>
     <button onclick="this.parentElement.style.display='none'" class="close-vid-btn">×</button>
 </div>
 
 <style>
 .floating-video-box {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    width: 260px;
+    background: #006633;
+    padding: 4px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    z-index: 9996;
+}
+.close-vid-btn {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: #ffd700;
+    color: #003366;
+    border: 2px solid #006633;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+}
+</style>.floating-video-box {
     position: fixed;
     bottom: 25px;
     left: 25px; /* Positions frame at bottom-left */
@@ -330,6 +357,7 @@ mybutton.onclick = function() {
 </style>
 </body>
 </html>
+
 
 
 

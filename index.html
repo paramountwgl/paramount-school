@@ -272,9 +272,65 @@ function scrollFunction() {
 mybutton.onclick = function() {
   window.scrollTo({top: 0, behavior: 'smooth'});
 };
-</script>    
+</script> 
+    <div class="floating-video-box">
+    <video id="cornerVideo" controls poster="logo.png" muted autoplay loop>
+        <source src="school-intro.mp4(2).mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <button onclick="this.parentElement.style.display='none'" class="close-vid-btn">×</button>
+</div>
+
+<style>
+.floating-video-box {
+    position: fixed;
+    bottom: 25px;
+    left: 25px; /* Positions frame at bottom-left */
+    width: 260px; /* Small attractive frame size */
+    background: #006633; /* Forest Green border */
+    padding: 4px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    z-index: 9996; /* Keeps it visible but behind WhatsApp button */
+}
+
+.floating-video-box video {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    display: block;
+}
+
+.close-vid-btn {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: #ffd700; /* Gold color */
+    color: #003366;
+    border: 2px solid #006633;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile size adjustment */
+@media (max-width: 600px) {
+    .floating-video-box {
+        width: 160px;
+        bottom: 90px; /* Moves it up to avoid overlapping mobile nav */
+        left: 10px;
+    }
+}
+</style>
 </body>
 </html>
+
 
 
 

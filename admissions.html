@@ -28,11 +28,12 @@
     border-radius: 8px; 
     margin-bottom: 15px; 
     border-left: 5px solid #228B22; 
-    width: 100%; 
-    max-width: 700px; /* Keeps steps from getting too wide on desktop */
+    width: 100%; /* Important: takes full width of the container */
+    max-width: 700px; /* Stays neat on desktop */
     margin-left: auto; 
-    margin-right: auto; /* Centers the step box itself */
-    text-align: left; /* Keeps the text easy to read */
+    margin-right: auto; 
+    text-align: left; 
+    box-sizing: border-box; /* Prevents padding from breaking the width */
 }
 
 /* MOBILE FIX: Adjusts the header on small screens */
@@ -85,30 +86,33 @@
         </div>
 </div>
     
-   <div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 20px;">
+  <div class="container" style="padding: 10px; width: 95%; margin: auto;">
+    <h2 style="text-align: center; color: #228B22;">4 Simple Steps to Join</h2>
     
-    <div style="width: 100%; max-width: 700px; background: #f9f9f9; padding: 20px; border-left: 5px solid #228B22; margin-bottom: 15px; border-radius: 8px; text-align: left;">
-        <strong>Step 1: Inquiry</strong><br>
-        Visit the school campus or click the WhatsApp button to speak with our admission counselor.
-    </div>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        
+        <div class="step-box">
+            <strong style="color: #228B22;">Step 1: Inquiry</strong><br>
+            Visit the school campus or click the WhatsApp button to speak with our admission counselor.
+        </div>
 
-    <div style="width: 100%; max-width: 700px; background: #f9f9f9; padding: 20px; border-left: 5px solid #228B22; margin-bottom: 15px; border-radius: 8px; text-align: left;">
-        <strong>Step 2: Registration</strong><br>
-        Collect the admission form from the school office between 9:00 AM and 4:00 PM.
-    </div>
+        <div class="step-box">
+            <strong style="color: #228B22;">Step 2: Registration</strong><br>
+            Collect the admission form from the school office between 9:00 AM and 4:00 PM.
+        </div>
 
-    <div style="width: 100%; max-width: 700px; background: #f9f9f9; padding: 20px; border-left: 5px solid #228B22; margin-bottom: 15px; border-radius: 8px; text-align: left;">
-        <strong>Step 3: Interaction</strong><br>
-        A short interaction with the student and parents to understand the child's needs.
-    </div>
+        <div class="step-box">
+            <strong style="color: #228B22;">Step 3: Interaction</strong><br>
+            A short interaction with the student and parents to understand the child's needs.
+        </div>
 
-    <div style="width: 100%; max-width: 700px; background: #f9f9f9; padding: 20px; border-left: 5px solid #228B22; margin-bottom: 15px; border-radius: 8px; text-align: left;">
-        <strong>Step 4: Admission Confirmed</strong><br>
-        Submission of documents and fee payment to secure the seat.
-    </div>
+        <div class="step-box">
+            <strong style="color: #228B22;">Step 4: Admission Confirmed</strong><br>
+            Submission of documents and fee payment to secure the seat.
+        </div>
 
+    </div>
 </div>
-
    <div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 40px; margin-bottom: 50px;">
     
     <h2 style="color: #228B22; border-bottom: 3px solid #ffcc00; display: inline-block; padding-bottom: 5px; margin-bottom: 25px;">

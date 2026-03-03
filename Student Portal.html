@@ -5,39 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Profile | Paramount School</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
     <style>
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f4f4; }
-        .profile-header { background: #228B22; color: white; padding: 40px 20px; text-align: center; }
-       </div> 
+        
+        .profile-header { 
+            background: #228B22; 
+            color: white; 
+            padding: 60px 20px; 
+            text-align: center; 
+            position: relative; 
+        }
 
-<div style="text-align: center; margin-top: 20px; margin-bottom: -40px;">
-    <h1 style="color: #228B22; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; font-family: sans-serif;">
-        Student Portal
-    </h1>
-</div>
-<div class="profile-card">
-      .profile-card { 
-    max-width: 800px; 
-    /* CHANGE this line from margin: -50px to margin: 80px */
-    margin: 80px auto 40px; 
-    background: white; 
-    padding: 30px; 
-    border-radius: 15px; 
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-    position: relative;
-}
+        .profile-card { 
+            max-width: 800px; 
+            /* Pushes the box down to make room for the title */
+            margin: 80px auto 40px; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            position: relative;
+        }
+
         .student-photo { 
             width: 120px; height: 120px; border-radius: 50%; border: 5px solid white; 
             margin-top: -90px; background: #eee; object-fit: cover;
         }
+
         .info-grid { 
             display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
             gap: 20px; margin-top: 30px; text-align: left; 
         }
+
         .info-item { padding: 10px; border-bottom: 1px solid #eee; }
         .info-item label { font-size: 12px; color: #888; display: block; text-transform: uppercase; }
         .info-item span { font-weight: bold; color: #333; }
+        
         .status-badge { 
             padding: 5px 15px; border-radius: 20px; font-size: 12px; 
             background: #e8f5e9; color: #2e7d32; font-weight: bold; 
@@ -46,8 +50,7 @@
 </head>
 <body>
 
-<div class="profile-header" style="background: #228B22; padding: 60px 20px; text-align: center; position: relative; color: white;">
-    
+<div class="profile-header">
     <div style="position: absolute; top: 20px; left: 20px; text-align: left;">
         <h1 style="margin: 0; font-size: 22px; text-transform: uppercase; letter-spacing: 1px;">Paramount</h1>
         <p style="margin: 0; font-size: 10px; font-weight: bold; opacity: 0.9;">ENGLISH MEDIUM SCHOOL</p>
@@ -63,18 +66,19 @@
     </div>
 
     <div style="position: absolute; top: 15px; right: 20px;">
-        <img src="logo.png" alt="Logo" style="height: 70px; width: auto; filter: ">
+        <img src="logo.png" alt="Logo" style="height: 70px; width: auto; filter: brightness(0) invert(1);">
     </div>
 </div>
-    <h1>Student Portal</h1>
-</div>
+
+<h1 style="text-align: center; color: #228B22; margin-top: 30px; text-transform: uppercase; letter-spacing: 2px;">
+    Student Portal
+</h1>
 
 <div class="profile-card">
     <div style="text-align: center;">
         <img src="Shaik Tauseef Ali.png.jpeg" alt="Student Photo" class="student-photo">
-        
         <h2 id="studentName" style="margin: 10px 0 5px;">Student Name</h2>
-        <span class="status-badge">Active Student</span>
+        <span class="status-badge">Search to View Status</span>
     </div>
 
     <div class="info-grid">
@@ -82,59 +86,55 @@
             <label>Class / Section</label>
             <span id="studentClass">---</span>
         </div>
-        
         <div class="info-item">
             <label>Father's Name</label>
             <span id="fatherName">---</span>
         </div>
-        
         <div class="info-item">
             <label>Attendance</label>
             <span id="attendanceRate">---</span>
         </div>
-        
         <div class="info-item">
             <label>Roll Number</label>
             <span id="RollNumber">---</span>
         </div>
     </div>
-</div>
-   
+    
     <div style="margin-top: 30px; text-align: center;">
         <a href="index.html" style="text-decoration: none; color: #228B22; font-weight: bold;">
             <i class="fas fa-arrow-left"></i> Back to Home
         </a>
     </div>
 </div>
+
 <script>
-// This is your "Database" of students
 const studentData = {
     "2203A51618": {
         name: "Shaik Tauseef Ali",
         class: "10th Grade - A",
-        father: "Mr. Shaik Ali",
+        father: "Mr. Shaik Ahmad",
         attendance: "95%",
-        status: "Active"
+        roll: "2203A51618"
     },
     "2203A51611": {
         name: "Ayaan Khan",
         class: "9th Grade - B",
         father: "Mr. Mohammad Khan",
         attendance: "92%",
-        status: "Active"
+        roll: "2203A51611"
     }
 };
-    function searchStudent() {
-    const input = document.getElementById('rollNumberInput').value.toUpperCase();
+
+function searchStudent() {
+    const input = document.getElementById('rollNumberInput').value.trim();
     const student = studentData[input];
 
     if (student) {
-        // Update the page with the found student's info
         document.getElementById('studentName').innerText = student.name;
         document.getElementById('studentClass').innerText = student.class;
         document.getElementById('fatherName').innerText = student.father;
         document.getElementById('attendanceRate').innerText = student.attendance;
-        document.getElementById('RollNumber').innerText = student.RollNumber;
+        document.getElementById('RollNumber').innerText = student.roll;
     } else {
         alert("Roll Number not found. Please try again.");
     }

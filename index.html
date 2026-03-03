@@ -22,6 +22,42 @@
   box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
 }      
     </style>
+    <style>
+    #schoolIntroBox {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;      /* Positioned on the left to balance the right-side buttons */
+    width: 260px;    /* A good size for desktop and mobile */
+    height: 150px;
+    z-index: 1000;   /* Keeps it on top of other content */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    border: 2px solid #004a99; /* Matches your school blue */
+    background: #fff;
+    transition: 0.4s ease;
+}
+
+#schoolIntroBox:hover {
+    transform: scale(1.08); /* Gently expands when a parent hovers over it */
+}
+
+#videoFrame {
+    width: 100%;
+    height: 100%;
+}
+
+.video-header {
+    background: #004a99;
+    color: white;
+    font-size: 11px;
+    text-align: center;
+    padding: 3px 0;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+        </style>
 
     <style>
       
@@ -300,10 +336,20 @@
     }
     </script>
 
+<div id="schoolIntroBox">
+    <div class="video-header">Explore Paramount</div>
+    <iframe 
+        id="videoFrame"
+        src="https://www.youtube.com/embed/rZo2y98KuAo?rel=0" 
+        title="School Introduction" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+    </iframe>
+</div>
 </body>
 </html>
-</body>
-</html>
+
 
 
 

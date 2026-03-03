@@ -5,92 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admissions 2026-27 | Paramount English Medium School</title>
     <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;700&display=swap" rel="stylesheet">
-     <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png">
     <style>
-        body { font-family: sans-serif; margin: 0; color: #333; line-height: 1.6; }
-        .header-bg { background: #006633; color: white; padding: 60px 5%; text-align: center; font-family: 'Zilla Slab', serif; }
-        /* This centers your main white box on desktop and mobile */
-.container { 
-    max-width: 900px; 
-    margin: 20px auto; /* Centering with auto left/right */
-    background: white; 
-    padding: 30px; 
-    border-radius: 15px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-    box-sizing: border-box;
-    width: 95%; /* Ensures it doesn't touch the edges on mobile */
-}
+        body { font-family: sans-serif; margin: 0; color: #333; line-height: 1.6; background-color: #f4f4f4; }
+        
+        /* Centering main white box */
+        .container { 
+            max-width: 900px; 
+            margin: 20px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            box-sizing: border-box;
+            width: 95%; 
+        }
 
-/* This styles the individual steps to be centered containers with left-aligned text */
-.step-box { 
-    background: #f4f4f4; 
-    padding: 20px; 
-    border-radius: 8px; 
-    margin-bottom: 15px; 
-    border-left: 5px solid #228B22; 
-    width: 100%; /* Important: takes full width of the container */
-    max-width: 700px; /* Stays neat on desktop */
-    margin-left: auto; 
-    margin-right: auto; 
-    text-align: left; 
-    box-sizing: border-box; /* Prevents padding from breaking the width */
-}
+        /* Step boxes styling */
+        .step-box { 
+            background: #f4f4f4; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            border-left: 5px solid #228B22; 
+            width: 100%; 
+            max-width: 700px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            text-align: left; 
+            box-sizing: border-box; 
+        }
 
-/* MOBILE FIX: Adjusts the header on small screens */
-@media screen and (max-width: 768px) {
-    .admission-header-green div {
-        flex-direction: column !important; /* Stacks logo and text vertically */
-        text-align: center !important;
-    }
-    .admission-header-green div div {
-        border-right: none !important;
-        border-left: none !important;
-        padding: 10px 0 !important;
-    }
-}
-        /* This ensures the header content scales down on very small screens */
-@media screen and (max-width: 480px) {
-    .admission-header-green h1, .admission-header-green h2 {
-        font-size: 14px !important;
-    }
-    .admission-header-green p {
-        font-size: 7px !important;
-    }
-    .admission-header-green img {
-        height: 40px !important;
-    }
-}
+        .btn-back {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #228B22;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* Responsive Fixes */
+        @media screen and (max-width: 768px) {
+            .header-content {
+                flex-direction: column !important;
+                text-align: center !important;
+            }
+        }
     </style>
 </head>
 <body>
+
 <div style="background-color: #228B22; padding: 40px 20px; color: white; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
     
-    <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; width: 100%;">
+    <a href="index.html" style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; width: 100%; text-decoration: none; color: white; cursor: pointer;">
         <img src="logo.png" alt="Paramount logo" style="height: 80px; width: auto; display: block;">
         <div style="text-align: left;">
             <h1 style="margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 1px;">PARAMOUNT</h1>
             <p style="margin: 0; font-size: 12px; font-weight: bold; letter-spacing: 1px;">ENGLISH MEDIUM SCHOOL</p>
         </div>
-    </div>
+    </a>
 
     <div style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 20px; max-width: 800px; margin: 0 auto;">
         <h2 style="margin: 0; font-size: 32px; text-transform: uppercase;">Admission Process 2026-27</h2>
         <p style="margin: 10px 0 0; font-size: 16px; opacity: 0.9;">Join the Paramount Family and Shape Your Child's Future</p>
     </div>
-
 </div>
 
-<div class="steps-container" style="padding: 50px 20px; max-width: 900px; margin: auto;">
-    <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-        <h2 style="color: #228B22; border-bottom: 3px solid #ffcc00; display: inline-block; padding-bottom: 5px;">4 Simple Steps to Join The Parmount Family</h2>
-        </div>
-</div>
-    
-  <div class="container" style="padding: 10px; width: 95%; margin: auto;">
-    <h2 style="text-align: center; color: #228B22;">4 Simple Steps to Join</h2>
+<div class="container">
+    <h2 style="text-align: center; color: #228B22; border-bottom: 3px solid #ffcc00; display: block; padding-bottom: 10px; margin-bottom: 30px;">4 Simple Steps to Join</h2>
     
     <div style="display: flex; flex-direction: column; align-items: center;">
-        
         <div class="step-box">
             <strong style="color: #228B22;">Step 1: Inquiry</strong><br>
             Visit the school campus or click the WhatsApp button to speak with our admission counselor.
@@ -110,14 +97,13 @@
             <strong style="color: #228B22;">Step 4: Admission Confirmed</strong><br>
             Submission of documents and fee payment to secure the seat.
         </div>
-
     </div>
 </div>
-  <div class="container" style="padding: 10px; width: 95%; margin: auto; margin-top: 30px;">
+
+<div class="container" style="margin-top: 30px;">
     <h2 style="text-align: center; color: #228B22; margin-bottom: 20px;">Required Documents</h2>
     
     <div style="display: flex; flex-direction: column; align-items: center;">
-        
         <div class="step-box" style="border-left: 5px solid #ffcc00; background: #fffcf0;">
             <ul style="list-style: none; padding: 0; margin: 0; line-height: 1.8;">
                 <li style="margin-bottom: 10px;">
@@ -138,12 +124,11 @@
                 </li>
             </ul>
         </div>
-
     </div>
 </div>
-    <center>
-        <a href="index.html" class="btn-apply">← Back to Home Page</a>
-    </center>
+
+<div style="text-align: center; padding-bottom: 40px;">
+    <a href="index.html" class="btn-back">← Back to Home Page</a>
 </div>
 
 </body>

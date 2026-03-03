@@ -47,22 +47,36 @@
         padding: 10px 0 !important;
     }
 }
+        /* This ensures the header content scales down on very small screens */
+@media screen and (max-width: 480px) {
+    .admission-header-green h1, .admission-header-green h2 {
+        font-size: 14px !important;
+    }
+    .admission-header-green p {
+        font-size: 7px !important;
+    }
+    .admission-header-green img {
+        height: 40px !important;
+    }
+}
     </style>
 </head>
 <body>
 
-  <div class="admission-header-green" style="background-color: #228B22; padding: 40px 5%; color: white; width: 100%; box-sizing: border-box;">
-    <div style="display: flex; align-items: center; justify-content: center; gap: 30px; max-width: 1200px; margin: auto;">
-       <img src="./logo.png" alt="Paramount Logo" style="height: 100px; width: auto; display: block;">
-        <div style="text-align: left; border-right: 2px solid rgba(255,255,255,0.3); padding-right: 30px;">
-            <h1 style="margin: 0; font-size: 32px; text-transform: uppercase;">PARAMOUNT</h1>
-            <p style="margin: 0; font-size: 14px; font-weight: bold;">ENGLISH MEDIUM SCHOOL</p>
-        </div>
-        <div style="text-align: left;">
-            <h2 style="margin: 0; font-size: 36px; text-transform: uppercase;">Admission Process</h2>
-            <p style="margin: 0; font-size: 18px; opacity: 0.9;">2026-27 | Shape Your Child's Future</p>
+ <div style="display: flex; align-items: center; justify-content: center; gap: 15px; max-width: 1200px; margin: auto; flex-wrap: nowrap; overflow: hidden;">
+    <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+        <img src="logo.png" alt="Paramount Logo" style="height: 60px; width: auto; display: block;">
+        <div style="text-align: left; border-right: 1.5px solid rgba(255,255,255,0.3); padding-right: 10px;">
+            <h1 style="margin: 0; font-size: 18px; text-transform: uppercase; white-space: nowrap;">PARAMOUNT</h1>
+            <p style="margin: 0; font-size: 8px; font-weight: bold; white-space: nowrap;">ENGLISH MEDIUM SCHOOL</p>
         </div>
     </div>
+
+    <div style="text-align: left; flex-shrink: 1;">
+        <h2 style="margin: 0; font-size: 18px; text-transform: uppercase; white-space: nowrap;">Admission Process</h2>
+        <p style="margin: 0; font-size: 10px; opacity: 0.9; white-space: nowrap;">2026-27 | Shape Your Child's Future</p>
+    </div>
+</div>
 </div>
 
 <div class="steps-container" style="padding: 50px 20px; max-width: 900px; margin: auto;">

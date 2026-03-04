@@ -23,15 +23,40 @@
             position: relative;
         }
 
+        /* UPDATED: Increased sizing for branding */
         .header-logo-box {
             display: flex; 
             align-items: center; 
-            gap: 12px; 
+            gap: 15px; /* Increased gap */
             text-decoration: none; 
             color: white; 
             cursor: pointer;
             padding: 10px;
             z-index: 10;
+        }
+
+        /* Increased Logo Size */
+        .header-logo-box img {
+            height: 75px; /* Increased from 55px */
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        /* Increased Text Size */
+        .header-logo-box h1 {
+            margin: 0;
+            font-size: 30px; /* Increased from 20px */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        .header-logo-box p {
+            margin: 0;
+            font-size: 11px; /* Slightly larger */
+            font-weight: bold;
+            opacity: 0.9;
+            letter-spacing: 1px;
         }
 
         .search-container {
@@ -44,7 +69,6 @@
             margin-top: 20px;
         }
 
-        /* FIXED: Added relative positioning so the Clear button stays INSIDE */
         .input-wrapper {
             position: relative; 
             flex: 1;
@@ -53,7 +77,7 @@
         }
 
         #rollNumberInput {
-            padding: 12px 45px 12px 20px; /* Right padding to make room for 'X' */
+            padding: 12px 45px 12px 20px;
             border-radius: 30px;
             border: none;
             width: 100%;
@@ -62,7 +86,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        /* FIXED: Absolute positioning relative to the wrapper */
         #clearBtn {
             position: absolute;
             right: 15px;
@@ -84,12 +107,11 @@
             white-space: nowrap;
         }
 
-        /* UPDATED: Increased margin-top for more gap from title */
         .profile-card { 
             max-width: 800px; 
             margin: 100px auto 40px; 
             background: white; 
-            padding: 60px 30px 30px; /* Increased top padding */
+            padding: 60px 30px 30px;
             border-radius: 15px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
             position: relative;
@@ -99,7 +121,7 @@
         .photo-container {
             width: 130px;
             height: 130px;
-            margin: -125px auto 15px; /* Pushed down slightly more */
+            margin: -125px auto 15px;
             border-radius: 50%;
             border: 5px solid white;
             background: #eef2f3;
@@ -134,30 +156,25 @@
             background: #e8f5e9; color: #2e7d32; font-weight: bold; 
         }
 
-        #attendanceAlert {
-            display: none; 
-            background-color: #fff3f3; 
-            color: #c62828; 
-            padding: 15px; 
-            border-radius: 10px; 
-            border-left: 5px solid #c62828; 
-            margin: 20px 0; 
-            text-align: left; 
-            font-size: 14px;
+        .print-only-header {
+            display: none;
+            text-align: center;
+            border-bottom: 2px solid #228B22;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         @media screen and (min-width: 769px) {
-            .header-logo-box { position: absolute; left: 20px; top: 20px; }
-            .profile-header { padding-top: 80px; }
+            .header-logo-box { position: absolute; left: 20px; top: 15px; }
+            .profile-header { padding-top: 90px; }
         }
 
         @media screen and (max-width: 768px) {
-            /* Mobile adjustment for gap */
             .profile-card { margin-top: 120px; padding: 60px 20px 20px; }
             .info-grid { grid-template-columns: 1fr; }
             .profile-header { padding: 20px 10px; }
-            .header-logo-box img { height: 50px; }
-            .header-logo-box h1 { font-size: 18px; }
+            .header-logo-box img { height: 60px; } /* Slightly smaller for mobile but still larger than before */
+            .header-logo-box h1 { font-size: 24px; }
         }
 
         @media print {
@@ -165,15 +182,20 @@
             .profile-header, button, .search-container, #clearBtn, .search-btn, a, .portal-title {
                 display: none !important;
             }
+            .print-only-header {
+                display: flex !important;
+                flex-direction: column;
+                align-items: center;
+            }
             .profile-card {
                 margin: 20px auto !important;
                 box-shadow: none !important;
-                border: 1px solid #000 !important;
-                width: 95% !important;
-                padding: 20px !important;
+                border: 1px solid #eee !important;
+                width: 98% !important;
+                padding: 40px 20px !important;
             }
             .photo-container {
-                margin: 10px auto !important;
+                margin: 20px auto !important;
                 border: 2px solid #228B22 !important;
             }
             .student-photo {
@@ -186,10 +208,10 @@
 
 <div class="profile-header">
     <a href="index.html" class="header-logo-box">
-        <img src="logo.png" alt="Logo" style="height: 55px; width: auto; filter:">
+        <img src="logo.png" alt="Logo">
         <div style="text-align: left;">
-            <h1 style="margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">Paramount</h1>
-            <p style="margin: 0; font-size: 9px; font-weight: bold; opacity: 0.9;">ENGLISH MEDIUM SCHOOL</p>
+            <h1>Paramount</h1>
+            <p>ENGLISH MEDIUM SCHOOL</p>
         </div>
     </a>
 
@@ -211,6 +233,12 @@
 </h1>
 
 <div class="profile-card">
+    <div class="print-only-header">
+        <img src="logo.png" alt="Logo" style="height: 100px; width: auto; margin-bottom: 10px;">
+        <h1 style="margin: 0; color: #228B22; text-transform: uppercase; font-size: 36px;">Paramount English Medium School</h1>
+        <p style="margin: 5px 0; font-weight: bold; color: #666;">Official Student Record - 2026-27</p>
+    </div>
+
     <div style="text-align: center;">
         <div class="photo-container">
             <img id="studentPhoto" src="logo.png" alt="Student Photo" class="student-photo">

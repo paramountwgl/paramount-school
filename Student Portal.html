@@ -97,7 +97,7 @@
             border-radius: 50%; 
             border: 5px solid white; 
             margin-top: -95px; 
-            background: #fff; /* White background looks better with avatars */
+            background: #eef2f3; 
             object-fit: cover;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
@@ -149,7 +149,7 @@
 
 <div class="profile-header">
     <a href="index.html" class="header-logo-box">
-        <img src="logo.png" alt="Logo" style="height: 55px; width: auto; filter: ">
+        <img src="logo.png" alt="Logo" style="height: 55px; width: auto; filter: brightness(0) invert(1);">
         <div style="text-align: left;">
             <h1 style="margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">Paramount</h1>
             <p style="margin: 0; font-size: 9px; font-weight: bold; opacity: 0.9;">ENGLISH MEDIUM SCHOOL</p>
@@ -175,7 +175,7 @@
 
 <div class="profile-card">
     <div style="text-align: center;">
-        <img id="studentPhoto" src="https://api.dicebear.com/7.x/adventurer/svg?seed=Paramount" alt="Student Avatar" class="student-photo">
+        <img id="studentPhoto" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Paramount&clothing=collarAndShirt" alt="Student Avatar" class="student-photo">
         <h2 id="studentName" style="margin: 10px 0 5px;">Student Name</h2>
         <span class="status-badge" id="statusBadge">Search to View Status</span>
     </div>
@@ -191,6 +191,13 @@
         <div class="info-item"><label>Attendance</label><span id="attendanceRate">---</span></div>
         <div class="info-item"><label>Roll Number</label><span id="RollNumber">---</span></div>
         <div class="info-item"><label>Parent Phone</label><span id="PhoneNumber">---</span></div>
+        <div class="info-item"><label>Gender</label><span id="studentGender">---</span></div>
+    </div>
+    
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="index.html" style="text-decoration: none; color: #228B22; font-weight: bold;">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
     </div>
 </div>
 
@@ -202,7 +209,8 @@ const studentData = {
         father: "Mr. Shaik Ahmad",
         attendance: "95%",
         roll: "2203A51618",
-        phonenumber: "9550791538"
+        phonenumber: "9550791538",
+        gender: "Boy"
     },
     "2203A51611": {
         name: "Shaik Minhaj Ali",
@@ -210,7 +218,17 @@ const studentData = {
         father: "Mr. Shaik Ahmad",
         attendance: "42%", 
         roll: "2203A51611",
-        phonenumber: "8341039583"
+        phonenumber: "8341039583",
+        gender: "Boy"
+    },
+    "2203A51612": {
+        name: "Sana Khan",
+        class: "8th Grade - C",
+        father: "Mr. Yusuf Khan",
+        attendance: "88%", 
+        roll: "2203A51612",
+        phonenumber: "9123456780",
+        gender: "Girl"
     }
 };
 
@@ -234,9 +252,16 @@ function searchStudent() {
     const photoImg = document.getElementById('studentPhoto');
 
     if (student) {
-        // GENERATE 3D AVATAR: Using the student's name to create a unique avatar
-        // Style used: 'adventurer' for a fun, 3D character look
-        photoImg.src = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(student.name)}`;
+        // PROFESSIONAL AVATAR LOGIC
+        // We use collarAndShirt for boys and a different top for girls to simulate a uniform
+        let avatarUrl = "";
+        if (student.gender === "Girl") {
+            avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(student.name)}&top=longHair,curvy,shaggy,bob&clothing=shirtVNeck&clothingColor=ffffff`;
+        } else {
+            avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(student.name)}&top=shortHair,sides,tapa&clothing=collarAndShirt&clothingColor=ffffff`;
+        }
+        
+        photoImg.src = avatarUrl;
         
         document.getElementById('studentName').innerText = student.name;
         document.getElementById('studentClass').innerText = student.class;
@@ -244,6 +269,7 @@ function searchStudent() {
         document.getElementById('attendanceRate').innerText = student.attendance;
         document.getElementById('RollNumber').innerText = student.roll;
         document.getElementById('PhoneNumber').innerText = student.phonenumber;
+        document.getElementById('studentGender').innerText = student.gender;
 
         const attendanceValue = parseInt(student.attendance);
         const statusBadge = document.getElementById('statusBadge');

@@ -91,15 +91,24 @@
             width: 92%;
         }
 
-        .student-photo { 
-            width: 130px; 
-            height: 130px; 
-            border-radius: 50%; 
-            border: 5px solid white; 
-            margin-top: -95px; 
-            background: #eef2f3; 
-            object-fit: cover;
+        .photo-container {
+            width: 130px;
+            height: 130px;
+            margin: -95px auto 10px;
+            border-radius: 50%;
+            border: 5px solid white;
+            background: #eef2f3;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .student-photo { 
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .info-grid { 
@@ -149,7 +158,7 @@
 
 <div class="profile-header">
     <a href="index.html" class="header-logo-box">
-        <img src="logo.png" alt="Logo" style="height: 55px; width: auto; filter: ">
+        <img src="logo.png" alt="Logo" style="height: 55px; width: auto; filter: brightness(0) invert(1);">
         <div style="text-align: left;">
             <h1 style="margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">Paramount</h1>
             <p style="margin: 0; font-size: 9px; font-weight: bold; opacity: 0.9;">ENGLISH MEDIUM SCHOOL</p>
@@ -175,7 +184,9 @@
 
 <div class="profile-card">
     <div style="text-align: center;">
-        <img id="studentPhoto" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Paramount&clothing=collarAndShirt" alt="Student Avatar" class="student-photo">
+        <div class="photo-container">
+            <img id="studentPhoto" src="logo.png" alt="Student Avatar" class="student-photo">
+        </div>
         <h2 id="studentName" style="margin: 10px 0 5px;">Student Name</h2>
         <span class="status-badge" id="statusBadge">Search to View Status</span>
     </div>
@@ -252,17 +263,21 @@ function searchStudent() {
     const photoImg = document.getElementById('studentPhoto');
 
     if (student) {
-        // PROFESSIONAL AVATAR LOGIC
-        // We use collarAndShirt for boys and a different top for girls to simulate a uniform
+        // FIXED URL: Simplified parameters to ensure loading
         let avatarUrl = "";
+        const seed = encodeURIComponent(student.name);
+        
         if (student.gender === "Girl") {
-            avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(student.name)}&top=longHair,curvy,shaggy,bob&clothing=shirtVNeck&clothingColor=ffffff`;
+            // Girls: Longer hair, professional shirt
+            avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&top=longHair,curvy,shaggy,bob&clothing=shirtVNeck&clothingColor=ffffff`;
         } else {
-            avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(student.name)}&top=shortHair,sides,tapa&clothing=collarAndShirt&clothingColor=ffffff`;
+            // Boys: Short hair, collar and shirt (Uniform)
+            avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&top=shortHair,sides,tapa&clothing=collarAndShirt&clothingColor=ffffff`;
         }
         
         photoImg.src = avatarUrl;
         
+        // Update basic info
         document.getElementById('studentName').innerText = student.name;
         document.getElementById('studentClass').innerText = student.class;
         document.getElementById('fatherName').innerText = student.father;

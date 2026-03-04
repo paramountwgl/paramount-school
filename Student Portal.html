@@ -7,11 +7,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/png" href="logo.png">
     <style>
-        /* Base reset to prevent horizontal scrolling */
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f4f4; overflow-x: hidden; width: 100%; }
         
-        /* Fixed Header: Uses flex-direction to stack items correctly on all screens */
         .profile-header { 
             background: #228B22; 
             color: white; 
@@ -25,7 +23,6 @@
             position: relative;
         }
 
-        /* Branding: Absolute on desktop, centered on mobile */
         .header-logo-box {
             display: flex; 
             align-items: center; 
@@ -36,7 +33,6 @@
             padding: 10px;
         }
 
-        /* Search Container: Centered and responsive */
         .search-container {
             display: flex;
             justify-content: center;
@@ -47,16 +43,36 @@
             margin-top: 20px;
         }
 
+        /* Container to hold input and X button */
+        .input-wrapper {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
         #rollNumberInput {
-            padding: 12px 20px;
+            padding: 12px 40px 12px 20px; /* Extra right padding for the X */
             border-radius: 30px;
             border: none;
-            flex: 1; /* Takes up available space */
-            min-width: 0; /* Prevents overflow */
+            width: 100%;
             font-size: 16px;
             outline: none;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
+
+        /* The Clear Button Styling */
+        #clearBtn {
+            position: absolute;
+            right: 15px;
+            color: #888;
+            cursor: pointer;
+            display: none; /* Hidden by default */
+            font-size: 18px;
+            transition: color 0.2s;
+        }
+        
+        #clearBtn:hover { color: #333; }
 
         .search-btn {
             padding: 12px 25px;
@@ -114,22 +130,14 @@
             font-size: 14px;
         }
 
-        /* DESKTOP SPECIFIC: Moves branding to corner only if screen is wide */
         @media screen and (min-width: 769px) {
-            .header-logo-box {
-                position: absolute;
-                left: 20px;
-                top: 20px;
-            }
-            .profile-header {
-                padding-top: 80px;
-            }
+            .header-logo-box { position: absolute; left: 20px; top: 20px; }
+            .profile-header { padding-top: 80px; }
         }
 
-        /* MOBILE SPECIFIC */
         @media screen and (max-width: 768px) {
             .profile-card { margin-top: 80px; padding: 20px; }
-            .info-grid { grid-template-columns: 1fr; } /* Stack details on phones */
+            .info-grid { grid-template-columns: 1fr; }
             .profile-header { padding: 20px 10px; }
             .header-logo-box img { height: 50px; }
             .header-logo-box h1 { font-size: 18px; }
@@ -140,7 +148,7 @@
 
 <div class="profile-header">
     <a href="index.html" class="header-logo-box">
-        <img src="logo.png" alt="Logo" style="height: 55px; width: auto; filter:">
+        <img src="logo.png" alt="Logo" style="height: 55px; width: auto; filter: brightness(0) invert(1);">
         <div style="text-align: left;">
             <h1 style="margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px;">Paramount</h1>
             <p style="margin: 0; font-size: 9px; font-weight: bold; opacity: 0.9;">ENGLISH MEDIUM SCHOOL</p>
@@ -148,7 +156,12 @@
     </a>
 
     <div class="search-container">
-        <input type="text" id="rollNumberInput" placeholder="Enter Roll Number">
+        <div class="input-wrapper">
+            <input type="text" id="rollNumberInput" placeholder="Enter Roll Number" oninput="toggleClearBtn()">
+            <span id="clearBtn" onclick="clearSearch()">
+                <i class="fas fa-times-circle"></i>
+            </span>
+        </div>
         <button onclick="searchStudent()" class="search-btn">
             <i class="fas fa-search"></i>
         </button>
@@ -205,6 +218,21 @@ const studentData = {
         phonenumber: "8341039583"
     }
 };
+
+// --- CLEAR BUTTON LOGIC ---
+function toggleClearBtn() {
+    const input = document.getElementById('rollNumberInput');
+    const clearBtn = document.getElementById('clearBtn');
+    // Show X if there is text, hide if empty
+    clearBtn.style.display = input.value.length > 0 ? "block" : "none";
+}
+
+function clearSearch() {
+    const input = document.getElementById('rollNumberInput');
+    input.value = "";
+    toggleClearBtn();
+    input.focus(); // Keep focus on the box
+}
 
 function searchStudent() {
     const input = document.getElementById('rollNumberInput').value.trim();

@@ -44,15 +44,16 @@
             margin-top: 20px;
         }
 
+        /* FIXED: Added relative positioning so the Clear button stays INSIDE */
         .input-wrapper {
-            position: relative;
-            flex: 1; tie
+            position: relative; 
+            flex: 1;
             display: flex;
             align-items: center;
         }
 
         #rollNumberInput {
-            padding: 12px 40px 12px 20px;
+            padding: 12px 45px 12px 20px; /* Right padding to make room for 'X' */
             border-radius: 30px;
             border: none;
             width: 100%;
@@ -61,6 +62,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
+        /* FIXED: Absolute positioning relative to the wrapper */
         #clearBtn {
             position: absolute;
             right: 15px;
@@ -68,6 +70,7 @@
             cursor: pointer;
             display: none;
             font-size: 18px;
+            z-index: 5;
         }
 
         .search-btn {
@@ -81,12 +84,12 @@
             white-space: nowrap;
         }
 
-        /* UPDATED: Added padding-top to create gap between title and photo */
+        /* UPDATED: Increased margin-top for more gap from title */
         .profile-card { 
             max-width: 800px; 
-            margin: 60px auto 40px; 
+            margin: 100px auto 40px; 
             background: white; 
-            padding: 50px 30px 30px; /* 50px top padding for the gap */
+            padding: 60px 30px 30px; /* Increased top padding */
             border-radius: 15px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
             position: relative;
@@ -96,7 +99,7 @@
         .photo-container {
             width: 130px;
             height: 130px;
-            margin: -115px auto 10px; /* Adjusted margin for the new card padding */
+            margin: -125px auto 15px; /* Pushed down slightly more */
             border-radius: 50%;
             border: 5px solid white;
             background: #eef2f3;
@@ -149,7 +152,8 @@
         }
 
         @media screen and (max-width: 768px) {
-            .profile-card { margin-top: 100px; padding: 50px 20px 20px; }
+            /* Mobile adjustment for gap */
+            .profile-card { margin-top: 120px; padding: 60px 20px 20px; }
             .info-grid { grid-template-columns: 1fr; }
             .profile-header { padding: 20px 10px; }
             .header-logo-box img { height: 50px; }
@@ -202,7 +206,7 @@
     </div>
 </div>
 
-<h1 class="portal-title" style="text-align: center; color: #228B22; margin: 15px 0 0; font-size: 32px; text-transform: uppercase; letter-spacing: 3px; font-weight: 800;">
+<h1 class="portal-title" style="text-align: center; color: #228B22; margin: 30px 0 0; font-size: 34px; text-transform: uppercase; letter-spacing: 3px; font-weight: 800;">
     Student Portal
 </h1>
 
@@ -229,7 +233,7 @@
         <div class="info-item"><label>Gender</label><span id="studentGender">---</span></div>
     </div>
     
-    <div style="margin-top: 30px; text-align: center; display: flex; flex-direction: column; gap: 15px; align-items: center;">
+    <div style="margin-top: 40px; text-align: center; display: flex; flex-direction: column; gap: 15px; align-items: center;">
         <button onclick="downloadReport()" style="padding: 12px 25px; border-radius: 30px; border: none; background-color: #228B22; color: white; font-weight: bold; cursor: pointer; width: 220px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
             <i class="fas fa-file-download"></i> Download Report (PDF)
         </button>

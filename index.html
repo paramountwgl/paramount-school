@@ -2,401 +2,274 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paramount English Medium School | Warangal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Paramount School | Digital Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/png" href="logo.png">
     <style>
-  #backToTopBtn {
-  display: none; 
-  position: fixed; 
-  bottom: 100px; /* Moves it above the WhatsApp button */
-  right: 30px; 
-  z-index: 99; 
-  background-color: #004a99; 
-  color: white;
-  border: none;
-  padding: 15px;
-  border-radius: 50%;
-  font-size: 20px; /* Makes the arrow larger and easier to see */
-  cursor: pointer;
-  box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
-}      
-    </style>
-    <style>
-#schoolIntroBox {
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    width: 280px;    /* Width of the player */
-    height: 158px;   /* Exact 16:9 height for 280px width */
-    z-index: 9999;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    border: 3px solid #228B22; /* Your Forest Green */
-    background: #000; /* Black background hides any tiny gaps */
-    transition: 0.4s ease;
-}
-
-#videoFrame {
-    width: 100%;
-    height: 100%;
-    display: block; /* Removes the tiny ghost gap at the bottom of the iframe */
-    border: none;
-}
-
-#closeVideo {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    z-index: 10001;
-    color: white;
-    cursor: pointer;
-    font-size: 22px;
-    font-weight: bold;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.9); /* Ensures 'X' is visible over video */
-}
-        </style>
-    
-
-    <style>
-      
-        /* General Styles */
-        :root { --primary: #003366; --secondary: #006633; --gold: #ffd700; --light: #f4f4f4; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; color: #333; overflow-x: hidden; }
-
-        /* Responsive Header */
-        header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 10px 5%; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-            position: sticky; top: 0; z-index: 1000; 
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f4f4; overflow-x: hidden; width: 100%; }
+        
+        /* NAVIGATION STYLES */
+        nav {
+            background: #1a6d1a;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-       .logo-container { 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
-    flex-shrink: 0; /* This prevents the logo from disappearing on small screens */
-}
-        .logo-img { height: 70px; width: auto; }
-        .school-name-box { display: flex; flex-direction: column; }
-        .name-main { font-size: 1.4rem; font-weight: 900; color: 800; color: #006633; line-height: 1; }
-        .name-sub { font-size: 0.8rem; font-weight: 700; color: 700; color: #006633;; letter-spacing: 1px; }
+        .nav-btn {
+            background: none;
+            border: 1px solid white;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .nav-btn.active {
+            background: #ffcc00;
+            color: #1a6d1a;
+            border-color: #ffcc00;
+        }
 
-        nav a { margin-left: 20px; text-decoration: none; color: var(--primary); font-weight: bold; font-size: 1rem; }
+        /* HEADER & CARD STYLES */
+        .profile-header { 
+            background: #228B22; color: white; padding: 20px; text-align: center; 
+            display: flex; flex-direction: column; align-items: center; min-height: 200px; position: relative;
+        }
+        .header-logo-box { display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; padding: 10px; z-index: 10; }
+        .header-logo-box img { height: 80px; width: auto; }
+        .header-logo-box h1 { margin: 0; font-size: 32px; text-transform: uppercase; font-weight: 800; }
 
-        /* Admissions Banner */
-        .marquee-banner { background: var(--gold); color: var(--primary); padding: 8px 0; font-weight: bold; border-bottom: 2px solid var(--secondary); }
+        .search-container { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; max-width: 500px; margin-top: 20px; }
+        .input-wrapper { position: relative; flex: 1; display: flex; align-items: center; }
+        #rollNumberInput { padding: 12px 45px 12px 20px; border-radius: 30px; border: none; width: 100%; font-size: 16px; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        #clearBtn { position: absolute; right: 15px; color: #888; cursor: pointer; display: none; font-size: 18px; }
+        .search-btn { padding: 12px 25px; border-radius: 30px; border: none; background-color: #ffcc00; color: #228B22; font-weight: bold; cursor: pointer; }
 
-        /* Sections */
-        .section-padding { padding: 60px 10%; }
-        .chairman-section { display: flex; align-items: center; gap: 50px; background: var(--light); }
-        .chairman-img { width: 350px; border-radius: 15px; border: 5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .chairman-text { flex: 1; }
+        .profile-card, .attendance-card { 
+            max-width: 800px; margin: 100px auto 40px; background: white; padding: 60px 30px 30px;
+            border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; width: 92%;
+        }
 
-        .admissions-section { background: white; text-align: center;  }
+        /* ATTENDANCE SPECIFIC */
+        .student-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #eee; }
+        .present-toggle { width: 22px; height: 22px; accent-color: #228B22; cursor: pointer; }
+        .summary-box { background: #e8f5e9; padding: 20px; border-radius: 10px; margin-top: 25px; border-left: 5px solid #228B22; text-align: center; }
+        .whatsapp-btn { background: #25D366; color: white; border: none; padding: 12px 25px; border-radius: 30px; cursor: pointer; font-weight: bold; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; }
 
-        /* Footer */
-        footer { background: var(--primary); color: white; padding: 40px 5%; text-align: center; }
-        .contact-links a { color: white; margin: 0 10px; text-decoration: none; font-weight: bold; display: inline-block; padding: 5px 0; }
-        .whatsapp { color: #25D366 !important; }
+        .photo-container { width: 140px; height: 140px; margin: -130px auto 15px; border-radius: 50%; border: 5px solid white; background: #eef2f3; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .student-photo { width: 100%; height: 100%; object-fit: cover; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 30px; }
+        .info-item { padding: 10px; border-bottom: 1px solid #eee; }
+        .info-item label { font-size: 11px; color: #888; display: block; text-transform: uppercase; }
+        .info-item span { font-weight: bold; color: #333; }
 
-        /* MOBILE VIEW ADAPTATION (Screens smaller than 768px) */
-        @media (max-width: 768px) {
-            header { flex-direction: column; padding: 15px; }
-            .logo-container { margin-bottom: 10px; text-align: center; }
-            .logo-img { height: 55px; }
-            .name-main { font-size: 1.1rem; }
-            .name-sub { font-size: 0.65rem; }
-            
-            nav { width: 100%; display: flex; justify-content: space-around; padding-top: 10px; border-top: 1px solid #eee; }
-            nav a { margin: 0; font-size: 0.85rem; }
+        #attendanceAlert { display: none; background: #fff3f3; color: #c62828; padding: 15px; border-radius: 10px; border-left: 5px solid #c62828; margin: 20px 0; }
+        .print-only { display: none; }
 
-            .section-padding { padding: 30px 5%; }
-            .chairman-section { flex-direction: column; text-align: center; }
-            .chairman-img { width: 90%; max-width: 280px; height: auto; }
-            
-            .map-frame { height: 300px !important; }
+        @media print {
+            nav, .search-container, button, .portal-title, a { display: none !important; }
+            .print-only { display: block !important; }
+            .profile-card { border: 1px solid #eee; box-shadow: none; margin: 20px auto; }
+            .photo-container { margin: 20px auto !important; }
+            .print-header { text-align: center; border-bottom: 2px solid #228B22; padding-bottom: 10px; }
+            .print-header h1 { white-space: nowrap; font-size: 24px; color: #228B22; }
+            .print-footer { display: flex !important; justify-content: space-between; margin-top: 50px; }
         }
     </style>
 </head>
 <body>
 
-<header id="home">
-    <div class="logo-container">
-        <img src="logo.png" alt="Logo" class="logo-img">
-        <div class="school-name-box">
-            <span class="name-main">PARAMOUNT</span>
-            <span class="name-sub">ENGLISH MEDIUM SCHOOL</span>
+<nav>
+    <button onclick="switchPortal('student')" id="navStudent" class="nav-btn active">
+        <i class="fas fa-user-graduate"></i> Student Portal
+    </button>
+    <button onclick="switchPortal('attendance')" id="navAttendance" class="nav-btn">
+        <i class="fas fa-clipboard-check"></i> Online Attendance
+    </button>
+</nav>
+
+<div id="studentSection">
+    <div class="profile-header">
+        <div class="header-logo-box">
+            <img src="logo.png" alt="Logo">
+            <div style="text-align: left;">
+                <h1>Paramount</h1>
+                <p style="margin:0; font-size:12px; font-weight:bold;">ENGLISH MEDIUM SCHOOL</p>
+            </div>
+        </div>
+        <div class="search-container">
+            <div class="input-wrapper">
+                <input type="text" id="rollNumberInput" placeholder="Enter Roll Number" oninput="toggleClearBtn()">
+                <span id="clearBtn" onclick="clearSearch()"><i class="fas fa-times-circle"></i></span>
+            </div>
+            <button onclick="searchStudent()" class="search-btn"><i class="fas fa-search"></i></button>
         </div>
     </div>
-    <nav>
-        <a href="Student Portal.html">Student Portal</a>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-       <a href="admissions.html">Admissions</a>
-        <a href="#contact">Contact</a>
-    </nav>
-</header>
 
-<div class="marquee-banner">
-    <marquee behavior="scroll" direction="left" scrollamount="6">
-        📢 ADMISSIONS OPEN FOR 2026-27 | Paramount English Medium School | Contact: +91 9000641355 | Your Way To Success!
-    </marquee>
+    <h1 class="portal-title" style="text-align: center; color: #228B22; margin: 40px 0 0; font-size: 38px; text-transform: uppercase; letter-spacing: 3px; font-weight: 800;">
+        Student Portal
+    </h1>
+
+    <div class="profile-card">
+        <div class="print-only print-header">
+            <img src="logo.png" style="height: 60px;">
+            <h1>Paramount English Medium School</h1>
+            <p>Official Student Record - 2026-27</p>
+        </div>
+
+        <div style="text-align: center;">
+            <div class="photo-container">
+                <img id="studentPhoto" src="logo.png" class="student-photo">
+            </div>
+            <h2 id="studentName" style="margin: 10px 0 5px;">Student Name</h2>
+            <span id="statusBadge" style="padding: 5px 15px; border-radius: 20px; font-size: 12px; background: #f0f0f0; font-weight: bold;">Status</span>
+        </div>
+
+        <div id="attendanceAlert">
+            <i class="fas fa-exclamation-triangle"></i> <strong>Warning:</strong> Low Attendance.
+        </div>
+
+        <div class="info-grid">
+            <div class="info-item"><label>Class / Section</label><span id="studentClass">---</span></div>
+            <div class="info-item"><label>Father's Name</label><span id="fatherName">---</span></div>
+            <div class="info-item"><label>Attendance</label><span id="attendanceRate">---</span></div>
+            <div class="info-item"><label>Roll Number</label><span id="RollNumber">---</span></div>
+            <div class="info-item"><label>Parent Phone</label><span id="PhoneNumber">---</span></div>
+            <div class="info-item"><label>Gender</label><span id="studentGender">---</span></div>
+        </div>
+
+        <div class="print-only print-footer">
+            <div style="text-align:center; border-top:1px solid #000; width:150px;">Authorized Stamp</div>
+            <div style="text-align:center; border-top:1px solid #000; width:150px;">Principal Signature</div>
+        </div>
+
+        <div style="margin-top: 40px; text-align: center; display: flex; flex-direction: column; gap: 15px; align-items: center;">
+            <button onclick="window.print()" class="whatsapp-btn" style="background: #228B22; width: 220px; justify-content: center;">
+                <i class="fas fa-file-download"></i> Download Report
+            </button>
+        </div>
+    </div>
 </div>
 
-<section id="about" style="display: flex; flex-direction: row; align-items: flex-start; gap: 40px; padding: 60px 10%; background: #ffffff; flex-wrap: wrap;">
-    
-   <div style="flex: 0 0 350px; text-align: center; margin-top: 45px;">
-    <img src="chairman.png" alt="Chairman" class="chairman-img" style="width: 100%; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
-    
-    <div style="margin-top: 15px;">
-        <h3 style="color: #003366; margin: 0; font-size: 1.5rem; font-weight: bold;">Mr. Shaik Ahmad</h3>
-        <p style="color: #666; font-size: 1rem; margin-top: 5px;">Correspondent</p>
+<div id="attendanceSection" style="display: none;">
+    <div class="attendance-card">
+        <h2 style="color: #228B22; text-align: center; text-transform: uppercase;">Daily Attendance</h2>
+        <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
+            <select id="teacherSelect" style="padding: 12px; flex: 1; border-radius: 8px; border: 1px solid #ddd;">
+                <option value="">-- Select Teacher --</option>
+                <option value="Mr. Shaik Ahmad">Mr. Shaik Ahmad</option>
+                <option value="Ms. Geethika">Ms. Geethika</option>
+            </select>
+            <select id="classSelect" style="padding: 12px; flex: 1; border-radius: 8px; border: 1px solid #ddd;">
+                <option value="">-- Select Class --</option>
+                <option value="10th-A">10th Grade - A</option>
+                <option value="9th-B">9th Grade - B</option>
+            </select>
+        </div>
+        <div id="attendanceList"></div>
+        <div id="summaryBox" class="summary-box" style="display:none;">
+            <div id="statsDisplay" style="margin-bottom:15px; font-weight:bold;"></div>
+            <button onclick="sendAttendance()" class="whatsapp-btn">
+                <i class="fab fa-whatsapp"></i> Send to Correspondent
+            </button>
+        </div>
     </div>
 </div>
-    <div style="flex: 1; min-width: 300px;">
-        <h2 style="color: #003366; font-size: 2.2rem; margin-bottom: 25px; border-left: 5px solid #ffd700; padding-left: 15px;">
-            Message from the Correspondent
-        </h2>
-        <div style="line-height: 1.8; color: #333; font-size: 1.1rem; text-align: justify;">
-            <p style="font-style: italic; color: #555; background: #f9f9f9; padding: 20px; border-radius: 8px;">Welcome to <strong>Paramount English Medium School</strong>.<em>An institution where we do not just teach—we inspire, we mold, and we empower. As the Correspondent of this esteemed school, it is my distinct honor to share the philosophy that drives our daily pursuit of excellence. In an era where the global landscape is shifting at an unprecedented pace, education must transcend the traditional boundaries of textbooks and classrooms. At Paramount, we believe that true learning is a holistic journey that harmonizes intellectual growth with moral integrity, ensuring that our students are prepared not just for exams, but for the complexities of life itself.</em></p>
-            <p style="font-style: italic; color: #555; background: #f9f9f9; padding: 20px; border-radius: 8px;"><em>"To our dear parents, we view you as our most vital partners in this educational odyssey. The synergy between the home and the school is what allows a child to truly flourish. When you choose Paramount, you are choosing a community that values transparency, constant improvement, and a deep-seated respect for our cultural heritage blended with a modern, scientific outlook. We are dedicated to producing graduates who are not only professionally successful but are also compassionate, ethical, and socially responsible citizens."</em></p>
-            <p style="margin-top: 20px; font-weight: bold; color: #003366;"><em>"Your way to success."</em></p>
-        </div>
-    </div>
 
-</section>
-    <section id="notices" style="padding: 60px 10%; background: #ffffff; font-family: sans-serif;">
-    <div style="text-align: center; margin-bottom: 40px;">
-        <h2 style="color: #003366; font-size: 2.2rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">
-            School Notice Board
-        </h2>
-        <div style="height: 4px; width: 80px; background: #006633; margin: 0 auto;"></div>
-    </div>
+<script>
+const studentData = {
+    "2203A51618": { name: "Shaik Tauseef Ali", class: "10th Grade - A", father: "Mr. Shaik Ahmad", attendance: "95%", roll: "2203A51618", phonenumber: "9550791538", gender: "Boy" },
+    "2203A51611": { name: "Shaik Minhaj Ali", class: "9th Grade - B", father: "Mr. Shaik Ahmad", attendance: "42%", roll: "2203A51611", phonenumber: "8341039583", gender: "Boy" }
+};
 
-    <div style="display: grid; gap: 20px; max-width: 900px; margin: 0 auto;">
-        
-        <div style="background: #fff9c4; padding: 20px; border-left: 6px solid #fbc02d; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s;">
-            <span style="background: #fbc02d; color: #333; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">HOLIDAY</span>
-            <h3 style="margin: 10px 0 5px 0; color: #333;">Summer Vacation 2026</h3>
-            <p style="margin: 0; color: #555;">Will update you soon <strong>Stay tunned</strong>.</p>
-        </div>
+const classLists = {
+    "10th-A": ["Shaik Tauseef Ali", "Rahul Sharma", "Zoya Khan", "Abhishek Das"],
+    "9th-B": ["Shaik Minhaj Ali", "Sana Khan", "Aryan Raj", "Priya Singh"]
+};
 
-        <div style="background: #e3f2fd; padding: 20px; border-left: 6px solid #2196f3; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-            <span style="background: #2196f3; color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">EXAMS</span>
-            <h3 style="margin: 10px 0 5px 0; color: #333;">Annual Result Declaration</h3>
-            <p style="margin: 0; color: #555;">Parents will be invited to collect the progress reports <strong>Announcing soon</strong> Stay Tunned.</p>
-        </div>
+function switchPortal(type) {
+    const sSec = document.getElementById('studentSection');
+    const aSec = document.getElementById('attendanceSection');
+    const nS = document.getElementById('navStudent');
+    const nA = document.getElementById('navAttendance');
 
-        <div style="background: #e8f5e9; padding: 20px; border-left: 6px solid #4caf50; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-            <span style="background: #4caf50; color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">NEW</span>
-            <h3 style="margin: 10px 0 5px 0; color: #333;">Uniform & Book Stall</h3>
-            <p style="margin: 0; color: #555;">Comming Soon.</p>
-        </div>
-
-    </div>
-</section>
-    <section style="background: white; padding: 20px 5%; text-align: center;">
-    <h2 style="color: #006633; font-family: 'Zilla Slab', serif; font-size: 2rem; margin-bottom: 20px;">
-        LEADERS OF THE SCHOOL (2026)
-    </h2>
-    <div style="max-width: 900px; margin: 0 auto; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-        <img src="leaders-of-the-school.jpg" alt="School Leaders" style="width: 100%; height: auto; display: block;">
-    </div>
-</section>
-<section id="drive-events" style="padding: 50px 10%; background: #ffffff; text-align: center; font-family: 'Zilla Slab', serif;">
-    <h2 style="color: #006633; font-size: 2.2rem; margin-bottom: 10px;">SCHOOL EVENT GALLERIES</h2>
-    <div style="height: 4px; width: 60px; background: #ffd700; margin: 0 auto 30px;"></div>
-    
-    <p style="color: #555; margin-bottom: 30px; font-family: sans-serif;">Click on an event to view full photos on Google Drive</p>
-    
-    <div style="max-width: 700px; margin: 0 auto; display: grid; gap: 15px;">
-        
-        <a href=" https://drive.google.com/drive/folders/1oqyOQXnL_fxUtX51hnJl5M91PztOluNJ?usp=sharing
-" target="_blank" 
-           style="display: flex; justify-content: space-between; align-items: center; background: #f4f4f4; padding: 18px 25px; border-radius: 8px; text-decoration: none; border-left: 6px solid #006633; transition: 0.3s;">
-            <span style="color: #003366; font-size: 1.1rem; font-weight: bold;">📸 “THUNDERSTRIKE – 5th Annual Sports Day & Cultural Fest 2026”</span>
-            <span style="color: #006633; font-weight: bold;">Open Folder →</span>
-        </a>
-
-        <a href="YOUR_LINK_HERE" target="_blank" 
-           style="display: flex; justify-content: space-between; align-items: center; background: #f4f4f4; padding: 18px 25px; border-radius: 8px; text-decoration: none; border-left: 6px solid #006633; transition: 0.3s;">
-            <span style="color: #003366; font-size: 1.1rem; font-weight: bold;">🏆 Annual Sports Meet 2025</span>
-            <span style="color: #006633; font-weight: bold;">Open Folder →</span>
-        </a>
-
-    </div>
-</section>
-<section id="admissions" class="section-padding admissions-section">
-    <h2 style="color: var(--primary);">Admissions For 2026-27</h2>
-    <p>Join our academic excellence. </p>
-    <p>Follow The Below Steps</p>
-    <p>Step 1: Office Visit at our Campus</p>
-    <p>Step 2: Visit our Office thorugh Google Maps</p>
-    <p>Step 3: Document Submission</p>
-    <p>Step 4: Interaction with Mrs.Roqiya Begum(Principal) of the Paramount English Medium School</p>
-    <p>Step 5: Admission completed successfully.</p>
-   
-    
-</section>
-
-<section id="location" style="padding: 60px 10%; background: #f4f4f4; text-align: center; font-family: sans-serif;">
-    <h2 style="color: #003366; margin-bottom: 20px;">Visit Our Campus</h2>
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3794.136458315152!2d79.58027477521033!3d17.926044383057112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a335a9269b09a15%3A0x585daa32a7bfd9cf!2sParamount%20English%20Medium%20School!5e0!3m2!1sen!2sin!4v1709568000000!5m2!1sen!2sin" width="100%" height="400" style="border:0;" class="map-frame" allowfullscreen="" loading="lazy"></iframe>
-
-<a href="https://maps.google.com/?q=Paramount+English+Medium+School+Warangal" 
-   target="_blank" 
-   style="display: inline-block; background: #006633; color: white; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; margin-bottom: 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-family: sans-serif;">
-    📍 Open in Google Maps for Paramount School
-</a>
-    </a>
-
-    <div style="border-radius: 15px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border: 1px solid #ddd; max-width: 1000px; margin: 0 auto;">
-        <iframe 
-            src="https://maps.google.com/?cid=15590804619565980111&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ" 
-            width="100%" 
-            height="400" 
-            style="border:0;" 
-            allowfullscreen="" 
-            loading="lazy">
-        </iframe>
-    </div>
-    
-    <p style="margin-top: 20px; color: #555;">
-        Pensionpur, Warangal, Telangana 506005
-    </p>
-</section>
-
-<footer id="contact">
-    <h3>Contact Us</h3>
-    <p>Pensionpur, Warangal, Telangana 506005</p>
-    <div class="contact-links">
-        <a href="tel:+91 9000641355">Call</a> | 
-        <a href="https://wa.me/919000641355?text=I%20am%20interested%20in%20Paramount%20School" target="_blank" style="color: #25D366;">WhatsApp Us</a> |
-        <a href="mailto:paramount0707@gmail.com">Email</a> | 
-        <a href="https://www.instagram.com/paramount.07?igsh=MTYwcjcxZnliMnhmdA%3D%3D&utm_source=qr" target="_blank"">Instagram</a>
-    </div>
-</footer>
-<a href="https://wa.me/919000641355" target="_blank" class="whatsapp-btn">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width: 25px; height: 25px;">
-    <span>Contact us</span>
-</a>
-
-<style>
-.whatsapp-btn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #25d366;
-    color: white;
-    padding: 15px 25px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-family: sans-serif;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    z-index: 9999;
-    transition: transform 0.3s ease;
-    animation: pulse-animation 2s infinite;
-}
-
-.whatsapp-btn:hover {
-    transform: scale(1.1);
-    background-color: #128c7e;
-    color: white;
-}
-
-@keyframes pulse-animation {
-    0% { box-shadow: 0 0 0 0px rgba(37, 211, 102, 0.7); }
-    70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-    100% { box-shadow: 0 0 0 0px rgba(37, 211, 102, 0); }
-}
-</style>
-<button onclick="topFunction()" id="backToTopBtn" title="Go to top">↑</button>
-</button>  
-   
-    <button onclick="topFunction()" id="backToTopBtn" title="Go to top">↑</button>
-
-    <script>
-    let mybutton = document.getElementById("backToTopBtn");
-
-    window.onscroll = function() {
-      if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-        mybutton.style.display = "block";
-      } else {
-        mybutton.style.display = "none";
-      }
-    };
-
-    function topFunction() {
-      window.scrollTo({top: 0, behavior: 'smooth'});
+    if(type === 'attendance') {
+        sSec.style.display = 'none'; aSec.style.display = 'block';
+        nA.classList.add('active'); nS.classList.remove('active');
+    } else {
+        sSec.style.display = 'block'; aSec.style.display = 'none';
+        nS.classList.add('active'); nA.classList.remove('active');
     }
-    </script>
-<div id="schoolIntroBox">
-    <span id="closeVideo" onclick="closeIntroVideo()">&times;</span>
-    <iframe 
-        id="videoFrame"
-        src="https://www.youtube.com/embed/rZo2y98KuAo?autoplay=1&mute=1&loop=1&playlist=rZo2y98KuAo&rel=0&showinfo=0&controls=1" 
-        title="School Introduction" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen>
-    </iframe>
-</div>
-    <script>
-    function closeIntroVideo() {
-        var videoBox = document.getElementById("schoolIntroBox");
-        if (videoBox) {
-            videoBox.style.display = "none";
+}
+
+function searchStudent() {
+    const input = document.getElementById('rollNumberInput').value.trim();
+    const student = studentData[input];
+    if (student) {
+        document.getElementById('studentPhoto').src = `students/${student.roll}.jpg`;
+        document.getElementById('studentName').innerText = student.name;
+        document.getElementById('studentClass').innerText = student.class;
+        document.getElementById('fatherName').innerText = student.father;
+        document.getElementById('attendanceRate').innerText = student.attendance;
+        document.getElementById('RollNumber').innerText = student.roll;
+        document.getElementById('PhoneNumber').innerText = student.phonenumber;
+        document.getElementById('studentGender').innerText = student.gender;
+        
+        const att = parseInt(student.attendance);
+        const alertBox = document.getElementById('attendanceAlert');
+        const badge = document.getElementById('statusBadge');
+        if(att < 50) {
+            alertBox.style.display = 'block';
+            badge.innerText = "Inactive"; badge.style.background = "#ffebee"; badge.style.color = "#c62828";
+        } else {
+            alertBox.style.display = 'none';
+            badge.innerText = "Active"; badge.style.background = "#e8f5e9"; badge.style.color = "#2e7d32";
         }
+    } else { alert("Not found"); }
+}
+
+document.getElementById('classSelect').addEventListener('change', function() {
+    const list = document.getElementById('attendanceList');
+    list.innerHTML = "";
+    if(classLists[this.value]) {
+        classLists[this.value].forEach(name => {
+            list.innerHTML += `<div class="student-row"><span>${name}</span><input type="checkbox" class="present-toggle" checked onchange="calcStats()"></div>`;
+        });
+        document.getElementById('summaryBox').style.display = "block";
+        calcStats();
     }
-    </script>
+});
+
+function calcStats() {
+    const total = document.querySelectorAll('.present-toggle').length;
+    const present = document.querySelectorAll('.present-toggle:checked').length;
+    document.getElementById('statsDisplay').innerText = `Total: ${total} | Present: ${present} | Absent: ${total - present}`;
+}
+
+function sendAttendance() {
+    const teacher = document.getElementById('teacherSelect').value;
+    const cls = document.getElementById('classSelect').value;
+    if(!teacher || !cls) return alert("Select Teacher and Class");
+    
+    let absents = [];
+    document.querySelectorAll('.student-row').forEach(row => {
+        if(!row.querySelector('input').checked) absents.push(row.querySelector('span').innerText);
+    });
+
+    const msg = `*PARAMOUNT ATTENDANCE*%0ATeacher: ${teacher}%0AClass: ${cls}%0AAbsent: ${absents.length > 0 ? absents.join(", ") : "None"}`;
+    window.open(`https://wa.me/9550791538?text=${msg}`, '_blank');
+}
+
+function toggleClearBtn() { document.getElementById('clearBtn').style.display = document.getElementById('rollNumberInput').value.length > 0 ? "block" : "none"; }
+function clearSearch() { document.getElementById('rollNumberInput').value = ""; toggleClearBtn(); }
+</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

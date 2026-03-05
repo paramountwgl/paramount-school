@@ -137,19 +137,18 @@
 </div>
 
 <script>
-// --- PASTE EXCEL DATA HERE LATER ---
+// The Data structure matches exactly what you requested!
 const studentData = {
     "2203A51618": {
-        name: "Shaik Tauseef Ali",
-        class: "10th Grade - A",
-        classKey: "10th-A",
-        admissionNo: "PEMS-1001",
-        dob: "15-Aug-2010",
-        doj: "01-Jun-2025",
-        father: "Mr. Shaik Ahmad",
-        roll: "2203A51618",
-        phonenumber: "9550791538",
-        gender: "Boy"
+        Name: "Shaik Tauseef Ali",
+        Class: "10th Grade - A",
+        AdmissionNo: "PEMS-1001",
+        Dob: "15-Aug-2010",
+        Doj: "01-Jun-2025",
+        Father: "Mr. Shaik Ahmad",
+        Roll: "2203A51618",
+        Phonenumber: "9550791538",
+        Gender: "Boy"
     }
 }; 
 
@@ -183,25 +182,31 @@ function searchStudent() {
     const statusBadge = document.getElementById('statusBadge');
 
     if (student) {
-        photoImg.src = `students/${student.roll}.jpg`;
+        photoImg.src = `students/${student.Roll}.jpg`;
 
-        document.getElementById('studentName').innerText = student.name || "---";
-        document.getElementById('studentClass').innerText = student.class || "---";
-        document.getElementById('fatherName').innerText = student.father || "---";
-        document.getElementById('RollNumber').innerText = student.roll || "---";
-        document.getElementById('PhoneNumber').innerText = student.phonenumber || "---";
-        document.getElementById('studentGender').innerText = student.gender || "---";
-        document.getElementById('admissionNo').innerText = student.admissionNo || "---";
-        document.getElementById('studentDob').innerText = student.dob || "---";
-        document.getElementById('studentDoj').innerText = student.doj || "---";
+        document.getElementById('studentName').innerText = student.Name || "---";
+        document.getElementById('studentClass').innerText = student.Class || "---";
+        document.getElementById('fatherName').innerText = student.Father || "---";
+        document.getElementById('RollNumber').innerText = student.Roll || "---";
+        document.getElementById('PhoneNumber').innerText = student.Phonenumber || "---";
+        document.getElementById('studentGender').innerText = student.Gender || "---";
+        document.getElementById('admissionNo').innerText = student.AdmissionNo || "---";
+        document.getElementById('studentDob').innerText = student.Dob || "---";
+        document.getElementById('studentDoj').innerText = student.Doj || "---";
 
         // --- FETCH LIVE DATA FROM TEACHER PORTAL ---
         let livePercent = 0;
         let hasData = false;
         const savedData = JSON.parse(localStorage.getItem('paramountAttendance'));
 
-        if (savedData && savedData[student.classKey] && savedData[student.classKey].students[student.name]) {
-            const stats = savedData[student.classKey].students[student.name];
+        // Automatically convert "10th Grade - A" to "10th-A" in the background
+        let computedClassKey = "";
+        if (student.Class) {
+            computedClassKey = student.Class.replace(" Grade - ", "-");
+        }
+
+        if (savedData && savedData[computedClassKey] && savedData[computedClassKey].students[student.Name]) {
+            const stats = savedData[computedClassKey].students[student.Name];
             if (stats.totalDays > 0) {
                 livePercent = Math.round((stats.presentDays / stats.totalDays) * 100);
                 hasData = true;

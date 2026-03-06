@@ -9,82 +9,54 @@
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f4f4; overflow-x: hidden; width: 100%; }
-        
-        /* HEADER SECTION */
-        .profile-header { 
-            background: #228B22; color: white; padding: 20px; text-align: center; 
-            display: flex; flex-direction: column; align-items: center; width: 100%; min-height: 200px; position: relative;
-        }
+        #liveAnnouncementBanner { display: none; background-color: #c62828; color: white; text-align: center; padding: 12px 20px; font-weight: bold; font-size: 15px; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); animation: pulseBanner 2.5s infinite; }
+        @keyframes pulseBanner { 0% { background-color: #c62828; } 50% { background-color: #e53935; } 100% { background-color: #c62828; } }
+        .profile-header { background: #228B22; color: white; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; width: 100%; min-height: 200px; position: relative; }
         .header-logo-box { display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; cursor: pointer; padding: 10px; z-index: 10; }
         .header-logo-box img { height: 85px; width: auto; display: block; }
         .header-logo-box h1 { margin: 0; font-size: 32px; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; color: white; }
         .header-logo-box p { margin: 0; font-size: 12px; font-weight: bold; opacity: 0.9; letter-spacing: 1px; color: white; }
-
         .search-container { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; max-width: 500px; margin-top: 20px; }
         .input-wrapper { position: relative; flex: 1; display: flex; align-items: center; }
         #rollNumberInput { padding: 12px 45px 12px 20px; border-radius: 30px; border: none; width: 100%; font-size: 16px; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         #clearBtn { position: absolute; right: 15px; color: #888; cursor: pointer; display: none; font-size: 18px; z-index: 5; }
         .search-btn { padding: 12px 25px; border-radius: 30px; border: none; background-color: #ffcc00; color: #228B22; font-weight: bold; cursor: pointer; white-space: nowrap; }
-
-        /* CARD SECTION */
         .profile-card { max-width: 800px; margin: 100px auto 40px; background: white; padding: 60px 30px 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); position: relative; width: 92%; }
         .photo-container { width: 140px; height: 140px; margin: -130px auto 15px; border-radius: 50%; border: 5px solid white; background: #eef2f3; box-shadow: 0 5px 15px rgba(0,0,0,0.1); overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .student-photo { width: 100%; height: 100%; object-fit: cover; background: #fff; }
-
         .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 30px; text-align: left; }
         .info-item { padding: 10px; border-bottom: 1px solid #eee; }
         .info-item label { font-size: 11px; color: #888; display: block; text-transform: uppercase; }
         .info-item span { font-weight: bold; color: #333; word-break: break-word; }
-        
         .status-badge { padding: 5px 15px; border-radius: 20px; font-size: 12px; background: #f0f0f0; color: #666; font-weight: bold; }
         #attendanceAlert { display: none; background-color: #fff3f3; color: #c62828; padding: 15px; border-radius: 10px; border-left: 5px solid #c62828; margin: 20px 0; text-align: left; font-size: 14px; }
-
-        /* HIDDEN ELEMENTS FOR WEB VIEW */
         .print-only-header, .print-footer { display: none; }
-
         @media screen and (min-width: 769px) { .header-logo-box { position: absolute; left: 20px; top: 15px; } .profile-header { padding-top: 100px; } }
         @media screen and (max-width: 768px) { .profile-card { margin-top: 130px; padding: 60px 20px 20px; } .header-logo-box img { height: 70px; } .header-logo-box h1 { font-size: 26px; } }
-
-        /* --- FINAL PRINT LOGIC --- */
-        @media print {
-            body { background: white !important; }
-            .profile-header, button, .search-container, #clearBtn, .search-btn, a, .portal-title { display: none !important; }
-            .print-only-header { display: flex !important; flex-direction: column; align-items: center; width: 100%; }
-            .print-only-header h1 { display: block !important; margin: 0; color: #228B22 !important; text-transform: uppercase; font-size: 24px !important; white-space: nowrap; width: 100%; text-align: center; }
-            .print-footer { display: flex !important; justify-content: space-between; align-items: flex-end; margin-top: 50px; padding-top: 20px; width: 100%; }
-            .profile-card { margin: 10px auto !important; box-shadow: none !important; border: 1px solid #eee !important; width: 98% !important; padding: 30px 20px !important; }
-            .photo-container { margin: 20px auto !important; border: 2px solid #228B22 !important; }
-            .student-photo { object-fit: contain !important; }
-        }
+        @media print { body { background: white !important; } #liveAnnouncementBanner, .profile-header, button, .search-container, #clearBtn, .search-btn, a, .portal-title { display: none !important; } .print-only-header { display: flex !important; flex-direction: column; align-items: center; width: 100%; } .print-only-header h1 { display: block !important; margin: 0; color: #228B22 !important; text-transform: uppercase; font-size: 24px !important; white-space: nowrap; width: 100%; text-align: center; } .print-footer { display: flex !important; justify-content: space-between; align-items: flex-end; margin-top: 50px; padding-top: 20px; width: 100%; } .profile-card { margin: 10px auto !important; box-shadow: none !important; border: 1px solid #eee !important; width: 98% !important; padding: 30px 20px !important; } .photo-container { margin: 20px auto !important; border: 2px solid #228B22 !important; } .student-photo { object-fit: contain !important; } }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
+
+<div id="liveAnnouncementBanner"><i class="fas fa-bell" style="color: #ffd700; margin-right: 8px; font-size: 18px;"></i> <span id="announcementMessageText"></span></div>
 
 <div class="profile-header">
     <a href="index.html" class="header-logo-box">
         <img src="logo.png" alt="School Logo" onerror="this.style.display='none'">
-        <div style="text-align: left;">
-            <h1>Paramount</h1>
-            <p>ENGLISH MEDIUM SCHOOL</p>
-        </div>
+        <div style="text-align: left;"><h1>Paramount</h1><p>ENGLISH MEDIUM SCHOOL</p></div>
     </a>
-
     <div class="search-container">
         <div class="input-wrapper">
             <input type="text" id="rollNumberInput" placeholder="Enter Roll Number" oninput="toggleClearBtn()">
-            <span id="clearBtn" onclick="clearSearch()">
-                <i class="fas fa-times-circle"></i>
-            </span>
+            <span id="clearBtn" onclick="clearSearch()"><i class="fas fa-times-circle"></i></span>
         </div>
-        <button onclick="searchStudent()" class="search-btn">
-            <i class="fas fa-search"></i>
-        </button>
+        <button onclick="searchStudent()" class="search-btn"><i class="fas fa-search"></i></button>
     </div>
 </div>
 
-<h1 class="portal-title" style="text-align: center; color: #228B22; margin: 40px 0 0; font-size: 38px; text-transform: uppercase; letter-spacing: 3px; font-weight: 800;">
-    Student Portal
-</h1>
+<h1 class="portal-title" style="text-align: center; color: #228B22; margin: 40px 0 0; font-size: 38px; text-transform: uppercase; letter-spacing: 3px; font-weight: 800;">Student Portal</h1>
 
 <div class="profile-card">
     <div class="print-only-header">
@@ -94,17 +66,12 @@
     </div>
 
     <div style="text-align: center;">
-        <div class="photo-container">
-            <img id="studentPhoto" src="logo.png" alt="Student Photo" class="student-photo" onerror="this.src='logo.png'">
-        </div>
+        <div class="photo-container"><img id="studentPhoto" src="logo.png" alt="Student Photo" class="student-photo" onerror="this.src='logo.png'"></div>
         <h2 id="studentName" style="margin: 10px 0 5px;">Student Name</h2>
         <span class="status-badge" id="statusBadge">Search to View Status</span>
     </div>
 
-    <div id="attendanceAlert">
-        <i class="fas fa-exclamation-triangle"></i> 
-        <strong>Low Attendance Warning:</strong> Parent/Guardian intervention is required. Attendance has dropped below 50%.
-    </div>
+    <div id="attendanceAlert"><i class="fas fa-exclamation-triangle"></i> <strong>Low Attendance Warning:</strong> Parent/Guardian intervention is required. Attendance has dropped below 50%.</div>
 
     <div class="info-grid">
         <div class="info-item"><label>Class / Section</label><span id="studentClass">---</span></div>
@@ -119,25 +86,45 @@
     </div>
     
     <div class="print-footer">
-        <div style="text-align: center;">
-            <div style="width: 150px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
-            <p style="font-size: 12px; font-weight: bold;">Authorized Stamp</p>
-        </div>
-        <div style="text-align: center;">
-            <div style="width: 150px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
-            <p style="font-size: 12px; font-weight: bold;">Principal Signature</p>
-        </div>
+        <div style="text-align: center;"><div style="width: 150px; border-bottom: 1px solid black; margin-bottom: 5px;"></div><p style="font-size: 12px; font-weight: bold;">Authorized Stamp</p></div>
+        <div style="text-align: center;"><div style="width: 150px; border-bottom: 1px solid black; margin-bottom: 5px;"></div><p style="font-size: 12px; font-weight: bold;">Principal Signature</p></div>
     </div>
 
     <div style="margin-top: 40px; text-align: center; display: flex; flex-direction: column; gap: 15px; align-items: center;">
-        <button onclick="downloadReport()" style="padding: 12px 25px; border-radius: 30px; border: none; background-color: #228B22; color: white; font-weight: bold; cursor: pointer; width: 220px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-            <i class="fas fa-file-download"></i> Download Report (PDF)
-        </button>
+        <button onclick="downloadReport()" style="padding: 12px 25px; border-radius: 30px; border: none; background-color: #228B22; color: white; font-weight: bold; cursor: pointer; width: 220px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"><i class="fas fa-file-download"></i> Download Report (PDF)</button>
     </div>
 </div>
 
 <script>
-// --- COMPLETE PARAMOUNT SCHOOL DATABASE ---
+// --- FIREBASE INITIALIZATION ---
+const firebaseConfig = {
+  apiKey: "AIzaSyDRYk9KOK-ga0c88dnYMsAoifW2NJTd_Y8",
+  authDomain: "paramount-school-d55bc.firebaseapp.com",
+  databaseURL: "https://paramount-school-d55bc-default-rtdb.firebaseio.com",
+  projectId: "paramount-school-d55bc",
+  storageBucket: "paramount-school-d55bc.firebasestorage.app",
+  messagingSenderId: "130979432562",
+  appId: "1:130979432562:web:4cd94787b23f9daba51aeb"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// Listen for Announcements
+db.ref('announcement').on('value', (snap) => {
+    const msg = snap.val();
+    const banner = document.getElementById('liveAnnouncementBanner');
+    if (msg) { document.getElementById('announcementMessageText').innerText = msg; banner.style.display = 'block'; } 
+    else { banner.style.display = 'none'; }
+});
+
+// Fetch Live Attendance Automatically from Cloud
+let cloudAttendanceData = {};
+db.ref('attendance').on('value', (snap) => {
+    cloudAttendanceData = snap.val() || {};
+    const currentInput = document.getElementById('rollNumberInput').value.trim();
+    if(currentInput.length > 0) searchStudent(); // Instantly update screen if parent is watching
+});
+
 const studentData = {
     "1472070": { Name: "Hanish Macharla", Class: "Pre-KG (Diamond)", AdmissionNo: "2052", Dob: "---", Doj: "2025-08-04", Father: "M.Vinay", Roll: "1472070", Phonenumber: "9182861346", Gender: "Male" },
     "1478225": { Name: "Arjun Vihaar Illandula", Class: "Pre-KG (Diamond)", AdmissionNo: "2061", Dob: "2022-11-22", Doj: "2025-10-16", Father: "Illandula Ravi.", Roll: "1478225", Phonenumber: "9848742172", Gender: "Male" },
@@ -339,14 +326,7 @@ function clearSearch() {
     input.focus();
 }
 
-function downloadReport() {
-    const name = document.getElementById('studentName').innerText;
-    if (name === "Student Name" || name === "---") {
-        alert("Please search for a student first.");
-        return;
-    }
-    window.print();
-}
+function downloadReport() { window.print(); }
 
 function searchStudent() {
     const input = document.getElementById('rollNumberInput').value.trim();
@@ -356,9 +336,7 @@ function searchStudent() {
     const statusBadge = document.getElementById('statusBadge');
 
     if (student) {
-        // FIXED: Now looking for .png instead of .jpg
         photoImg.src = `students/${student.Roll}.png`;
-
         document.getElementById('studentName').innerText = student.Name || "---";
         document.getElementById('studentClass').innerText = student.Class || "---";
         document.getElementById('fatherName').innerText = student.Father || "---";
@@ -369,19 +347,16 @@ function searchStudent() {
         document.getElementById('studentDob').innerText = student.Dob || "---";
         document.getElementById('studentDoj').innerText = student.Doj || "---";
 
-        // --- FETCH LIVE DATA FROM TEACHER PORTAL ---
         let livePercent = 0;
         let hasData = false;
-        const savedData = JSON.parse(localStorage.getItem('paramountAttendance'));
 
-        // Automatically convert "10th Grade - A" to "10th-A" in the background
+        // FETCHING DATA FROM THE CLOUD NOW
+        const savedData = cloudAttendanceData;
+
         let computedClassKey = "";
         if (student.Class) {
             computedClassKey = student.Class.replace(" Grade - ", "-").replace(" (Diamond)", "").replace(" (Ruby)", "").replace(" (Amber)", "").replace(" (Opal)", "").replace(" (Crystal)", "").replace(" (Citrine)", "").replace(" (Moonstone)", "").replace(" (Alluri)", "").replace(" (Kalam)", "").replace(" (Bhagat)", "").trim();
-            // Just a fallback formatting rule since the new class names are longer
-            if (!computedClassKey.includes("-")) {
-                 computedClassKey = student.Class;
-            }
+            if (!computedClassKey.includes("-")) { computedClassKey = student.Class; }
         }
 
         if (savedData && savedData[computedClassKey] && savedData[computedClassKey].students[student.Name]) {
@@ -392,7 +367,6 @@ function searchStudent() {
             }
         }
 
-        // --- UPDATE UI BASED ON LIVE DATA ---
         if (hasData) {
             document.getElementById('attendanceRate').innerText = livePercent + "%";
             if (livePercent < 50) {
@@ -416,16 +390,13 @@ function searchStudent() {
             statusBadge.style.color = "#666";
             alertBox.style.display = "none";
         }
-
     } else {
         alert("Roll Number not found.");
     }
 }
 
 document.getElementById('rollNumberInput').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        searchStudent();
-    }
+    if (e.key === 'Enter') searchStudent();
 });
 </script>
 </body>

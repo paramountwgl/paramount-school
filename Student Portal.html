@@ -39,6 +39,11 @@
         .info-item span { font-weight: 800; color: #333; font-size: 14px; display: block; }
         .subject-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; border-left: 5px solid var(--forest); }
         .status-badge { padding: 6px 18px; border-radius: 20px; font-size: 12px; background: #f0f0f0; font-weight: bold; display: inline-block; margin-top: 10px; }
+
+        /* ADDED RETURN BUTTON STYLE */
+        .nav-return-box { width: 100%; display: flex; justify-content: center; margin-top: 15px; }
+        .return-link { background: rgba(255,255,255,0.1); color: white; padding: 10px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 13px; border: 1px solid rgba(255,255,255,0.3); transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .return-link:hover { background: var(--gold); color: var(--forest); border-color: var(--gold); }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -56,6 +61,11 @@
         <img src="logo.png" alt="Logo">
         <div style="text-align: left;"><h1>Paramount</h1><p>ENGLISH MEDIUM SCHOOL</p></div>
     </a>
+
+    <div class="nav-return-box">
+        <a href="index.html" class="return-link"><i class="fas fa-arrow-left"></i> Return to Home Page</a>
+    </div>
+
     <div class="search-container">
         <input type="text" id="rollNumberInput" placeholder="Enter Roll Number" onkeypress="if(event.key === 'Enter') searchStudent()">
         <button onclick="searchStudent()" class="search-btn"><i class="fas fa-search"></i></button>
@@ -340,8 +350,8 @@ function signHW(date, name, sub, checked) {
 db.ref('announcement').on('value', (snap) => {
     const msg = snap.val();
     const banner = document.getElementById('liveAnnouncementBanner');
-    if (msg) { document.getElementById('announcementMessageText').innerText = msg; banner.style.display = 'block'; } 
-    else { banner.style.display = 'none'; }
+    if (msg && banner) { document.getElementById('announcementMessageText').innerText = msg; banner.style.display = 'block'; } 
+    else if (banner) { banner.style.display = 'none'; }
 });
 </script>
 </body>

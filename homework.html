@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Daily Homework | Paramount School</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --forest: #006633; --gold: #ffd700; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f7f6; }
+        .portal-nav { background: #004d26; padding: 12px; display: flex; justify-content: center; gap: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 2000; }
+        .portal-nav a { color: white; text-decoration: none; font-weight: bold; font-size: 14px; padding: 8px 15px; border-radius: 20px; }
+        .portal-nav a.active { background: rgba(255,255,255,0.2); border: 1px solid var(--gold); }
+        .container { max-width: 600px; margin: 30px auto; padding: 0 15px; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+        input { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #ddd; margin-top: 5px; }
+        .search-btn { background: var(--forest); color: white; border: none; padding: 15px; width: 100%; border-radius: 30px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        
+        /* VERIFICATION BOX STYLING */
+        .subject-card { background: #fafafa; border-left: 5px solid var(--forest); padding: 15px; margin-top: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .verify-section { text-align: center; border-left: 1px solid #ddd; padding-left: 15px; }
+        .verify-section input { width: 28px; height: 28px; accent-color: var(--forest); cursor: pointer; }
+        .last-updated { font-size: 11px; color: #777; text-align: right; margin-bottom: 10px; display: block; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+
+<div class="portal-nav">
+    <a href="Student Portal.html"><i class="fas fa-user-circle"></i> Profile Search</a>
+    <a href="homework.html" class="active"><i class="fas fa-book-open"></i> Daily Homework</a>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h2 style="color: var(--forest); text-align: center; margin-top: 0;"><i class="fas fa-check-double"></i> Homework Diary</h2>
+        
+        <label style="font-weight:bold; color:#555;">Student Name</label>
+        <input type="text" id="pStudentName" placeholder="Enter Child's Full Name">
+
+        <label style="font-weight:bold; color:#555; display:block; margin-top:15px;">Date</label>
+        <input type="date" id="pDate">
+
+        <button class="search-btn" onclick="fetchHomework()"><i class="fas fa-search"></i> View Assignments</button>
+
+        <div id="hwDisplay" style="margin-top: 25px;"></div>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDRYk9KOK-ga0c88dnYMsAoifW2NJTd_Y8",
+        databaseURL: "https://paramount-school-d55bc-default-rtdb.firebaseio.com",
+        projectId: "paramount-school-d55bc"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function fetchHomework() {
+        const student = document.getElementById('pStudentName').value.trim();
+        const date = document.getElementById('pDate').value;
+        const display = document.getElementById('hwDisplay');
+
+        if(!student || !date) return Swal.fire('Notice', 'Enter Name and Select Date', 'info');
+
+        db.ref(`homework/${date}`).once('value', (snap) => {
+            const data = snap.val();
+            display.innerHTML = "";
+
+            if(!data) {
+                display.innerHTML = "<p style='color:red; text-align:center;'>No homework found for this date.</p>";
+                return;
+            }
+
+            if(data.lastUpdated) {
+                display.innerHTML += `<span class="last-updated"><i class="fas fa-clock"></i> Posted at: ${data.lastUpdated}</span>`;
+            }
+
+            for (let sub in data) {
+                if(sub === 'lastUpdated') continue;
+                display.innerHTML += `
+                    <div class="subject-card">
+                        <div>
+                            <strong style="color:var(--forest); text-transform:uppercase; font-size:13px;">${sub}</strong>
+                            <p style="margin:5px 0; color:#333;">${data[sub]}</p>
+                        </div>
+                        <div class="verify-section">
+                            <label style="font-size: 9px; display: block; margin-bottom: 2px;">ACKNOWLEDGED</label>
+                            <input type="checkbox" onchange="verifyTask('${date}', '${student}', '${sub}', this.checked)">
+                        </div>
+                    </div>`;
+            }
+        });
+    }
+
+    function verifyTask(date, name, sub, checked) {
+        db.ref(`homework_status/${date}/${name}/${sub}`).set({
+            verified: checked,
+            verifiedAt: new Date().toLocaleTimeString()
+        }).then(() => {
+            if(checked) Swal.fire({ icon: 'success', title: 'Verified', timer: 800, showConfirmButton: false });
+        });
+    }
+</script>
+</body>
+</html>

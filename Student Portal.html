@@ -7,60 +7,40 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" type="image/png" href="logo.png">
     <style>
+        :root { --forest: #006633; --gold: #ffd700; --danger: #c62828; }
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #f4f7f6; overflow-x: hidden; width: 100%; }
         
         /* NAVIGATION BAR */
-        .portal-nav { 
-            background: #004d26; 
-            padding: 12px; 
-            display: flex; 
-            justify-content: center; 
-            gap: 20px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            position: sticky;
-            top: 0;
-            z-index: 2000;
-        }
-        .portal-nav a { 
-            color: white; 
-            text-decoration: none; 
-            font-weight: bold; 
-            font-size: 14px;
-            padding: 8px 15px;
-            border-radius: 20px;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .portal-nav a.active { background: rgba(255,255,255,0.2); border: 1px solid #ffd700; }
-        .portal-nav a:hover { color: #ffd700; }
+        .portal-nav { background: #004d26; padding: 12px; display: flex; justify-content: center; gap: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 2000; }
+        .portal-nav a { color: white; text-decoration: none; font-weight: bold; font-size: 14px; padding: 8px 15px; border-radius: 20px; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .portal-nav a.active { background: rgba(255,255,255,0.2); border: 1px solid var(--gold); }
+        .portal-nav a:hover { color: var(--gold); }
 
-        /* BANNER & HEADER STYLING */
-        #liveAnnouncementBanner { display: none; background-color: #c62828; color: white; text-align: center; padding: 12px 20px; font-weight: bold; font-size: 15px; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.1); animation: pulseBanner 2.5s infinite; border-radius: 12px; width: 90%; max-width: 600px; margin: 25px auto 10px auto; }
-        @keyframes pulseBanner { 0% { background-color: #c62828; } 50% { background-color: #e53935; } 100% { background-color: #c62828; } }
-        .profile-header { background: #006633; color: white; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; width: 100%; min-height: 200px; position: relative; }
+        /* HEADER STYLING */
+        .profile-header { background: var(--forest); color: white; padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; width: 100%; min-height: 200px; position: relative; }
         .header-logo-box { display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; cursor: pointer; padding: 10px; z-index: 10; }
         .header-logo-box img { height: 85px; width: auto; }
         .header-logo-box h1 { margin: 0; font-size: 32px; text-transform: uppercase; font-weight: 800; }
-        .header-logo-box p { margin: 0; font-size: 12px; color: #ffd700; }
+        .header-logo-box p { margin: 0; font-size: 12px; color: var(--gold); }
         
         /* SEARCH & CARDS */
         .search-container { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; max-width: 500px; margin-top: 20px; }
-        .input-wrapper { position: relative; flex: 1; display: flex; align-items: center; }
-        #rollNumberInput { padding: 12px 45px 12px 20px; border-radius: 30px; border: none; width: 100%; font-size: 16px; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .search-btn { padding: 12px 25px; border-radius: 30px; border: none; background-color: #ffd700; color: #006633; font-weight: bold; cursor: pointer; }
-        .portal-title { text-align: center; color: #006633; margin: 20px 0 70px 0; font-size: 32px; font-weight: 900; }
+        #rollNumberInput { padding: 12px 20px; border-radius: 30px; border: none; width: 100%; font-size: 16px; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .search-btn { padding: 12px 25px; border-radius: 30px; border: none; background-color: var(--gold); color: var(--forest); font-weight: bold; cursor: pointer; }
+        .portal-title { text-align: center; color: var(--forest); margin: 20px 0 70px 0; font-size: 32px; font-weight: 900; }
         .profile-card { max-width: 750px; margin: 0 auto 40px auto; background: white; padding: 60px 30px 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); position: relative; width: 92%; }
         .photo-container { width: 130px; height: 130px; margin: -120px auto 15px; border-radius: 50%; border: 5px solid white; background: #eef2f3; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .student-photo { width: 100%; height: 100%; object-fit: cover; }
+        
         .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 25px; border-top: 2px solid #f0f0f0; padding-top: 25px; }
-        .info-item { padding: 10px 15px; background: #fafafa; border-radius: 8px; border: 1px solid #eee; }
-        .info-item label { font-size: 11px; color: #777; display: block; text-transform: uppercase; font-weight: bold; }
+        .info-item, .subject-row { padding: 10px 15px; background: #fafafa; border-radius: 8px; border: 1px solid #eee; }
+        .info-item label { font-size: 11px; color: #777; display: block; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
         .info-item span { font-weight: 800; color: #333; font-size: 14px; display: block; }
+        .subject-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; border-left: 5px solid var(--forest); }
         .status-badge { padding: 6px 18px; border-radius: 20px; font-size: 12px; background: #f0f0f0; font-weight: bold; display: inline-block; margin-top: 10px; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
@@ -77,21 +57,17 @@
         <div style="text-align: left;"><h1>Paramount</h1><p>ENGLISH MEDIUM SCHOOL</p></div>
     </a>
     <div class="search-container">
-        <div class="input-wrapper">
-            <input type="text" id="rollNumberInput" placeholder="Enter Roll Number" onkeypress="if(event.key === 'Enter') searchStudent()">
-        </div>
+        <input type="text" id="rollNumberInput" placeholder="Enter Roll Number" onkeypress="if(event.key === 'Enter') searchStudent()">
         <button onclick="searchStudent()" class="search-btn"><i class="fas fa-search"></i></button>
     </div>
 </div>
-
-<div id="liveAnnouncementBanner"><i class="fas fa-bell" style="color: #ffd700; margin-right: 8px;"></i> <span id="announcementMessageText"></span></div>
 
 <h1 class="portal-title">STUDENT PORTAL</h1>
 
 <div class="profile-card">
     <div style="text-align: center;">
         <div class="photo-container"><img id="studentPhoto" src="logo.png" class="student-photo"></div>
-        <h2 id="studentName" style="margin: 10px 0 5px; font-size: 28px; color: #006633; text-transform: uppercase; font-weight: 900;">Student Name</h2>
+        <h2 id="studentName" style="margin: 10px 0 5px; font-size: 28px; color: var(--forest); text-transform: uppercase; font-weight: 900;">Student Name</h2>
         <span class="status-badge" id="statusBadge">Search to View Status</span>
     </div>
 
@@ -100,7 +76,7 @@
         <div class="info-item"><label>Roll Number</label><span id="RollNumber">---</span></div>
         <div class="info-item"><label>Admission No</label><span id="admissionNo">---</span></div>
         <div class="info-item"><label>Father's Name</label><span id="fatherName">---</span></div>
-        <div class="info-item" style="background: #e8f5e9;"><label>Live Attendance %</label><span id="attendanceRate" style="color: #006633; font-size: 18px;">---</span></div>
+        <div class="info-item" style="background: #e8f5e9;"><label>Live Attendance %</label><span id="attendanceRate" style="color: var(--forest); font-size: 18px;">---</span></div>
         <div class="info-item"><label>Date of Birth</label><span id="studentDob">---</span></div>
         <div class="info-item"><label>Parent Phone</label><span id="PhoneNumber">---</span></div>
         <div class="info-item"><label>Gender</label><span id="studentGender">---</span></div>
@@ -110,12 +86,8 @@
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyDRYk9KOK-ga0c88dnYMsAoifW2NJTd_Y8",
-  authDomain: "paramount-school-d55bc.firebaseapp.com",
   databaseURL: "https://paramount-school-d55bc-default-rtdb.firebaseio.com",
-  projectId: "paramount-school-d55bc",
-  storageBucket: "paramount-school-d55bc.firebasestorage.app",
-  messagingSenderId: "130979432562",
-  appId: "1:130979432562:web:4cd94787b23f9daba51aeb"
+  projectId: "paramount-school-d55bc"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -322,31 +294,47 @@ function searchStudent() {
         document.getElementById('studentGender').innerText = student.Gender;
         document.getElementById('studentPhoto').src = `students/${student.Roll}.png`;
         
-        // Fetch Cloud Attendance
         const shortClass = student.Class.split(" ")[0];
         db.ref(`attendance/${shortClass}/students/${student.Name}`).once('value', (snap) => {
             const stats = snap.val() || { presentDays: 0, totalDays: 0 };
             const percent = stats.totalDays > 0 ? Math.round((stats.presentDays / stats.totalDays) * 100) : 0;
-            const rateEl = document.getElementById('attendanceRate');
-            const badge = document.getElementById('statusBadge');
-            
-            rateEl.innerText = `${percent}% (${stats.presentDays}/${stats.totalDays} Days)`;
-            
-            if (stats.totalDays > 0) {
-                if (percent >= 50) {
-                    rateEl.style.color = "#006633";
-                    badge.innerText = "GOOD STANDING";
-                    badge.style.background = "#e8f5e9";
-                    badge.style.color = "#2e7d32";
-                } else {
-                    rateEl.style.color = "#c62828";
-                    badge.innerText = "ACTION REQUIRED";
-                    badge.style.background = "#ffebee";
-                    badge.style.color = "#c62828";
-                }
-            }
+            document.getElementById('attendanceRate').innerText = `${percent}% (${stats.presentDays}/${stats.totalDays} Days)`;
         });
-    } else { alert("Student record not found."); }
+    } else { alert("Student not found."); }
+}
+
+function getDiary() {
+    const name = document.getElementById('stName').value;
+    const date = document.getElementById('stDate').value;
+    const list = document.getElementById('hwList');
+    
+    db.ref(`homework/${date}`).once('value', (snap) => {
+        const data = snap.val();
+        if(!data) { 
+            list.innerHTML = "<p style='color:red; text-align:center;'>No homework found.</p>"; 
+            return; 
+        }
+
+        let timeInfo = data.lastUpdated ? `<p style="text-align:right; font-size:12px; color:#666;">📝 Last updated: ${data.lastUpdated}</p>` : "";
+        let html = `<h3>Homework for ${date}</h3>` + timeInfo;
+        
+        for (let sub in data) {
+            if(sub === 'lastUpdated') continue;
+            html += `<div class="subject-row">
+                <div><strong style="color:var(--forest)">${sub}</strong><p>${data[sub]}</p></div>
+                <div style="text-align:center;"><label style="font-size:10px; display:block;">Parent Sign</label>
+                <input type="checkbox" onchange="signHW('${date}','${name}','${sub}',this.checked)" style="width:22px;height:22px;"></div>
+            </div>`;
+        }
+        list.innerHTML = html;
+    });
+}
+
+function signHW(date, name, sub, checked) {
+    db.ref(`homework_status/${date}/${name}/${sub}`).set({
+        verified: checked,
+        time: new Date().toLocaleString()
+    });
 }
 
 db.ref('announcement').on('value', (snap) => {
@@ -355,8 +343,6 @@ db.ref('announcement').on('value', (snap) => {
     if (msg) { document.getElementById('announcementMessageText').innerText = msg; banner.style.display = 'block'; } 
     else { banner.style.display = 'none'; }
 });
-
-function downloadReport() { window.print(); }
 </script>
 </body>
 </html>

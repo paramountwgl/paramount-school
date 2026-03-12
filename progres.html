@@ -25,7 +25,7 @@
         .header-content { display: flex; align-items: center; justify-content: center; gap: 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
         .header-logo { height: clamp(55px, 8vw, 80px); width: auto; }
         .divider-v { width: 2px; height: 50px; background: rgba(255,255,255,0.3); }
-        .school-text { display: flex; flex-direction: column; line-height: 1.1; text-align: left; }
+        .school-text { display: flex; flex-direction: column; line-height: 1.1; }
         .school-name-main { font-family: 'Montserrat', sans-serif; font-size: clamp(1.2rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: 1px; }
         .school-name-sub { font-family: 'Montserrat', sans-serif; font-size: clamp(0.6rem, 2vw, 0.9rem); color: var(--gold); font-weight: 700; text-transform: uppercase; }
         .page-brand { font-family: 'Montserrat', sans-serif; font-size: clamp(1.1rem, 3.5vw, 2rem); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: white; }
@@ -62,12 +62,10 @@
         .stat-box { background: #f1f8f4; padding: 18px; border-radius: 15px; text-align: center; border: 1px solid #e2eee6; }
         .stat-box span { font-size: 24px; font-weight: 800; color: var(--forest); }
         
-        /* SPACING FIXED FOR GRADE BOX */
         .grade-box { grid-column: span 2; background: #fff8e1; border: 1px solid #ffe082; padding: 35px; border-radius: 20px; text-align: center; }
-        .grade-box label { display: block; margin-bottom: 25px; font-size: 11px; font-weight: 900; color: #777; letter-spacing: 1px; }
+        .grade-box label { display: block; margin-bottom: 15px; font-size: 11px; font-weight: 900; color: #777; }
         .grade-pill { background: var(--forest); color: white; padding: 14px 70px; border-radius: 50px; font-size: 30px; font-weight: 900; display: inline-block; box-shadow: 0 8px 25px rgba(0,102,51,0.3); }
 
-        /* SIGNATURES MOVED DOWN */
         .signatures-row { margin-top: 100px; display: none; justify-content: space-between; padding: 0 20px; }
         .sig-block { text-align: center; width: 170px; border-top: 2px solid #333; padding-top: 10px; font-size: 13px; font-weight: 800; text-transform: uppercase; }
 
@@ -114,8 +112,8 @@
                 <div class="toggle-container">
                     <select id="examType" onchange="fetchResults()">
                         <option value="FA-1">FA-1</option><option value="FA-2">FA-2</option>
-                        <option value="FA-3">FA-3</option><option value="SA-1">SA-1(Pre-Annual)</option>
-                        <option value="SA-2">SA-2(Annual)</option>
+                        <option value="FA-3">FA-3</option><option value="SA-1">SA-1</option>
+                        <option value="SA-2">SA-2</option>
                     </select>
                     <button class="btn-all-exams" onclick="fetchAllExams()">All Exams View</button>
                 </div>
@@ -140,16 +138,16 @@
             </div>
 
             <table class="cumulative-view" id="allExamsTable">
-                <thead><tr><th>Subject</th><th>FA1</th><th>FA2</th><th>FA3</th><th>SA1(Pre-Annual)</th><th>SA2(Annual)</th></tr></thead>
+                <thead><tr><th>Subject</th><th>FA1</th><th>FA2</th><th>FA3</th><th>SA1</th><th>SA2</th></tr></thead>
                 <tbody id="allExamsBody"></tbody>
             </table>
 
             <div id="summaryArea" class="results-container">
                 <div class="summary-grid">
-                    <div class="stat-box"><label>TOTAL</label><span id="resTotal">-</span></div>
+                    <div class="stat-box"><label>TOTAL (AVAILABLE)</label><span id="resTotal">-</span></div>
                     <div class="stat-box"><label>PERCENTAGE</label><span id="resPerc">-</span></div>
                     <div class="grade-box">
-                        <label>FINAL ACADEMIC PERFORMANCE GRADE</label>
+                        <label>ACADEMIC PERFORMANCE GRADE</label>
                         <span id="resGrade" class="grade-pill">-</span>
                     </div>
                 </div>
@@ -160,7 +158,7 @@
             </div>
             
             <button class="btn-download" id="pdfBtn" onclick="downloadReport()"><i class="fas fa-file-pdf"></i> Download Report Card</button>
-            <div id="noData" style="text-align:center; padding: 40px; color: #999; display: none;">Records not found.</div>
+            <div id="noData" style="text-align:center; padding: 40px; color: #999; display: none;">No records found.</div>
         </div>
     </div>
 </div>
@@ -187,6 +185,12 @@
     };
 
     let chartObj;
+
+    function getGradeSubjects(className) {
+        if (["Grade-6", "Grade-7", "Grade-8"].includes(className)) return ["TEL", "HIN", "ENG", "MAT", "PHY", "CHE", "BIO", "SOC", "IIT"];
+        if (className === "Grade-5") return ["TEL", "HIN", "ENG", "MAT", "SCI", "SOC", "IIT"];
+        return ["TEL", "HIN", "ENG", "MAT", "SCI", "SOC"];
+    }
 
     function fetchResults() {
         const roll = document.getElementById('rollNo').value.trim();
@@ -215,14 +219,15 @@
                 document.getElementById('singleResults').style.display = 'block';
                 document.getElementById('summaryArea').style.display = 'block';
                 document.getElementById('pdfBtn').style.display = 'flex';
+                
+                const subjects = getGradeSubjects(student.Class);
                 const m = data.marks;
-                const seq = ["TEL", "HIN", "ENG", "MAT", "SCI", "PHY", "CHE", "BIO", "SOC", "IIT"];
-                const present = seq.filter(s => m[s] !== undefined);
                 
                 document.getElementById('col1').innerHTML = ""; document.getElementById('col2').innerHTML = "";
-                const half = Math.ceil(present.length / 2);
-                present.forEach((sub, idx) => {
-                    const row = `<div class="subj-item"><span>${sub}</span><span>${m[sub]}</span></div>`;
+                const half = Math.ceil(subjects.length / 2);
+                subjects.forEach((sub, idx) => {
+                    const mark = m[sub] || '-';
+                    const row = `<div class="subj-item"><span>${sub}</span><span>${mark}</span></div>`;
                     if(idx < half) document.getElementById('col1').innerHTML += row;
                     else document.getElementById('col2').innerHTML += row;
                 });
@@ -230,7 +235,7 @@
                 const ctx = document.getElementById('marksGraph').getContext('2d');
                 chartObj = new Chart(ctx, {
                     type: 'bar',
-                    data: { labels: present, datasets: [{ data: present.map(s => m[s]), backgroundColor: '#006633', borderRadius: 5 }] },
+                    data: { labels: subjects, datasets: [{ data: subjects.map(s => m[s] || 0), backgroundColor: '#006633', borderRadius: 5 }] },
                     options: { scales: { y: { beginAtZero: true, max: 100 } } }
                 });
 
@@ -244,38 +249,43 @@
     async function fetchAllExams() {
         const roll = document.getElementById('rollNo').value.trim();
         const student = students[roll];
-        if(!student) return alert("Enter Roll Number First");
+        if(!student) return alert("Roll Number Required");
 
-        document.getElementById('noData').style.display = 'none';
-        document.getElementById('singleResults').style.display = 'none';
-        
-        const exams = ["FA-1", "FA-2", "FA-3", "SA-1", "SA-2"];
-        const subjects = ["TEL", "HIN", "ENG", "MAT", "SCI", "PHY", "CHE", "BIO", "SOC", "IIT"];
-        
         db.ref(`progress_cards/${student.Class}`).once('value', (snap) => {
             const classData = snap.val();
             document.getElementById('reportProfile').style.display = 'flex';
             document.getElementById('dispName').innerText = student.Name;
             document.getElementById('studentPhoto').src = `students/${roll}.png`;
 
+            const subjects = getGradeSubjects(student.Class);
+            const exams = ["FA-1", "FA-2", "FA-3", "SA-1", "SA-2"];
+            
             let tableHtml = "";
+            let grandTotal = 0; let totalPossible = 0;
+
             subjects.forEach(sub => {
                 let row = `<tr><td class="subj-cell">${sub}</td>`;
                 exams.forEach(ex => {
-                    const mark = (classData && classData[ex] && classData[ex][student.Name]) ? classData[ex][student.Name].marks[sub] : '-';
-                    const failStyle = (mark !== '-' && parseInt(mark) < 35) ? 'class="fail-mark"' : '';
-                    row += `<td ${failStyle}>${mark}</td>`;
+                    let mark = (classData && classData[ex] && classData[ex][student.Name]) ? classData[ex][student.Name].marks[sub] : '-';
+                    if (mark === undefined) mark = '-';
+                    const failClass = (mark !== '-' && parseInt(mark) < 35) ? 'fail-mark' : '';
+                    row += `<td class="${failClass}">${mark}</td>`;
+                    if(mark !== '-') { grandTotal += parseInt(mark); totalPossible += 100; }
                 });
                 row += `</tr>`;
                 tableHtml += row;
             });
+
             document.getElementById('allExamsBody').innerHTML = tableHtml;
             document.getElementById('allExamsTable').style.display = 'table';
+            document.getElementById('singleResults').style.display = 'none';
             document.getElementById('summaryArea').style.display = 'block';
             document.getElementById('pdfBtn').style.display = 'flex';
-            document.getElementById('resTotal').innerText = "CUMULATIVE";
-            document.getElementById('resPerc').innerText = "-";
-            document.getElementById('resGrade').innerText = "N/A";
+            
+            const perc = totalPossible > 0 ? ((grandTotal / totalPossible) * 100).toFixed(1) : '0';
+            document.getElementById('resTotal').innerText = grandTotal;
+            document.getElementById('resPerc').innerText = perc + "%";
+            document.getElementById('resGrade').innerText = perc >= 35 ? "PASSED" : "FAIL";
         });
     }
 
@@ -292,7 +302,7 @@
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('p', 'mm', 'a4');
         pdf.addImage(img, 'PNG', 0, 0, 210, (canvas.height * 210) / canvas.width);
-        pdf.save(`${document.getElementById('dispName').innerText}_Progress.pdf`);
+        pdf.save(`${document.getElementById('dispName').innerText}_Report.pdf`);
 
         nav.style.display = 'flex'; sc.style.display = 'block'; btn.style.display = 'flex'; sig.style.display = 'none';
     }

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Academic Progress | Paramount School</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        :root { --forest: #006633; --gold: #ffd700; --light: #f4f7f6; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; padding-bottom: 100px; }
+        
+        /* Premium Nav */
+        .portal-nav { background: #004d26; padding: 12px; display: flex; justify-content: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 2000; }
+        .portal-nav a { color: white; text-decoration: none; font-weight: bold; font-size: 12px; padding: 8px 15px; border-radius: 25px; transition: 0.3s; display: flex; align-items: center; gap: 6px; border: 1px solid transparent; }
+        .portal-nav a.active { background: rgba(255,255,255,0.2); border: 1px solid var(--gold); color: var(--gold); }
+
+        header { background: var(--forest); color: white; padding: 25px 20px; text-align: center; }
+        .header-logo { height: 60px; margin-bottom: 10px; }
+        .portal-title { font-family: 'Montserrat'; font-weight: 800; font-size: 1.4rem; color: white; text-transform: uppercase; }
+
+        .container { max-width: 750px; margin: -30px auto 30px auto; padding: 0 15px; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 8px solid var(--gold); }
+        
+        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { flex: 1; padding: 14px 20px; border-radius: 50px; border: 2px solid #eee; outline: none; font-size: 16px; }
+        .btn-search { background: var(--forest); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: 800; cursor: pointer; }
+
+        .student-header { text-align: center; margin-bottom: 20px; display: none; }
+        .student-header h2 { color: var(--forest); margin: 0; text-transform: uppercase; font-size: 20px; }
+        .student-header p { color: #666; margin: 5px 0; font-weight: 700; font-size: 13px; }
+
+        .marks-table { width: 100%; border-collapse: collapse; margin-top: 15px; display: none; }
+        .marks-table th { background: #f8f9fa; color: var(--forest); text-align: left; padding: 12px; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #eee; }
+        .marks-table td { padding: 12px; border-bottom: 1px solid #f0f0f0; font-weight: 700; color: #333; font-size: 15px; }
+
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; display: none; }
+        .stat-box { background: #f1f8f4; padding: 15px; border-radius: 12px; text-align: center; }
+        .stat-box label { display: block; font-size: 10px; color: #777; font-weight: 900; margin-bottom: 5px; }
+        .stat-box span { font-size: 18px; font-weight: 800; color: var(--forest); }
+        
+        .grade-pill { background: var(--forest); color: white; padding: 5px 15px; border-radius: 20px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="portal-nav">
+    <a href="Student Portal.html"><i class="fas fa-id-card"></i> Profile</a>
+    <a href="progress.html" class="active"><i class="fas fa-chart-line"></i> Progress</a>
+    <a href="homework.html"><i class="fas fa-book-open"></i> Homework</a>
+</div>
+
+<header>
+    <img src="logo.png" class="header-logo" onerror="this.src='https://via.placeholder.com/60'">
+    <div class="portal-title">Academic Progress</div>
+</header>
+
+<div class="container">
+    <div class="card">
+        <div class="search-box">
+            <input type="text" id="rollNo" placeholder="Enter Roll Number">
+            <button class="btn-search" onclick="fetchResults()"><i class="fas fa-search"></i></button>
+        </div>
+
+        <select id="examType" class="input" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #eee; margin-bottom: 20px;" onchange="fetchResults()">
+            <option value="FA-1">FA-1</option>
+            <option value="FA-2">FA-2</option>
+            <option value="SA-1">SA-1 (Half Yearly)</option>
+            <option value="SA-2">SA-2 (Annual)</option>
+        </select>
+
+        <div id="studentInfo" class="student-header">
+            <h2 id="dispName">-</h2>
+            <p id="dispClass">-</p>
+        </div>
+
+        <table class="marks-table" id="resTable">
+            <thead><tr><th>Subject</th><th>Marks</th></tr></thead>
+            <tbody id="marksBody"></tbody>
+        </table>
+
+        <div class="summary-grid" id="statGrid">
+            <div class="stat-box"><label>TOTAL</label><span id="resTotal">-</span></div>
+            <div class="stat-box"><label>PERCENTAGE</label><span id="resPerc">-</span></div>
+            <div class="stat-box" style="grid-column: span 2;">
+                <label>FINAL GRADE</label>
+                <span id="resGrade" class="grade-pill">-</span>
+            </div>
+        </div>
+        
+        <div id="noData" style="text-align:center; padding: 30px; color: #999; display: none;">
+            <i class="fas fa-exclamation-circle" style="font-size: 30px; margin-bottom: 10px;"></i>
+            <p>Results not uploaded for this student/exam yet.</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script>
+    const firebaseConfig = { apiKey: "AIzaSyDRYk9KOK-ga0c88dnYMsAoifW2NJTd_Y8", databaseURL: "https://paramount-school-d55bc-default-rtdb.firebaseio.com", projectId: "paramount-school-d55bc" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Student Registry (Keep this synchronized with your main file)
+    const students = {
+        "1472070": { Name: "Hanish Macharla", Class: "Pre-KG" },
+        "1298423": { Name: "Dheeraj Gattu", Class: "Grade-1" },
+        "1298334": { Name: "Vyshnavi Uppala", Class: "Grade-8" }
+        // ... add all roll numbers here
+    };
+
+    function fetchResults() {
+        const roll = document.getElementById('rollNo').value.trim();
+        const exam = document.getElementById('examType').value;
+        const student = students[roll];
+
+        if(!student) return;
+
+        const shortClass = student.Class.split(" ")[0];
+        document.getElementById('noData').style.display = 'none';
+
+        db.ref(`progress_cards/${shortClass}/${exam}/${student.Name}`).once('value', (snap) => {
+            const data = snap.val();
+            
+            document.getElementById('studentInfo').style.display = 'block';
+            document.getElementById('dispName').innerText = student.Name;
+            document.getElementById('dispClass').innerText = student.Class;
+
+            if(data) {
+                let html = "";
+                for(let s in data.marks) {
+                    html += `<tr><td>${s}</td><td>${data.marks[s]}</td></tr>`;
+                }
+                document.getElementById('marksBody').innerHTML = html;
+                document.getElementById('resTable').style.display = 'table';
+                document.getElementById('statGrid').style.display = 'grid';
+                document.getElementById('resTotal').innerText = data.total;
+                document.getElementById('resPerc').innerText = data.percentage;
+                document.getElementById('resGrade').innerText = data.grade;
+            } else {
+                document.getElementById('resTable').style.display = 'none';
+                document.getElementById('statGrid').style.display = 'none';
+                document.getElementById('noData').style.display = 'block';
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -13,7 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
-        :root { --forest: #006633; --gold: #ffd700; --light: #f4f7f6; --danger: #e53935; }
+        :root { --forest: #006633; --gold: #ffd700; --light: #f4f7f6; --danger: #e53935; --premium-gradient: linear-gradient(135deg, #006633 0%, #004d26 100%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: #eef2f1; margin: 0; padding-bottom: 120px; }
         
@@ -36,16 +36,13 @@
         input { width: 100%; padding: 18px 25px; border-radius: 50px; border: 2px solid #ddd; outline: none; font-size: 16px; }
         .btn-search { position: absolute; right: 8px; background: var(--forest); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; }
         
-        select { 
-            flex: 2; padding: 14px; border-radius: 12px; border: 2px solid #ddd; background: #fff; font-weight: 700; outline: none; 
-            -webkit-appearance: none; appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23006633' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: right 15px center; background-size: 15px;
-        }
+        .toggle-container { display: flex; gap: 12px; margin-bottom: 25px; }
+        select { flex: 1.5; padding: 14px; border-radius: 15px; border: 2px solid #eee; background: #fff; font-weight: 700; outline: none; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23006633' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; background-size: 15px; }
 
-        .btn-all-exams { flex: 1.2; background: white; color: var(--forest); border: 2px solid var(--forest); border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 11px; text-transform: uppercase; }
+        .btn-premium { flex: 1.2; position: relative; background: var(--premium-gradient); color: white; border: none; border-radius: 15px; font-weight: 800; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; transition: 0.3s; box-shadow: 0 8px 20px rgba(0, 102, 51, 0.15); }
+        .btn-premium.back-mode { background: white; color: var(--forest); border: 2px solid var(--forest); }
 
-        .report-header { display: none; justify-content: space-between; align-items: center; margin-bottom: 25px; background: #f9f9f9; padding: 20px; border-radius: 20px; }
+        .report-header { display: none; justify-content: space-between; align-items: center; margin-bottom: 25px; background: #f9f9f9; padding: 20px; border-radius: 20px; border-left: 5px solid var(--forest); }
         .student-meta h2 { color: var(--forest); margin: 0; font-size: 24px; font-weight: 900; }
         .photo-container { width: 110px; height: 110px; border-radius: 50%; border: 4px solid white; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .student-photo { width: 100%; height: 100%; object-fit: cover; }
@@ -56,9 +53,9 @@
         .center-divider { width: 1px; background: #eee; height: 100%; }
 
         .cumulative-view { width: 100%; border-collapse: collapse; margin-top: 20px; border-radius: 15px; overflow: hidden; display: none; font-size: 13px; }
-        .cumulative-view th { background: var(--forest); color: white; padding: 15px; }
-        .cumulative-view td { padding: 12px; text-align: center; border: 1px solid #eee; font-weight: 700; }
-        .fail-mark { background: #fff5f5 !important; color: var(--danger) !important; }
+        .cumulative-view th { background: var(--forest); color: white; padding: 15px; border: 1px solid #004d26; }
+        .cumulative-view td { padding: 12px; text-align: center; border: 1px solid #eee; font-weight: 700; background: #fff; }
+        .fail-mark { background: #fff5f5 !important; color: var(--danger) !important; font-weight: 900; }
 
         .graph-section { margin-top: 30px; border: 1px solid #eee; border-radius: 20px; padding: 20px; background: white; min-height: 250px; }
 
@@ -67,28 +64,30 @@
         .stat-label { display: block; font-size: 10px; font-weight: 900; color: #999; margin-bottom: 5px; }
         .stat-value { font-size: 22px; font-weight: 900; color: var(--forest); }
 
-        .grade-highlight-box { grid-column: span 2; background: linear-gradient(135deg, var(--forest), #004d26); color: white; padding: 30px; border-radius: 20px; text-align: center; }
-        .big-grade { font-size: 50px; font-weight: 900; display: block; color: var(--gold); }
+        .grade-highlight-box { grid-column: span 2; background: var(--premium-gradient); color: white; padding: 30px; border-radius: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,102,51,0.2); }
+        .big-grade { font-size: 55px; font-weight: 900; display: block; color: var(--gold); }
 
+        /* SIGNATURE SECTION UPDATED */
         .signatures-row { margin-top: 130px; display: none; justify-content: space-between; padding: 0 20px; }
-        .sig-block { text-align: center; width: 180px; border-top: 2px solid #333; padding-top: 10px; font-size: 12px; font-weight: 800; }
+        .sig-block { text-align: center; width: 220px; border-top: 3px solid #333; padding-top: 10px; font-size: 12px; font-weight: 800; color: #333; line-height: 1.5; }
+        .correspondent-name { font-size: 14px; color: var(--forest); display: block; margin-top: 2px; }
 
         .btn-download { background: var(--forest); color: white; border: none; padding: 18px; border-radius: 50px; font-weight: 800; cursor: pointer; margin-top: 30px; width: 100%; display: none; justify-content: center; align-items: center; gap: 10px; }
 
         @media (max-width: 650px) {
+            .header-content { flex-direction: column; text-align: center; }
             .divider-v { display: none; }
             .subjects-section { grid-template-columns: 1fr; }
-            .center-divider { display: none; }
-            .cumulative-view { font-size: 9px; }
+            .cumulative-view { font-size: 8px; }
         }
     </style>
 </head>
 <body>
 
 <div class="portal-nav" id="noPrintNav">
-    <a href="Student Portal.html">Profile</a>
-    <a href="progress.html" class="active">Progress</a>
-    <a href="homework.html">Homework</a>
+    <a href="Student Portal.html"><i class="fas fa-id-card"></i> Profile</a>
+    <a href="progress.html" class="active"><i class="fas fa-chart-line"></i> Progress</a>
+    <a href="homework.html"><i class="fas fa-book-open"></i> Homework</a>
 </div>
 
 <div id="printableArea">
@@ -108,7 +107,7 @@
         <div class="card">
             <div id="searchControls">
                 <div class="search-area">
-                    <input type="text" id="rollNo" placeholder="Enter Roll Number" onkeypress="if(event.key === 'Enter') fetchResults();">
+                    <input type="text" id="rollNo" placeholder="Enter Student Roll Number" onkeypress="if(event.key === 'Enter') fetchResults();">
                     <button class="btn-search" onclick="fetchResults()"><i class="fas fa-search"></i></button>
                 </div>
                 <div class="toggle-container">
@@ -117,7 +116,9 @@
                         <option value="FA-3">FA-3</option><option value="SA-1">SA-1(Pre-Annual)</option>
                         <option value="SA-2">SA-2(Annual)</option>
                     </select>
-                    <button id="toggleBtn" class="btn-all-exams" onclick="toggleCumulative()">All Exams View</button>
+                    <button id="toggleBtn" class="btn-premium" onclick="toggleCumulative()">
+                        <i class="fas fa-layer-group"></i> All Exams View
+                    </button>
                 </div>
             </div>
 
@@ -125,7 +126,7 @@
                 <div class="student-meta">
                     <h2 id="dispName">-</h2>
                     <p id="dispClass">-</p>
-                    <p id="dispRoll" style="color:var(--forest); font-weight:800;">-</p>
+                    <p id="dispRoll" style="color:var(--forest); font-weight:800; font-size:12px;">-</p>
                 </div>
                 <div class="photo-container"><img id="studentPhoto" src="logo.png" class="student-photo" onerror="this.src='logo.png'"></div>
             </div>
@@ -149,17 +150,20 @@
                     <div class="stat-ring-card"><span class="stat-label">TOTAL SCORE</span><span id="resTotal" class="stat-value">-</span></div>
                     <div class="stat-ring-card"><span class="stat-label">PERCENTAGE</span><span id="resPerc" class="stat-value">-</span></div>
                     <div class="grade-highlight-box" id="promotionBox">
-                        <label id="gradeLabel">PERFORMANCE GRADE</label>
+                        <label id="gradeLabel" style="color:rgba(255,255,255,0.7); font-size:11px; font-weight:900;">PERFORMANCE GRADE</label>
                         <span id="resGrade" class="big-grade">-</span>
                     </div>
                 </div>
                 <div class="signatures-row" id="sigRow">
                     <div class="sig-block">Class Teacher Signature</div>
-                    <div class="sig-block">Correspondent Signature</div>
+                    <div class="sig-block">
+                        Correspondent Signature<br>
+                        <span class="correspondent-name">Mr. Shaik Ahmad (Correspondent)</span>
+                    </div>
                 </div>
             </div>
             
-            <button class="btn-download" id="pdfBtn" onclick="downloadReport()"><i class="fas fa-file-pdf"></i> Download Report</button>
+            <button class="btn-download" id="pdfBtn" onclick="downloadReport()"><i class="fas fa-file-pdf"></i> Download Official Report</button>
             <div id="noData" style="text-align:center; padding: 40px; color: #999; display: none;">No Student Found.</div>
         </div>
     </div>
@@ -192,7 +196,12 @@
 
     function fetchResults() {
         isCumulative = false;
-        document.getElementById('toggleBtn').innerText = "All Exams View";
+        const toggleBtn = document.getElementById('toggleBtn');
+        if(toggleBtn) {
+            toggleBtn.innerHTML = '<i class="fas fa-layer-group"></i> All Exams View';
+            toggleBtn.classList.remove('back-mode');
+        }
+
         const roll = document.getElementById('rollNo').value.trim();
         const exam = document.getElementById('examType').value;
         const student = students[roll];
@@ -240,6 +249,7 @@
                 document.getElementById('noData').style.display = 'none';
             } else { 
                 document.getElementById('singleResults').style.display = 'none';
+                document.getElementById('summaryArea').style.display = 'none';
                 document.getElementById('noData').style.display = 'block'; 
             }
         });
@@ -251,7 +261,9 @@
         if(!student) return;
 
         isCumulative = true;
-        document.getElementById('toggleBtn').innerText = "Back to Single Exam";
+        const toggleBtn = document.getElementById('toggleBtn');
+        toggleBtn.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Single Exam';
+        toggleBtn.classList.add('back-mode');
         document.getElementById('singleResults').style.display = 'none';
 
         db.ref(`progress_cards/${student.Class}`).once('value', (snap) => {

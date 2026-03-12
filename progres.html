@@ -22,10 +22,10 @@
         .portal-nav a { color: white; text-decoration: none; font-weight: bold; font-size: 12px; padding: 8px 15px; border-radius: 25px; display: flex; align-items: center; gap: 6px; }
         .portal-nav a.active { background: rgba(255,255,255,0.2); border: 1px solid var(--gold); color: var(--gold); }
 
-        /* HEADER */
+        /* HEADER STYLE (SCREENSHOT 309) */
         header { background: var(--forest); color: white; padding: 25px 3%; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         .header-content { display: flex; align-items: center; justify-content: center; gap: 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
-        .header-logo { height: clamp(55px, 8vw, 80px); width: auto; flex-shrink: 0; }
+        .header-logo { height: clamp(55px, 8vw, 80px); width: auto; }
         .divider-v { width: 2px; height: 50px; background: rgba(255,255,255,0.3); }
         .school-text { display: flex; flex-direction: column; line-height: 1.1; text-align: left; }
         .school-name-main { font-family: 'Montserrat', sans-serif; font-size: clamp(1.2rem, 4vw, 2.2rem); font-weight: 800; letter-spacing: 1px; }
@@ -35,10 +35,10 @@
         .container { max-width: 900px; margin: 30px auto; padding: 0 15px; }
         .card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); border-top: 8px solid var(--gold); position: relative; }
         
-        /* SEARCH & BUTTONS */
         .search-area { position: relative; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
         input { width: 100%; padding: 18px 25px; border-radius: 50px; border: 2px solid #eee; outline: none; font-size: 16px; }
         .btn-search { position: absolute; right: 8px; background: var(--forest); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
         .toggle-container { display: flex; gap: 10px; margin-bottom: 20px; }
         select { flex: 2; padding: 14px; border-radius: 12px; border: 2px solid #eee; background: #fafafa; font-weight: 700; outline: none; -webkit-appearance: none; }
         .btn-all-exams { flex: 1; background: var(--forest); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 12px; text-transform: uppercase; }
@@ -46,8 +46,12 @@
         /* STUDENT PROFILE */
         .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; display: none; }
         .student-meta h2 { color: var(--forest); margin: 0; font-size: 24px; font-weight: 900; text-transform: uppercase; }
-        .photo-container { width: 120px; height: 120px; border-radius: 15px; border: 4px solid #eee; overflow: hidden; background: #f8f9fa; }
+        .photo-container { width: 130px; height: 130px; border-radius: 20px; border: 4px solid #eee; overflow: hidden; background: #f8f9fa; }
         .student-photo { width: 100%; height: 100%; object-fit: cover; }
+
+        /* MERIT BADGES */
+        .badge-container { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .merit-badge { background: #fff8e1; color: #ffa000; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; border: 1px solid #ffe082; display: flex; align-items: center; gap: 5px; text-transform: uppercase; }
 
         /* SINGLE VIEW */
         .results-container { display: none; }
@@ -55,7 +59,7 @@
         .subj-item { display: flex; justify-content: space-between; padding: 12px 10px; border-bottom: 1px solid #eee; font-weight: 700; font-size: 14px; }
         .center-divider { width: 1px; background: #eee; height: 100%; }
 
-        /* CUMULATIVE TABLE */
+        /* CUMULATIVE VIEW */
         .cumulative-view { width: 100%; border-collapse: collapse; margin-top: 20px; border-radius: 15px; overflow: hidden; display: none; font-size: 13px; border: 1px solid #eee; }
         .cumulative-view th { background: var(--forest); color: white; padding: 12px; text-align: center; }
         .cumulative-view td { padding: 12px; text-align: center; border: 1px solid #eee; font-weight: 700; }
@@ -64,19 +68,19 @@
 
         .graph-section { margin-top: 30px; border: 1px solid #f0f0f0; border-radius: 20px; padding: 20px; background: white; }
 
-        /* FINAL GRADE SPACING & BOX */
+        /* FINAL GRADE BOX */
         .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 25px; }
         .stat-box { background: #f1f8f4; padding: 18px; border-radius: 15px; text-align: center; border: 1px solid #e2eee6; }
         .stat-box span { font-size: 24px; font-weight: 800; color: var(--forest); }
-        .grade-box { grid-column: span 2; background: #fff8e1; border: 1px solid #ffe082; padding: 40px; border-radius: 20px; text-align: center; margin-top: 10px; }
-        .grade-box label { display: block; margin-bottom: 25px; font-size: 11px; font-weight: 900; color: #777; letter-spacing: 1px; }
-        .grade-pill { background: var(--forest); color: white; padding: 15px 70px; border-radius: 50px; font-size: 32px; font-weight: 900; display: inline-block; box-shadow: 0 8px 25px rgba(0,102,51,0.3); }
+        .grade-box { grid-column: span 2; background: #fff8e1; border: 1px solid #ffe082; padding: 45px 20px; border-radius: 25px; text-align: center; margin-top: 15px; }
+        .grade-box label { display: block; margin-bottom: 25px; font-size: 12px; font-weight: 900; color: #888; text-transform: uppercase; }
+        .grade-pill { background: var(--forest); color: white; padding: 15px 80px; border-radius: 100px; font-size: 34px; font-weight: 900; display: inline-block; box-shadow: 0 10px 30px rgba(0,102,51,0.3); letter-spacing: 2px; }
 
-        /* SIGNATURES DROP */
-        .signatures-row { margin-top: 120px; display: none; justify-content: space-between; padding: 0 20px; }
-        .sig-block { text-align: center; width: 170px; border-top: 2px solid #333; padding-top: 10px; font-size: 13px; font-weight: 800; text-transform: uppercase; }
+        /* SIGNATURES */
+        .signatures-row { margin-top: 130px; display: none; justify-content: space-between; padding: 0 20px; }
+        .sig-block { text-align: center; width: 180px; border-top: 3px solid #333; padding-top: 12px; font-size: 13px; font-weight: 800; text-transform: uppercase; color: #333; }
 
-        .btn-download { background: linear-gradient(135deg, var(--forest), #004d26); color: white; border: none; padding: 18px; border-radius: 50px; font-weight: 800; cursor: pointer; margin-top: 30px; width: 100%; display: none; align-items: center; justify-content: center; gap: 10px; }
+        .btn-download { background: linear-gradient(135deg, var(--forest), #004d26); color: white; border: none; padding: 18px; border-radius: 50px; font-weight: 800; cursor: pointer; margin-top: 30px; width: 100%; display: none; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
         @media (max-width: 650px) {
             .divider-v { display: none; }
@@ -84,7 +88,7 @@
             .center-divider { display: none; }
             .cumulative-view { font-size: 9px; }
             .report-header { flex-direction: column-reverse; text-align: center; }
-            .grade-pill { padding: 12px 50px; font-size: 24px; }
+            .grade-pill { padding: 12px 60px; font-size: 28px; }
         }
     </style>
 </head>
@@ -113,21 +117,22 @@
         <div class="card">
             <div id="searchControls">
                 <div class="search-area">
-                    <input type="text" id="rollNo" placeholder="Enter Roll Number" onkeypress="if(event.key === 'Enter') fetchResults();">
+                    <input type="text" id="rollNo" placeholder="Enter Student Roll Number" onkeypress="if(event.key === 'Enter') fetchResults();">
                     <button class="btn-search" onclick="fetchResults()"><i class="fas fa-search"></i></button>
                 </div>
                 <div class="toggle-container">
                     <select id="examType" onchange="fetchResults()">
-                        <option value="FA-1">FA-1</option><option value="FA-2">FA-2</option>
-                        <option value="FA-3">FA-3</option><option value="SA-1">SA-1(Pre-Annual)</option>
-                        <option value="SA-2">SA-2(Annual)</option>
+                        <option value="FA-1">FA-1 (Formative 1)</option><option value="FA-2">FA-2 (Formative 2)</option>
+                        <option value="FA-3">FA-3 (Formative 3)</option><option value="SA-1">SA-1 (Pre-Annual)</option>
+                        <option value="SA-2">SA-2 (Annual)</option>
                     </select>
-                    <button class="btn-all-exams" onclick="fetchAllExams()">All Exams View</button>
+                    <button class="btn-all-exams" onclick="fetchAllExams()">Cumulative View</button>
                 </div>
             </div>
 
             <div id="reportProfile" class="report-header">
                 <div class="student-meta">
+                    <div id="meritBadges" class="badge-container"></div>
                     <h2 id="dispName">-</h2>
                     <p id="dispClass">-</p>
                     <p id="dispRoll" style="color:var(--forest); font-weight:800;">-</p>
@@ -141,7 +146,10 @@
                     <div class="center-divider"></div>
                     <div id="col2" class="subj-column"></div>
                 </div>
-                <div class="graph-section"><canvas id="marksGraph"></canvas></div>
+                <div class="graph-section">
+                    <div style="text-align:center; font-weight:800; font-size:11px; margin-bottom:10px; color:#999;">VERTICAL ANALYSIS (MAX: 100)</div>
+                    <canvas id="marksGraph"></canvas>
+                </div>
             </div>
 
             <table class="cumulative-view" id="allExamsTable">
@@ -151,10 +159,10 @@
 
             <div id="summaryArea" class="results-container">
                 <div class="summary-grid">
-                    <div class="stat-box"><label>TOTAL OBTAINED </label><span id="resTotal">-</span></div>
-                    <div class="stat-box"><label>PERCENTAGE </label><span id="resPerc">-</span></div>
+                    <div class="stat-box"><label style="font-size:10px; font-weight:900; color:#888;">TOTAL</label><span id="resTotal">-</span></div>
+                    <div class="stat-box"><label style="font-size:10px; font-weight:900; color:#888;">PERCENTAGE</label><span id="resPerc">-</span></div>
                     <div class="grade-box">
-                        <label id="gradeLabel">FINAL ACADEMIC PERFORMANCE GRADE</label>
+                        <label id="gradeLabel">FINAL ACADEMIC GRADE</label>
                         <span id="resGrade" class="grade-pill">-</span>
                     </div>
                 </div>
@@ -165,7 +173,7 @@
             </div>
             
             <button class="btn-download" id="pdfBtn" onclick="downloadReport()"><i class="fas fa-file-pdf"></i> Download Report Card</button>
-            <div id="noData" style="text-align:center; padding: 40px; color: #999; display: none;">Records not found.</div>
+            <div id="noData" style="text-align:center; padding: 40px; color: #999; display: none;">No Student Found. Check Roll Number.</div>
         </div>
     </div>
 </div>
@@ -219,7 +227,7 @@
             document.getElementById('reportProfile').style.display = 'flex';
             document.getElementById('dispName').innerText = student.Name;
             document.getElementById('dispClass').innerText = student.Class;
-            document.getElementById('dispRoll').innerText = `Roll: ${roll}`;
+            document.getElementById('dispRoll').innerText = `Roll Number: ${roll}`;
             document.getElementById('studentPhoto').src = `students/${roll}.png`;
 
             if(data) {
@@ -250,6 +258,13 @@
                 document.getElementById('resTotal').innerText = data.total;
                 document.getElementById('resPerc').innerText = data.percentage;
                 document.getElementById('resGrade').innerText = data.grade;
+
+                // Merit Badge Award
+                let bHtml = "";
+                if(parseFloat(data.percentage) >= 90) bHtml += `<span class="merit-badge"><i class="fas fa-medal"></i> Star Performer</span>`;
+                if(data.grade === "A1") bHtml += `<span class="merit-badge"><i class="fas fa-trophy"></i> Honors List</span>`;
+                document.getElementById('meritBadges').innerHTML = bHtml;
+
             } else { document.getElementById('noData').style.display = 'block'; }
         });
     }

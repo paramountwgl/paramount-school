@@ -38,18 +38,15 @@
         .btn-search { position: absolute; right: 8px; background: var(--forest); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
         .toggle-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        
-        /* DROPDOWN ARROW FIX */
         select { 
             flex: 2; padding: 14px; border-radius: 12px; border: 2px solid #eee; background: #fafafa; font-weight: 700; outline: none; 
             -webkit-appearance: none; -moz-appearance: none; appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23006633' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
             background-repeat: no-repeat; background-position: right 15px center; background-size: 15px;
         }
+        .btn-all-exams { flex: 1.2; background: var(--forest); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 11px; text-transform: uppercase; padding: 10px; }
 
-        .btn-all-exams { flex: 1.2; background: var(--forest); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; font-size: 11px; text-transform: uppercase; padding: 10px; box-shadow: 0 4px 10px rgba(0,102,51,0.2); }
-
-        .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; display: none; }
+        .report-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; display: none; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         .student-meta h2 { color: var(--forest); margin: 0; font-size: 24px; font-weight: 900; text-transform: uppercase; }
         .photo-container { width: 120px; height: 120px; border-radius: 15px; border: 4px solid #eee; overflow: hidden; background: #f8f9fa; }
         .student-photo { width: 100%; height: 100%; object-fit: cover; }
@@ -70,12 +67,13 @@
         .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 25px; }
         .stat-box { background: #f1f8f4; padding: 18px; border-radius: 15px; text-align: center; border: 1px solid #e2eee6; }
         .stat-box span { font-size: 24px; font-weight: 800; color: var(--forest); }
+        
         .grade-box { grid-column: span 2; background: #fff8e1; border: 1px solid #ffe082; padding: 45px 20px; border-radius: 25px; text-align: center; margin-top: 15px; }
         .grade-box label { display: block; margin-bottom: 25px; font-size: 12px; font-weight: 900; color: #888; text-transform: uppercase; }
-        .grade-pill { background: var(--forest); color: white; padding: 15px 80px; border-radius: 100px; font-size: 34px; font-weight: 900; display: inline-block; box-shadow: 0 10px 30px rgba(0,102,51,0.3); }
+        .grade-pill { background: var(--forest); color: white; padding: 15px 80px; border-radius: 100px; font-size: 34px; font-weight: 900; display: inline-block; box-shadow: 0 10px 30px rgba(0,102,51,0.3); letter-spacing: 2px; }
 
-        .signatures-row { margin-top: 120px; display: none; justify-content: space-between; padding: 0 20px; }
-        .sig-block { text-align: center; width: 185px; border-top: 3px solid #333; padding-top: 10px; font-size: 13px; font-weight: 800; text-transform: uppercase; }
+        .signatures-row { margin-top: 130px; display: none; justify-content: space-between; padding: 0 20px; }
+        .sig-block { text-align: center; width: 190px; border-top: 3px solid #333; padding-top: 10px; font-size: 13px; font-weight: 800; text-transform: uppercase; }
 
         .btn-download { background: linear-gradient(135deg, var(--forest), #004d26); color: white; border: none; padding: 18px; border-radius: 50px; font-weight: 800; cursor: pointer; margin-top: 30px; width: 100%; display: none; align-items: center; justify-content: center; gap: 10px; }
 
@@ -85,7 +83,7 @@
             .center-divider { display: none; }
             .cumulative-view { font-size: 9px; }
             .report-header { flex-direction: column-reverse; text-align: center; }
-            .grade-pill { padding: 12px 50px; font-size: 24px; }
+            .grade-pill { padding: 12px 60px; font-size: 26px; }
         }
     </style>
 </head>
@@ -120,8 +118,8 @@
                 <div class="toggle-container">
                     <select id="examType" onchange="fetchResults()">
                         <option value="FA-1">FA-1</option><option value="FA-2">FA-2</option>
-                        <option value="FA-3">FA-3</option><option value="SA-1">SA-1(Pre-Annual)</option>
-                        <option value="SA-2">SA-2(Annual)</option>
+                        <option value="FA-3">FA-3</option><option value="SA-1">SA-1 (Pre-Annual)</option>
+                        <option value="SA-2">SA-2 (Annual)</option>
                     </select>
                     <button id="toggleBtn" class="btn-all-exams" onclick="toggleCumulative()">All Exams View</button>
                 </div>
@@ -142,11 +140,14 @@
                     <div class="center-divider"></div>
                     <div id="col2" class="subj-column"></div>
                 </div>
-                <div class="graph-section"><canvas id="marksGraph"></canvas></div>
+                <div class="graph-section">
+                    <div style="text-align:center; font-weight:800; font-size:11px; margin-bottom:10px; color:#888;">VERTICAL PERFORMANCE ANALYSIS (MAX: 100)</div>
+                    <canvas id="marksGraph"></canvas>
+                </div>
             </div>
 
             <table class="cumulative-view" id="allExamsTable">
-                <thead><tr><th>Subject</th><th>FA1</th><th>FA2</th><th>FA3</th><th>SA1(Pre-Annual)</th><th>SA2(Annual)</th></tr></thead>
+                <thead><tr><th>Subject</th><th>FA1</th><th>FA2</th><th>FA3</th><th>SA1</th><th>SA2</th></tr></thead>
                 <tbody id="allExamsBody"></tbody>
             </table>
 
@@ -154,8 +155,8 @@
                 <div class="summary-grid">
                     <div class="stat-box"><label style="font-size:10px; font-weight:900;">TOTAL MARKS </label><span id="resTotal">-</span></div>
                     <div class="stat-box"><label style="font-size:10px; font-weight:900;">PERCENTAGE </label><span id="resPerc">-</span></div>
-                    <div class="grade-box" id="promotionBox" style="display:none;">
-                        <label>FINAL PROMOTION STATUS</label>
+                    <div class="grade-box" id="promotionBox">
+                        <label id="gradeLabel">FINAL ACADEMIC PERFORMANCE GRADE</label>
                         <span id="resGrade" class="grade-pill">-</span>
                     </div>
                 </div>
@@ -166,7 +167,7 @@
             </div>
             
             <button class="btn-download" id="pdfBtn" onclick="downloadReport()"><i class="fas fa-file-pdf"></i> Download Report Card</button>
-            <div id="noData" style="text-align:center; padding: 40px; color: #999; display: none;">No Student Data Found.</div>
+            <div id="noData" style="text-align:center; padding: 40px; color: #999; display: none;">No Student Found.</div>
         </div>
     </div>
 </div>
@@ -178,8 +179,9 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // KEEP YOUR FULL 185 STUDENT LIST HERE
     const students = {
-        "1472070": { Name: "Hanish Macharla", Class: "Pre-KG" }, "1478225": { Name: "Arjun Vihaar Illandula", Class: "Pre-KG" }, "1469391": { Name: "Thanu sree Allakunta", Class: "Pre-KG" }, "1459555": { Name: "Aadhya Gangaraboina", Class: "Pre-KG" }, "1459560": { Name: "Aadhya Sri Oggula", Class: "Pre-KG" }, "1474500": { Name: "Aadhyasri Shivagoni", Class: "Pre-KG" }, "1460680": { Name: "Afraha Begum", Class: "Pre-KG" }, "1472299": { Name: "Aliya Sultana", Class: "Pre-KG" }, "1459683": { Name: "Anvika Bandi", Class: "Pre-KG" }, "1459620": { Name: "Aradana Devara konda", Class: "Pre-KG" }, "1459605": { Name: "Devansh Bandi", Class: "Pre-KG" }, "1472069": { Name: "Hanvitha Mulkalapelli", Class: "Pre-KG" }, "1472723": { Name: "Harsha Vardhan Seenapelli", Class: "Pre-KG" }, "1459658": { Name: "Hiranya Bandi", Class: "Pre-KG" }, "1478248": { Name: "Jashritha Boina", Class: "Pre-KG" }, "1481135": { Name: "Konreddy Shreyanvi", Class: "Pre-KG" }, "1459568": { Name: "Kriyansh Sammeta", Class: "Pre-KG" }, "1459555": { Name: "Hanish Macharla", Class: "Pre-KG" }, // ... [truncated for logic length, keep all 185 students in your file]
+        "1472070": { Name: "Hanish Macharla", Class: "Pre-KG" }, 
         "1298334": { Name: "Vyshnavi Uppala", Class: "Grade-8" }
     };
 
@@ -225,11 +227,13 @@
             if(data) {
                 document.getElementById('singleResults').style.display = 'block';
                 document.getElementById('summaryArea').style.display = 'block';
-                document.getElementById('pdfBtn').style.display = 'flex';
                 document.getElementById('promotionBox').style.display = 'block';
+                document.getElementById('pdfBtn').style.display = 'flex';
+                document.getElementById('gradeLabel').innerText = "FINAL ACADEMIC PERFORMANCE GRADE";
                 
                 const subjects = getGradeSubjects(student.Class);
-                const m = data.marks;
+                const m = data.marks || {};
+                
                 document.getElementById('col1').innerHTML = ""; document.getElementById('col2').innerHTML = "";
                 const half = Math.ceil(subjects.length / 2);
                 subjects.forEach((sub, idx) => {
@@ -242,7 +246,7 @@
                 chartObj = new Chart(ctx, {
                     type: 'bar',
                     data: { labels: subjects, datasets: [{ data: subjects.map(s => m[s] || 0), backgroundColor: '#006633', borderRadius: 5 }] },
-                    options: { scales: { y: { beginAtZero: true, max: 100 } } }
+                    options: { scales: { y: { beginAtZero: true, max: 100 } }, plugins:{ legend:{display:false} } }
                 });
 
                 document.getElementById('resTotal').innerText = data.total;
@@ -259,7 +263,6 @@
 
         isCumulative = true;
         document.getElementById('toggleBtn').innerText = "Go Back to Single Exam";
-        document.getElementById('singleResults').style.display = 'none';
 
         db.ref(`progress_cards/${student.Class}`).once('value', (snap) => {
             const classData = snap.val();
@@ -281,14 +284,21 @@
 
             document.getElementById('allExamsBody').innerHTML = tableHtml;
             document.getElementById('allExamsTable').style.display = 'table';
+            document.getElementById('singleResults').style.display = 'none';
             document.getElementById('summaryArea').style.display = 'block';
             document.getElementById('pdfBtn').style.display = 'flex';
             
             const perc = totalPossible > 0 ? ((grandTotal / totalPossible) * 100).toFixed(1) : '0';
             document.getElementById('resTotal').innerText = grandTotal;
             document.getElementById('resPerc').innerText = perc + "%";
-            document.getElementById('promotionBox').style.display = sa2Exists ? 'block' : 'none';
-            document.getElementById('resGrade').innerText = perc >= 35 ? "PROMOTED" : "RETAINED";
+            
+            if(sa2Exists) {
+                document.getElementById('promotionBox').style.display = 'block';
+                document.getElementById('gradeLabel').innerText = "FINAL PROMOTION STATUS";
+                document.getElementById('resGrade').innerText = perc >= 35 ? "PROMOTED" : "RETAINED";
+            } else {
+                document.getElementById('promotionBox').style.display = 'none';
+            }
         });
     }
 

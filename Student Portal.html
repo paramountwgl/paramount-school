@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Student Profile | Paramount School</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="logo.png">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -15,58 +16,52 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--light); overflow-x: hidden; width: 100%; padding-bottom: 120px; }
         
-        /* NAVIGATION BAR - OPTIMIZED FOR MOBILE */
-        .portal-nav { background: #004d26; padding: 12px 5px; display: flex; justify-content: center; gap: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 2000; }
-        .portal-nav a { 
-            color: white; text-decoration: none; font-weight: bold; 
-            font-size: clamp(10px, 3vw, 13px); padding: 8px 12px; 
-            border-radius: 25px; transition: 0.3s; display: flex; 
-            align-items: center; gap: 5px; border: 1px solid transparent;
-            white-space: nowrap;
-        }
+        /* NAVIGATION */
+        .portal-nav { background: #004d26; padding: 12px 5px; display: flex; justify-content: center; gap: 5px; position: sticky; top: 0; z-index: 2000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .portal-nav a { color: white; text-decoration: none; font-weight: bold; font-size: 11px; padding: 8px 12px; border-radius: 25px; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
         .portal-nav a.active { background: rgba(255,255,255,0.2); border: 1px solid var(--gold); color: var(--gold); }
-        .portal-nav a:hover { color: var(--gold); background: rgba(255,255,255,0.1); }
 
-        /* LIVE ANNOUNCEMENT BANNER */
-        .announcement-banner { 
-            color: white; text-align: center; padding: 12px 20px; font-weight: 800; font-size: 14px; 
-            display: none; border-radius: 10px; margin: 25px auto 0 auto; max-width: 750px; width: 92%; 
-            text-transform: uppercase; animation: breatheBg 1.8s infinite alternate ease-in-out;
-        }
-        @keyframes breatheBg { 0% { background-color: #ff4c4c; box-shadow: 0 0 15px rgba(255, 76, 76, 0.8); } 100% { background-color: #9b0000; box-shadow: 0 0 5px rgba(155, 0, 0, 0.2); } }
+        /* HEADER MOBILE FIXED */
+        .profile-header { background: var(--forest); color: white; padding: 25px 15px; border-bottom: 4px solid var(--gold); text-align: center; }
+        .header-logo-box { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .header-logo-box img { height: 60px; width: auto; }
+        .school-text { display: flex; flex-direction: column; line-height: 1.2; align-items: center; }
+        .school-name-main { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; }
+        .school-name-sub { font-family: 'Montserrat', sans-serif; font-size: 0.75rem; color: var(--gold); font-weight: 700; text-transform: uppercase; }
 
-        /* HEADER STYLING */
-        .profile-header { background: var(--forest); color: white; padding: 30px 20px; text-align: center; display: flex; flex-direction: column; align-items: center; width: 100%; position: relative; }
-        .header-logo-box { display: flex; align-items: center; gap: 15px; text-decoration: none; color: white; margin-bottom: 25px; }
-        .header-logo-box img { height: clamp(60px, 10vw, 85px); width: auto; }
-        .header-logo-box h1 { margin: 0; font-size: clamp(1.4rem, 5.5vw, 2.2rem); text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
-        .header-logo-box p { margin: 0; font-size: 12px; color: var(--gold); font-weight: 700; text-align: left; }
-        
         /* SEARCH BOX */
-        .search-container { display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; max-width: 550px; }
-        #rollNumberInput { padding: 15px 20px; border-radius: 35px; border: 2px solid transparent; width: 100%; font-size: 16px; outline: none; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-        #rollNumberInput:focus { border-color: var(--gold); }
-        .search-btn { padding: 14px 22px; border-radius: 35px; border: none; background-color: var(--gold); color: var(--forest); font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
-
-        .portal-title { text-align: center; color: var(--forest); margin: 30px 0 20px 0; font-size: 32px; font-weight: 900; }
+        .search-container { width: 100%; max-width: 500px; margin: 0 auto; display: flex; gap: 8px; }
+        #rollNumberInput { flex: 1; padding: 15px; border-radius: 30px; border: none; outline: none; font-size: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .search-btn { background: var(--gold); color: var(--forest); border: none; padding: 0 22px; border-radius: 30px; font-weight: 800; cursor: pointer; }
 
         /* PROFILE CARD */
-        .profile-card { max-width: 750px; margin: 80px auto 50px auto; background: white; padding: 0 35px 35px 35px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.06); width: 92%; border-bottom: 5px solid var(--forest); text-align: center; }
-        .photo-container { width: 140px; height: 140px; margin: -70px auto 20px auto; border-radius: 50%; border: 6px solid white; background: #f8f9fa; overflow: hidden; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .profile-card { max-width: 750px; margin: 60px auto 30px auto; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; width: 92%; position: relative; }
+        .photo-container { width: 110px; height: 110px; margin: -60px auto 15px auto; border-radius: 50%; border: 5px solid white; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); background: #eee; }
         .student-photo { width: 100%; height: 100%; object-fit: cover; }
+
+        .info-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 25px; text-align: left; }
+        .info-item { padding: 12px; background: #fcfdfc; border-radius: 12px; border: 1px solid #f0f0f0; }
+        .info-item label { font-size: 9px; font-weight: 800; color: #999; text-transform: uppercase; display: block; }
+        .info-item span { font-weight: 700; color: #222; font-size: 14px; margin-top: 3px; display: block; }
         
-        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 25px; border-top: 2px solid #f8f8f8; padding-top: 30px; text-align: left; }
-        .info-item { padding: 15px; background: #fcfcfc; border-radius: 12px; border: 1px solid #f0f0f0; }
-        .info-item label { font-size: 10px; color: #888; display: block; text-transform: uppercase; font-weight: 800; margin-bottom: 6px; }
-        .info-item span { font-weight: 700; color: #222; font-size: 15px; display: block; }
-        .attendance-highlight { background: #e8f5e9 !important; border: 1px solid #c8e6c9 !important; }
-        .status-badge { padding: 8px 22px; border-radius: 25px; font-size: 13px; background: #f0f0f0; font-weight: 800; display: inline-block; margin-top: 10px; text-transform: uppercase; border: 1px solid transparent; }
+        .status-badge { padding: 6px 20px; border-radius: 20px; font-size: 12px; font-weight: 800; background: #eee; display: inline-block; margin-top: 10px; text-transform: uppercase; }
+        .attendance-highlight { background: #e8f5e9 !important; border-color: #c8e6c9 !important; }
 
-        .pdf-btn-container { text-align: center; margin-top: 40px; display: none; }
-        .pdf-btn { background: linear-gradient(135deg, var(--forest), #004d26); color: white; border: none; padding: 14px 35px; border-radius: 50px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(0,102,51,0.2); }
+        /* DOWNLOAD BUTTON CENTERED */
+        .pdf-btn-container { display: none; justify-content: center; width: 100%; margin-top: 30px; }
+        .pdf-btn { background: var(--forest); color: white; border: none; padding: 16px 30px; border-radius: 50px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 14px; box-shadow: 0 10px 20px rgba(0, 102, 51, 0.2); }
 
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: white; display: flex; justify-content: center; z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
-        .btn-return { background: linear-gradient(135deg, var(--forest), #004d26); color: white; padding: 15px 45px; border-radius: 50px; font-weight: 800; text-decoration: none; font-size: 15px; border: 2px solid var(--gold); transition: 0.3s; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 8px 20px rgba(0, 102, 51, 0.3); }
+        .btn-return { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--forest); color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-weight: 800; border: 2px solid var(--gold); z-index: 1000; white-space: nowrap; font-size: 13px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* DESKTOP VIEW */
+        @media (min-width: 768px) {
+            .header-content { flex-direction: row; justify-content: center; gap: 30px; text-align: left; }
+            .header-logo-box { flex-direction: row; }
+            .school-text { align-items: flex-start; }
+            .info-grid { grid-template-columns: 1fr 1fr; }
+            .profile-card { padding: 35px; }
+            .school-name-main { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
@@ -74,35 +69,29 @@
 <div class="portal-nav" id="mainNav">
     <a href="Student Portal.html" class="active"><i class="fas fa-user-circle"></i> Profile</a>
     <a href="homework.html"><i class="fas fa-book-open"></i> Homework</a>
-    <a href="progres.html"><i class="fas fa-chart-line"></i> Progress</a>
+    <a href="progress.html"><i class="fas fa-chart-line"></i> Progress</a>
 </div>
 
-<div id="liveAnnouncementBanner" class="announcement-banner">
-    <i class="fas fa-bullhorn"></i> <span id="announcementMessageText"></span>
-</div>
-
-<div id="printableArea" style="background-color: var(--light); padding-bottom: 20px; width: 100%;">
+<div id="printableArea">
     <div class="profile-header" id="pdfHeader">
         <div class="header-logo-box">
             <img src="logo.png" alt="Logo">
-            <div style="text-align: left;">
-                <h1 id="pdfH1">Paramount</h1>
-                <p id="pdfP">ENGLISH MEDIUM SCHOOL</p>
+            <div class="school-text">
+                <span class="school-name-main">PARAMOUNT</span>
+                <span class="school-name-sub">ENGLISH MEDIUM SCHOOL</span>
             </div>
         </div>
 
         <div class="search-container" id="searchBoxForPdf">
             <input type="text" id="rollNumberInput" placeholder="Enter Roll Number" onkeypress="if(event.key === 'Enter') searchStudent();">
-            <button onclick="searchStudent();" class="search-btn"><i class="fas fa-search"></i> Search</button>
+            <button onclick="searchStudent();" class="search-btn"><i class="fas fa-search"></i></button>
         </div>
     </div>
 
-    <h1 class="portal-title">STUDENT PORTAL</h1>
-
     <div class="profile-card">
-        <div class="photo-container"><img id="studentPhoto" src="logo.png" class="student-photo" alt="Student Photo"></div>
-        <h2 id="studentName" style="margin: 0 0 5px; font-size: 28px; color: var(--forest); text-transform: uppercase; font-weight: 900;">Student Name</h2>
-        <span class="status-badge" id="statusBadge">Enter Roll Number to Access</span>
+        <div class="photo-container"><img id="studentPhoto" src="logo.png" class="student-photo" onerror="this.src='logo.png'"></div>
+        <h2 id="studentName" style="color: var(--forest); margin: 0; font-weight: 900; text-transform: uppercase;">STUDENT NAME</h2>
+        <div id="statusBadge" class="status-badge">AWAITING ROLL NUMBER</div>
 
         <div class="info-grid">
             <div class="info-item"><label>Class / Section</label><span id="studentClass">---</span></div>
@@ -116,14 +105,12 @@
         </div>
 
         <div class="pdf-btn-container" id="pdfBtnSection">
-            <button onclick="downloadPDF()" class="pdf-btn"><i class="fas fa-file-pdf"></i> Download Profile Report</button>
+            <button onclick="downloadPDF()" class="pdf-btn"><i class="fas fa-file-pdf"></i> DOWNLOAD PROFILE REPORT</button>
         </div>
     </div>
-</div> 
-
-<div class="bottom-nav" id="bottomNav">
-    <a href="index.html" class="btn-return"><i class="fas fa-user-tie"></i> Return to Portal</a>
 </div>
+
+<a href="index.html" class="btn-return" id="bottomNav">RETURN TO DASHBOARD</a>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -134,7 +121,6 @@ const firebaseConfig = { apiKey: "AIzaSyDRYk9KOK-ga0c88dnYMsAoifW2NJTd_Y8", data
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// ALL YOUR STUDENT DATA PRESERVED (All 100+ students)
 const studentData = {
     "1472070": { Name: "Hanish Macharla", Class: "Pre-KG (Diamond)", AdmissionNo: "2052", Father: "M.Vinay", Roll: "1472070", Phonenumber: "9182861346", Gender: "Male", Dob: "---" },
     "1478225": { Name: "Arjun Vihaar Illandula", Class: "Pre-KG (Diamond)", AdmissionNo: "2061", Father: "Illandula Ravi", Roll: "1478225", Phonenumber: "9848742172", Gender: "Male", Dob: "2022-11-22" },
@@ -177,8 +163,6 @@ const studentData = {
     "1478250": { Name: "Vishnu Priya Molugu", Class: "Pre-KG (Diamond)", AdmissionNo: "2006", Father: "MM Suresh kumar", Roll: "1478250", Phonenumber: "8247448532", Gender: "Female", Dob: "2022-02-24" },
     "1413563": { Name: "Vyshnav Tej Boina", Class: "Pre-KG (Diamond)", AdmissionNo: "2015", Father: "Shekar", Roll: "1413563", Phonenumber: "7671807331", Gender: "Male", Dob: "2022-01-31" },
     "1459577": { Name: "Yafiah Mohammad", Class: "Pre-KG (Diamond)", AdmissionNo: "2018", Father: "Yousuf Shareef", Roll: "1459577", Phonenumber: "9392670257", Gender: "Female", Dob: "2022-05-05" },
-
-    // KG-1
     "1424084": { Name: "Aadhya Sri Amaravadi", Class: "KG-1 (Ruby)", AdmissionNo: "2007", Father: "Rakesh", Roll: "1424084", Phonenumber: "9502626801", Gender: "Female", Dob: "2021-10-09" },
     "1426519": { Name: "Aditya Manda", Class: "KG-1 (Ruby)", AdmissionNo: "2004", Father: "Mohan Lal", Roll: "1426519", Phonenumber: "8374173873", Gender: "Male", Dob: "2022-01-21" },
     "1426518": { Name: "Aadhya Jella", Class: "KG-1 (Ruby)", AdmissionNo: "2003", Father: "Bhikshapathi", Roll: "1426518", Phonenumber: "9959633484", Gender: "Female", Dob: "2022-05-25" },
@@ -200,8 +184,6 @@ const studentData = {
     "1424085": { Name: "Yoganshika Nanduri", Class: "KG-1 (Ruby)", AdmissionNo: "2005", Father: "Vijay Kanth", Roll: "1424085", Phonenumber: "9949668558", Gender: "Female", Dob: "2022-01-09" },
     "1387264": { Name: "Yusra Mohammad", Class: "KG-1 (Ruby)", AdmissionNo: "1974", Father: "Yousuf Shareef", Roll: "1387264", Phonenumber: "9392661854", Gender: "Female", Dob: "2021-03-19" },
     "1402461": { Name: "Zainul Abideen Syed", Class: "KG-1 (Ruby)", AdmissionNo: "1997", Father: "Akbar", Roll: "1402461", Phonenumber: "8106972447", Gender: "Male", Dob: "2020-12-21" },
-
-    // KG-2
     "1298438": { Name: "Deekshanth Sammeta", Class: "KG-2 (Amber)", AdmissionNo: "1946", Father: "Shivakumar", Roll: "1298438", Phonenumber: "7842370658", Gender: "Male", Dob: "2018-07-09" },
     "1298439": { Name: "Hanshith Erroju", Class: "KG-2 (Amber)", AdmissionNo: "1960", Father: "Rajesh", Roll: "1298439", Phonenumber: "9010150059", Gender: "Male", Dob: "2019-08-17" },
     "1298447": { Name: "Harika Bandi", Class: "KG-2 (Amber)", AdmissionNo: "1968", Father: "Raju", Roll: "1298447", Phonenumber: "9573818773", Gender: "Female", Dob: "2020-06-14" },
@@ -231,8 +213,6 @@ const studentData = {
     "1459756": { Name: "Uvan Reddy Dasari", Class: "KG-2 (Amber)", AdmissionNo: "2030", Father: "Raghupathi Reddy", Roll: "1459756", Phonenumber: "9573557696", Gender: "Male", Dob: "2020-03-01" },
     "1459775": { Name: "Zayan Mohammad", Class: "KG-2 (Amber)", AdmissionNo: "2034", Father: "Zaffar", Roll: "1459775", Phonenumber: "9182909190", Gender: "Male", Dob: "---" },
     "1459714": { Name: "Zoya Mohammed", Class: "KG-2 (Amber)", AdmissionNo: "2035", Father: "Chand Pasha", Roll: "1459714", Phonenumber: "9848465650", Gender: "Female", Dob: "2020-05-20" },
-
-    // GRADE 1-8
     "1298423": { Name: "Dheeraj Gattu", Class: "Grade-1", AdmissionNo: "151", Father: "Raju", Roll: "1298423", Phonenumber: "9346457748", Gender: "Male", Dob: "2018-07-12" },
     "1298425": { Name: "Preetham Sannayala", Class: "Grade-1", AdmissionNo: "138", Father: "Shiva", Roll: "1298425", Phonenumber: "9000283858", Gender: "Male", Dob: "2019-06-04" },
     "1298428": { Name: "Shiva nandu Gonela", Class: "Grade-1", AdmissionNo: "137", Father: "Ramu", Roll: "1298428", Phonenumber: "9966960107", Gender: "Male", Dob: "2018-12-20" },
@@ -329,174 +309,71 @@ const studentData = {
     "1298334": { Name: "Vyshnavi Uppala", Class: "Grade-8", AdmissionNo: "34", Father: "Ramesh", Roll: "1298334", Phonenumber: "8179254251", Gender: "Female", Dob: "2012-12-10" }
 };
 
-// ROBUST SEARCH FUNCTION
 function searchStudent() {
-    try {
-        const rollNo = document.getElementById('rollNumberInput').value.trim();
-        const student = studentData[rollNo];
-        
-        if (student) {
-            // Instantly display data regardless of Firebase status
-            document.getElementById('studentName').innerText = student.Name;
-            document.getElementById('studentClass').innerText = student.Class;
-            document.getElementById('RollNumber').innerText = student.Roll;
-            document.getElementById('admissionNo').innerText = student.AdmissionNo;
-            document.getElementById('fatherName').innerText = student.Father;
-            document.getElementById('studentDob').innerText = student.Dob;
-            document.getElementById('PhoneNumber').innerText = student.Phonenumber;
-            document.getElementById('studentGender').innerText = student.Gender;
-            document.getElementById('studentPhoto').src = `students/${student.Roll}.png`;
-            
-            const status = document.getElementById('statusBadge');
-            status.innerText = "CALCULATING...";
-            status.style.background = "#fff3cd";
-            status.style.color = "#856404";
-            status.style.border = "1px solid #ffeeba";
-            
-            const shortClass = student.Class.split(" ")[0]; 
-            
-            // Protected Firebase Call
-            db.ref('daily_attendance').once('value').then((snap) => {
-                const allData = snap.val() || {};
-                let totalP = 0, totalT = 0;
-                
-                Object.keys(allData).forEach(date => {
-                    const classData = allData[date][shortClass];
-                    if(classData && classData[student.Name] !== undefined) {
-                        totalT++; 
-                        if(classData[student.Name] === true) {
-                            totalP++;
-                        }
-                    }
-                });
-                
-                const percent = totalT > 0 ? Math.round((totalP / totalT) * 100) : 0;
-                document.getElementById('attendanceRate').innerText = `${percent}% (${totalP}/${totalT} Days)`;
+    const rollNo = document.getElementById('rollNumberInput').value.trim();
+    const student = studentData[rollNo];
+    
+    if (student) {
+        document.getElementById('studentName').innerText = student.Name;
+        document.getElementById('studentClass').innerText = student.Class;
+        document.getElementById('RollNumber').innerText = student.Roll;
+        document.getElementById('admissionNo').innerText = student.AdmissionNo;
+        document.getElementById('fatherName').innerText = student.Father;
+        document.getElementById('studentDob').innerText = student.Dob;
+        document.getElementById('PhoneNumber').innerText = student.Phonenumber;
+        document.getElementById('studentGender').innerText = student.Gender;
+        document.getElementById('studentPhoto').src = `students/${student.Roll}.png`;
+        
+        document.getElementById('pdfBtnSection').style.display = 'flex';
+        const status = document.getElementById('statusBadge');
+        status.innerText = "PROFILE ACTIVE";
+        status.style.background = "#e8f5e9";
+        status.style.color = "#006633";
 
-                if(totalT === 0) {
-                    status.innerText = "NO DATA YET";
-                    status.style.background = "#f0f0f0";
-                    status.style.color = "#888";
-                    status.style.border = "1px solid transparent";
-                } else if (percent >= 75) {
-                    status.innerText = "ACTIVE";
-                    status.style.background = "#e8f5e9";
-                    status.style.color = "var(--forest)";
-                    status.style.border = "1px solid #c8e6c9";
-                } else {
-                    status.innerText = "INACTIVE";
-                    status.style.background = "#ffebee";
-                    status.style.color = "var(--danger)";
-                    status.style.border = "1px solid #ffcdd2";
-                }
-            }).catch(err => {
-                console.error("Firebase read blocked or failed:", err);
-                document.getElementById('attendanceRate').innerText = "System Offline";
-                status.innerText = "NO LIVE DATA";
-                status.style.background = "#f0f0f0";
-                status.style.color = "#888";
-            });
-
-            document.getElementById('pdfBtnSection').style.display = 'block';
-        } else { 
-            if (typeof Swal !== 'undefined') {
-                Swal.fire('Error', 'Student not found. Check Roll Number.', 'error'); 
-            } else {
-                alert('Student not found.');
-            }
-        }
-    } catch(e) {
-        console.error("Search Error:", e);
-    }
+        // Attendance Calculation
+        const shortClass = student.Class.split(" ")[0]; 
+        db.ref('daily_attendance').once('value').then((snap) => {
+            const allData = snap.val() || {};
+            let totalP = 0, totalT = 0;
+            Object.keys(allData).forEach(date => {
+                if(allData[date][shortClass] && allData[date][shortClass][student.Name] !== undefined) {
+                    totalT++;
+                    if(allData[date][shortClass][student.Name] === true) totalP++;
+                }
+            });
+            const percent = totalT > 0 ? Math.round((totalP / totalT) * 100) : 0;
+            document.getElementById('attendanceRate').innerText = `${percent}% (${totalP}/${totalT} Days)`;
+        });
+    } else {
+        Swal.fire('Error', 'Student Roll Number not found.', 'error');
+    }
 }
 
-// UPGRADED PDF ENGINE WITH NO ABSOLUTE POSITIONING BUG
 async function downloadPDF() {
-    Swal.fire({ title: 'Generating Report...', text: 'Please wait while we format your PDF.', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+    Swal.fire({ title: 'Generating PDF...', didOpen: () => Swal.showLoading() });
+    
+    const search = document.getElementById('searchBoxForPdf');
+    const pdfBtn = document.getElementById('pdfBtnSection');
+    const nav = document.getElementById('mainNav');
+    const botNav = document.getElementById('bottomNav');
 
-    // 1. Hide UI Elements
-    const searchBox = document.getElementById('searchBoxForPdf');
-    const pdfBtn = document.getElementById('pdfBtnSection');
-    const topNav = document.getElementById('mainNav');
-    const botNav = document.getElementById('bottomNav');
-    const banner = document.getElementById('liveAnnouncementBanner');
-    
-    const origSearchDisplay = searchBox.style.display;
-    const origPdfBtnDisplay = pdfBtn.style.display;
-   const origTopNavDisplay = topNav.style.display;
-    const origBotNavDisplay = botNav.style.display;
-    const origBannerDisplay = banner.style.display;
+    search.style.display = 'none';
+    pdfBtn.style.display = 'none';
+    nav.style.display = 'none';
+    botNav.style.display = 'none';
 
-    searchBox.style.display = 'none';
-    pdfBtn.style.display = 'none';
-  0   topNav.style.display = 'none';
-    botNav.style.display = 'none';
-    banner.style.display = 'none';
+    const canvas = await html2canvas(document.getElementById('printableArea'), { scale: 2 });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+    pdf.addImage(imgData, 'PNG', 0, 0, 210, (canvas.height * 210) / canvas.width);
+    pdf.save(`Paramount_Report_${document.getElementById('RollNumber').innerText}.pdf`);
 
-    // 2. Remove Green Header Background Temporarily for Clean PDF
-    const header = document.getElementById('pdfHeader');
-    const h1 = document.getElementById('pdfH1');
-    const p = document.getElementById('pdfP');
-
-    const origHeaderBg = header.style.background;
-    const origH1Color = h1.style.color;
-    const origPColor = p.style.color;
-
-    header.style.background = 'white';
-    h1.style.color = '#006633'; 
-    p.style.color = '#000000'; 
-
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    const printElement = document.getElementById('printableArea');
-    
-    try {
-        const canvas = await html2canvas(printElement, { 
-            scale: 2, 
-            useCORS: true,
-            backgroundColor: '#ffffff' 
-        });
-        const imgData = canvas.toDataURL('image/png');
-        
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-        
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        
-        const studentName = document.getElementById('studentName').innerText || 'Student';
-        pdf.save(`Paramount_Profile_${studentName}.pdf`);
-        
-        Swal.fire('Success!', 'PDF Downloaded Successfully.', 'success');
-    } catch (error) {
-        Swal.fire('Error', 'Could not generate PDF. Please try again.', 'error');
-        console.error(error);
-    }
-
-    // 3. Restore Everything Instantly
-    searchBox.style.display = origSearchDisplay;
-    pdfBtn.style.display = origPdfBtnDisplay;
-    topNav.style.display = origTopNavDisplay;
-    botNav.style.display = origBotNavDisplay;
-    banner.style.display = origBannerDisplay;
-
-    header.style.background = origHeaderBg;
-    h1.style.color = origH1Color;
-    p.style.color = origPColor;
+    search.style.display = 'flex';
+    pdfBtn.style.display = 'flex';
+    nav.style.display = 'flex';
+    botNav.style.display = 'flex';
+    Swal.close();
 }
-
-db.ref('announcement').on('value', (snap) => {
-    const msg = snap.val();
-    const banner = document.getElementById('liveAnnouncementBanner');
-    if (msg && banner) { 
-        document.getElementById('announcementMessageText').innerText = msg; 
-        banner.style.display = 'block'; 
-    } else if (banner) { 
-        banner.style.display = 'none'; 
-    }
-});
 </script>
 </body>
-</html>   
+</html>

@@ -107,6 +107,75 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid #f0f0f0;
             position: relative; overflow: hidden;
         }
+        /* ELITE HEADER STYLING */
+.elite-header {
+    background: var(--primary);
+    padding: 30px 0;
+    border-bottom: 5px solid var(--accent);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+}
+.header-logo { height: 85px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3)); }
+.brand-text { text-align: left; }
+.main-title { 
+    color: #fff; font-family: 'Montserrat'; font-size: 2.8rem; margin: 0; 
+    letter-spacing: 6px; line-height: 1;
+}
+.sub-title { 
+    color: var(--accent); font-size: 0.9rem; margin: 0; 
+    letter-spacing: 3px; font-weight: 800;
+}
+
+/* MODULAR GRID & CARDS */
+.portal-container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+.modular-glass {
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 35px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.03);
+    margin-bottom: 25px;
+    padding: 35px;
+}
+
+/* IDENTITY SECTION */
+.identity-layout { display: flex; align-items: center; gap: 40px; }
+.student-avatar-box { position: relative; }
+#dashImg { 
+    width: 160px; height: 160px; border-radius: 45px; 
+    object-fit: cover; border: 4px solid var(--accent);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+.student-bio h3 { font-size: 2rem; color: var(--primary); margin: 0; font-weight: 900; }
+.class-tag { background: var(--primary); color: var(--accent); padding: 5px 15px; border-radius: 12px; display: inline-block; font-weight: 800; font-size: 0.8rem; }
+.bio-grid { 
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; 
+    border-top: 1px solid #eee; padding-top: 20px;
+}
+.bio-item span { display: block; color: #aaa; font-size: 0.7rem; text-transform: uppercase; font-weight: 800; }
+.bio-item strong { color: #333; font-size: 1rem; }
+
+/* SOCIAL HUB FOOTER */
+.social-hub { text-align: center; margin-top: 50px; }
+.social-hub p { color: #aaa; font-weight: 800; font-size: 0.75rem; letter-spacing: 2px; }
+.icon-ring { display: flex; justify-content: center; gap: 25px; margin: 25px 0; }
+.social-link {
+    width: 60px; height: 60px; border-radius: 50%; background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: var(--primary); border: 1px solid #eee;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+.social-link:hover { transform: translateY(-8px); color: #fff; }
+.fb:hover { background: #1877F2; }
+.ig:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+.yt:hover { background: #FF0000; }
+.wa:hover { background: #25D366; }
         .stat-card i { font-size: 2rem; color: var(--accent); margin-bottom: 15px; opacity: 0.8; }
         .stat-card h3 { margin: 0; font-size: 1.8rem; color: var(--primary); font-weight: 900; }
         .stat-card p { margin: 5px 0 0; font-size: 0.9rem; color: #999; font-weight: 700; text-transform: uppercase; }
@@ -172,74 +241,93 @@
        
     </div>
 </div>
-<div id="mainDashboard">
-    <div class="premium-header">
-        <div class="header-bg-glow"></div>
-        <h2 style="font-family: 'Montserrat'; font-weight: 900; font-size: 2.5rem; letter-spacing: 5px;">PARAMOUNT</h2>
-        <p style="opacity: 0.6; letter-spacing: 3px; font-weight: 600;">PRIVATE PARENT DASHBOARD</p>
-        
-        <div class="user-profile-badge">
-            <img id="dashImg" src="logo.png" alt="Student">
-            <div class="info">
-                <h4 id="dashName">Student Name</h4>
-                <p id="dashClass">Class & Section</p>
-            </div>
-            <div style="margin-left: auto; padding-right: 15px; color: var(--success-glow);">
-                <i class="fas fa-shield-check" style="font-size: 2rem;"></i>
-            </div>
+<header class="elite-header">
+    <div class="header-content">
+        <img src="logo.png" class="header-logo" alt="Paramount Logo">
+        <div class="brand-text">
+            <h1 class="main-title">PARAMOUNT</h1>
+            <h2 class="sub-title">ENGLISH MEDIUM SCHOOL</h2>
         </div>
     </div>
+</header>
 
-    <div class="container">
-        <div class="grid-stats">
-            <div class="stat-card">
-                <i class="fas fa-chart-line-up"></i>
-                <h3 id="dashAtt">0%</h3>
-                <p>Academic Attendance</p>
+<div id="mainDashboard">
+    <div class="portal-container">
+        
+        <section class="identity-card modular-glass">
+            <div class="identity-layout">
+                <div class="student-avatar-box">
+                    <img id="dashImg" src="logo.png" alt="Student">
+                    <div class="status-dot online"></div>
+                </div>
+                <div class="student-bio">
+                    <h3 id="dashName">STUDENT NAME</h3>
+                    <p id="dashClass" class="class-tag">CLASS & SECTION</p>
+                    <div class="bio-grid">
+                        <div class="bio-item"><span>Father</span><strong id="dashFather">---</strong></div>
+                        <div class="bio-item"><span>Birth Date</span><strong id="dashDOB">---</strong></div>
+                        <div class="bio-item"><span>Gender</span><strong id="dashGender">---</strong></div>
+                        <div class="bio-item"><span>Contact</span><strong id="dashPhone">---</strong></div>
+                        
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
-                <i class="fas fa-id-badge"></i>
-                <h3 id="dashAdm">---</h3>
-                <p>Registry Number</p>
+        </section>
+
+        <div class="dual-module-grid">
+            <div class="metric-card modular-glass">
+                <div class="card-head">
+                    <i class="fas fa-calendar-check"></i>
+                    <h4>ATTENDANCE</h4>
+                </div>
+                <div class="metric-content">
+                    <h2 id="dashAtt">0%</h2>
+                    <div class="progress-track"><div id="attBar" class="progress-fill"></div></div>
+                </div>
+            </div>
+
+            <div class="metric-card modular-glass">
+                <div class="card-head">
+                    <i class="fas fa-id-card-clip"></i>
+                    <h4>REGISTRY</h4>
+                </div>
+                <div class="metric-content">
+                    <h2 id="dashAdm">----</h2>
+                    <p>Official Admission ID</p>
+                </div>
             </div>
         </div>
 
-        <div class="fee-card">
-            <div class="fee-info">
-                <span style="color: #bbb; font-weight: 800; font-size: 0.8rem; text-transform: uppercase;">Finance Status</span>
-                <h2 id="dashDue">₹ 0.00</h2>
-                <p style="margin:0; font-size: 0.8rem; color: var(--success-glow); font-weight: 800;"><i class="fas fa-sync fa-spin"></i> ENCRYPTED SYNC ACTIVE</p>
+        <section class="finance-card modular-glass">
+            <div class="finance-layout">
+                <div class="finance-text">
+                    <label>OUTSTANDING LEDGER BALANCE</label>
+                    <h2 id="dashDue">₹ 0.00</h2>
+                    <p class="join-date">Enrolled on: <span id="dashJoin">---</span></p>
+                </div>
+                <div class="finance-visual">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" class="svg-bg"></circle>
+                        <circle id="dashCircle" cx="50" cy="50" r="45" class="svg-fill"></circle>
+                    </svg>
+                    <span id="dashFeePerc" class="perc-label">0%</span>
+                </div>
             </div>
-            <div class="fee-circle">
-                <svg class="circle-svg" viewBox="0 0 100 100">
-                    <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
-                    <circle id="dashCircle" class="circle-bar" cx="50" cy="50" r="45"></circle>
-                </svg>
-                <div class="fee-percent" id="dashFeePerc">0%</div>
+        </section>
+
+        <footer class="social-hub">
+            <p>CONNECT WITH OUR COMMUNITY</p>
+            <div class="icon-ring">
+                <a href="#" class="social-tool" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/paramount.07" target="_blank" class="social-tool" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/919652188807" target="_blank" class="social-tool" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="tel:+919652188807" class="social-tool" title="Call Us"><i class="fas fa-phone-alt"></i></a>
+                    <a href="mailto:paramount0707@gmail.com" class="social-tool" title="Email Us"><i class="fas fa-envelope"></i></a>
             </div>
-        </div>
-
-        <div class="action-grid">
-            <a href="homework.html" class="action-btn"><i class="fas fa-book-sparkles"></i><span>Task</span></a>
-            <a href="timetable.html" class="action-btn"><i class="fas fa-calendar-star"></i><span>Plan</span></a>
-            <a href="reports.html" class="action-btn"><i class="fas fa-file-chart-column"></i><span>Stats</span></a>
-            <a href="store.html" class="action-btn"><i class="fas fa-bag-shopping"></i><span>Club</span></a>
-        </div>
-
-        <div style="background: #fafafa; border-radius: 35px; border: 1px solid #eee; overflow: hidden;">
-            <div class="detail-row"><span>Father's Name</span><span id="dashFather">---</span></div>
-            <div class="detail-row"><span>Date of Birth</span><span id="dashDOB">---</span></div>
-            <div class="detail-row"><span>Gender Identity</span><span id="dashGender">---</span></div>
-            <div class="detail-row"><span>Primary Contact</span><span id="dashPhone">---</span></div>
-            <div class="detail-row"><span>Enrollment Date</span><span id="dashJoin">---</span></div>
-        </div>
-
-        <button class="logout-btn" onclick="location.reload()">
-            <i class="fas fa-lock-keyhole"></i> TERMINATE SESSION
-        </button>
+            <button class="exit-session" onclick="logout()">TERMINATE ACCESS</button>
+        </footer>
     </div>
 </div>
-
 <script>
 // INITIALIZATION
 const firebaseConfig = { 
@@ -452,7 +540,7 @@ function togglePassVisibility() {
     }
 }
 
-async function handleLogin() {
+    async function handleLogin() {
     const roll = document.getElementById('rollNo').value.trim();
     const enteredPassword = document.getElementById('pass').value.trim();
     const student = studentList[roll];
@@ -466,34 +554,36 @@ async function handleLogin() {
 
     // 2. Verification check
     if (student && enteredPassword === expectedPassword) {
-        Swal.fire({ title: 'Verifying Identity...', timer: 1000, didOpen: () => Swal.showLoading() });
+        Swal.fire({ title: 'Establishing Secure Session...', timer: 1000, didOpen: () => Swal.showLoading() });
         
-        // Update UI with all details including Gender
-        document.getElementById('dashName').innerText = student.Name;
+        // Populate Premium UI Elements
+        document.getElementById('dashName').innerText = student.Name.toUpperCase();
         document.getElementById('dashClass').innerText = student.Class;
         document.getElementById('dashAdm').innerText = student.Adm;
         document.getElementById('dashFather').innerText = student.Father;
         document.getElementById('dashPhone').innerText = student.Phone;
         document.getElementById('dashJoin').innerText = student.Join;
         document.getElementById('dashDOB').innerText = student.DOB;
-        document.getElementById('dashGender').innerText = student.Gender; // Added this line
+        document.getElementById('dashGender').innerText = student.Gender; // CITED: Gender mapping 
         document.getElementById('dashImg').src = `students/${roll}.png`;
 
+        // Fetch Live Backend Data
         fetchAttendance(student.Name, student.Class);
         fetchFinance(student.Name, student.Class);
 
+        // Transition to Dashboard
         setTimeout(() => {
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('mainDashboard').style.display = 'block';
         }, 1200);
 
     } else {
-        // THIS IS THE FIXED ERROR MESSAGE BLOCK
+        // High-End Error Feedback
         Swal.fire({
             icon: 'error',
             title: 'Authentication Failed',
             text: 'Invalid Roll Number or Password format. (Format: Fathername@123)',
-            background: '#121212',
+            background: '#0a0a0a',
             color: '#ffffff',
             confirmButtonColor: '#ffd700',
             confirmButtonText: 'Try Again'

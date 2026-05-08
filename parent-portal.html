@@ -457,49 +457,46 @@ async function handleLogin() {
     const enteredPassword = document.getElementById('pass').value.trim();
     const student = studentList[roll];
 
-    // Password Transformation Logic:
-    // 1. Get Father's Name (e.g., "vinay")
-    // 2. Capitalize first letter + rest in lowercase (e.g., "Vinay")
-    // 3. Add suffix "@123" (e.g., "Vinay@123")
+    // 1. Password logic: First Letter Capital + @123
     let expectedPassword = "";
     if (student && student.Father) {
         let fName = student.Father.toLowerCase();
         expectedPassword = fName.charAt(0).toUpperCase() + fName.slice(1) + "@123";
     }
 
+    // 2. Verification check
     if (student && enteredPassword === expectedPassword) {
-        Swal.fire({ title: 'Verifying Credentials...', timer: 1000, didOpen: () => Swal.showLoading() });
+        Swal.fire({ title: 'Verifying Identity...', timer: 1000, didOpen: () => Swal.showLoading() });
         
-        // Update Dashboard UI
-    // ... inside handleLogin function after the student check ...
-document.getElementById('dashName').innerText = student.Name;
-document.getElementById('dashClass').innerText = student.Class;
-document.getElementById('dashAdm').innerText = student.Adm;
-document.getElementById('dashFather').innerText = student.Father;
-document.getElementById('dashPhone').innerText = student.Phone;
-document.getElementById('dashJoin').innerText = student.Join;
-document.getElementById('dashDOB').innerText = student.DOB; // Added this line
-document.getElementById('dashImg').src = `students/${roll}.png`;
-// ... rest of the function ...
+        // Update UI with all details including Gender
+        document.getElementById('dashName').innerText = student.Name;
+        document.getElementById('dashClass').innerText = student.Class;
+        document.getElementById('dashAdm').innerText = student.Adm;
+        document.getElementById('dashFather').innerText = student.Father;
+        document.getElementById('dashPhone').innerText = student.Phone;
+        document.getElementById('dashJoin').innerText = student.Join;
+        document.getElementById('dashDOB').innerText = student.DOB;
+        document.getElementById('dashGender').innerText = student.Gender; // Added this line
+        document.getElementById('dashImg').src = `students/${roll}.png`;
 
-        // Fetch Live Data from Firebase
         fetchAttendance(student.Name, student.Class);
         fetchFinance(student.Name, student.Class);
 
-        // Switch from Login to Dashboard
         setTimeout(() => {
-            document.getElementById('loginOverlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('mainDashboard').style.display = 'block';
-            }, 300);
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('mainDashboard').style.display = 'block';
         }, 1200);
+
     } else {
+        // THIS IS THE FIXED ERROR MESSAGE BLOCK
         Swal.fire({
             icon: 'error',
-            title: 'Access Denied',
-            text: 'Invalid Roll Number or Password. (Format: FatherName@123)',
-            confirmButtonColor: '#004d26'
+            title: 'Authentication Failed',
+            text: 'Invalid Roll Number or Password format. (Format: Fathername@123)',
+            background: '#121212',
+            color: '#ffffff',
+            confirmButtonColor: '#ffd700',
+            confirmButtonText: 'Try Again'
         });
     }
 }

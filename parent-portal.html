@@ -440,17 +440,8 @@ const studentList = {
     "1298333": { Name: "Sathwika Nagavelly", Father: "Ravi", Class: "Grade-8 (Bhagat)", Phone: "9492098006", Adm: "39", Gender: "Female", DOB: "2012-03-07", Join: "2021-04-10" },
     "1298334": { Name: "Vyshnavi Uppala", Father: "Ramesh", Class: "Grade-8 (Bhagat)", Phone: "8179254251", Adm: "34", Gender: "Female", DOB: "2012-12-10", Join: "2021-09-16" }
 };
-    // 1. AUTO-FILL ON REFRESH LOGIC
-window.onload = () => {
-    const savedRoll = localStorage.getItem('paramount_roll');
-    const savedPass = localStorage.getItem('paramount_pass');
-    if(savedRoll && savedPass) {
-        document.getElementById('rollNo').value = savedRoll;
-        document.getElementById('pass').value = savedPass;
-    }
-};
-
-// 2. PASSWORD VISIBILITY TOGGLE
+    
+// 1. PASSWORD VISIBILITY TOGGLE
 function togglePassVisibility() {
     const passInput = document.getElementById('pass');
     const toggleIcon = document.getElementById('togglePassword');

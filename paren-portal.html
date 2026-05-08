@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Elite Portal | Paramount Institutions</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        :root {
+            --primary: #004d26;
+            --accent: #ffd700;
+            --glass: rgba(255, 255, 255, 0.95);
+            --text-dark: #1a1a1a;
+            --success: #22c55e;
+        }
+
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease; }
+        body { margin: 0; background: #f0f2f5; overflow-x: hidden; }
+
+        /* --- LOGIN SCREEN --- */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, #002d16 100%);
+            display: flex; align-items: center; justify-content: center; z-index: 9999;
+        }
+
+        .login-card {
+            background: var(--glass); padding: 40px; border-radius: 30px;
+            width: 90%; max-width: 400px; text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .login-card img { height: 80px; margin-bottom: 20px; }
+        .login-card h2 { color: var(--primary); font-weight: 800; margin-bottom: 5px; }
+        .login-card p { color: #666; font-size: 0.9rem; margin-bottom: 30px; }
+
+        .input-group { position: relative; margin-bottom: 20px; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); }
+        .input-group input {
+            width: 100%; padding: 15px 15px 15px 45px; border-radius: 15px;
+            border: 2px solid #eee; outline: none; font-size: 1rem;
+        }
+        .input-group input:focus { border-color: var(--accent); background: #fff; }
+
+        .login-btn {
+            width: 100%; padding: 15px; border-radius: 15px; border: none;
+            background: var(--primary); color: white; font-weight: 700;
+            font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .login-btn:hover { background: #00361b; transform: translateY(-2px); }
+
+        /* --- DASHBOARD LAYOUT --- */
+        #mainDashboard { display: none; padding-bottom: 100px; }
+
+        .premium-header {
+            background: var(--primary); color: white; padding: 40px 20px 80px;
+            border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
+            text-align: center; position: relative;
+        }
+
+        .user-profile-badge {
+            position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%);
+            background: white; padding: 10px; border-radius: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 15px;
+            width: 85%; max-width: 350px;
+        }
+
+        .user-profile-badge img { width: 60px; height: 60px; border-radius: 18px; object-fit: cover; border: 2px solid var(--accent); }
+        .user-profile-badge .info { text-align: left; }
+        .user-profile-badge .info h4 { margin: 0; color: var(--primary); font-size: 1rem; }
+        .user-profile-badge .info p { margin: 0; font-size: 0.75rem; color: #777; font-weight: 600; }
+
+        /* --- CONTENT CARDS --- */
+        .container { padding: 70px 20px 20px; max-width: 800px; margin: 0 auto; }
+
+        .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .stat-card {
+            background: white; padding: 20px; border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;
+        }
+        .stat-card i { font-size: 1.5rem; color: var(--accent); margin-bottom: 10px; }
+        .stat-card h3 { margin: 0; font-size: 1.2rem; color: var(--primary); }
+        .stat-card p { margin: 5px 0 0; font-size: 0.8rem; color: #888; font-weight: 600; }
+
+        /* --- FEE PROGRESS --- */
+        .fee-card {
+            background: white; padding: 25px; border-radius: 25px; margin-bottom: 25px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .fee-circle { position: relative; width: 80px; height: 80px; }
+        .circle-svg { transform: rotate(-90deg); width: 80px; height: 80px; }
+        .circle-bg { fill: none; stroke: #eee; stroke-width: 8; }
+        .circle-bar { fill: none; stroke: var(--success); stroke-width: 8; stroke-dasharray: 226; stroke-dashoffset: 226; stroke-linecap: round; }
+        .fee-percent { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 800; font-size: 0.9rem; }
+
+        /* --- BUTTONS --- */
+        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .action-item {
+            background: white; border-radius: 15px; padding: 15px 5px;
+            text-align: center; text-decoration: none; border: 1px solid #f0f0f0;
+        }
+        .action-item i { display: block; font-size: 1.2rem; color: var(--primary); margin-bottom: 8px; }
+        .action-item span { font-size: 0.65rem; font-weight: 700; color: #444; text-transform: uppercase; }
+        .action-item:active { transform: scale(0.95); background: var(--accent); }
+
+        .logout-btn {
+            margin-top: 30px; width: 100%; padding: 15px; border-radius: 15px;
+            background: #fff0f0; color: #ef4444; border: none; font-weight: 700; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="loginOverlay">
+    <div class="login-card">
+        <img src="logo.png" alt="School Logo">
+        <h2>Parent Login</h2>
+        <p>Access your child's digital dashboard</p>
+        
+        <div class="input-group">
+            <i class="fas fa-id-card"></i>
+            <input type="text" id="rollNo" placeholder="Student Roll Number">
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="pass" placeholder="Password (Father's Name)">
+        </div>
+        
+        <button class="login-btn" onclick="handleLogin()">
+            LOGIN TO PORTAL <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+</div>
+
+<div id="mainDashboard">
+    <div class="premium-header">
+        <h2 style="font-weight: 800; letter-spacing: 1px;">PARAMOUNT EMS</h2>
+        <p style="opacity: 0.8; font-size: 0.9rem;">Parent-Student Integrated System</p>
+        
+        <div class="user-profile-badge">
+            <img id="dashImg" src="logo.png" alt="Student">
+            <div class="info">
+                <h4 id="dashName">Student Name</h4>
+                <p id="dashClass">Class & Section</p>
+            </div>
+            <div style="margin-left: auto; padding-right: 10px;">
+                <i class="fas fa-shield-check" style="color: var(--success); font-size: 1.2rem;"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="grid-stats">
+            <div class="stat-card">
+                <i class="fas fa-calendar-check"></i>
+                <h3 id="dashAtt">0%</h3>
+                <p>Attendance</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-medal"></i>
+                <h3 id="dashAdm">---</h3>
+                <p>Admission No</p>
+            </div>
+        </div>
+
+        <div class="fee-card">
+            <div>
+                <h4 style="margin:0; color: #777; font-size: 0.8rem; text-transform: uppercase;">Fee Status</h4>
+                <h2 id="dashDue" style="margin: 5px 0; color: var(--primary);">₹ 0.00</h2>
+                <p style="margin:0; font-size: 0.7rem; color: #999;">Pending Balance Due</p>
+            </div>
+            <div class="fee-circle">
+                <svg class="circle-svg">
+                    <circle class="circle-bg" cx="40" cy="40" r="36"></circle>
+                    <circle id="dashCircle" class="circle-bar" cx="40" cy="40" r="36"></circle>
+                </svg>
+                <div class="fee-percent" id="dashFeePerc">0%</div>
+            </div>
+        </div>
+
+        <div class="action-grid">
+            <a href="homework.html" class="action-item"><i class="fas fa-book"></i><span>Work</span></a>
+            <a href="timetable.html" class="action-item"><i class="fas fa-clock"></i><span>Time</span></a>
+            <a href="reports.html" class="action-item"><i class="fas fa-file-invoice"></i><span>Tests</span></a>
+            <a href="store.html" class="action-item"><i class="fas fa-shopping-bag"></i><span>Store</span></a>
+        </div>
+<div style="margin-top: 25px; background: white; border-radius: 20px; padding: 10px;">
+    <div style="padding: 15px; border-bottom: 1px solid #f5f5f5; display: flex; justify-content: space-between;">
+        <span style="color: #888; font-size: 0.8rem;">Father's Name</span>
+        <span id="dashFather" style="font-weight: 700; color: var(--primary); font-size: 0.85rem;">---</span>
+    </div>
+    <div style="padding: 15px; border-bottom: 1px solid #f5f5f5; display: flex; justify-content: space-between;">
+        <span style="color: #888; font-size: 0.8rem;">Date of Birth</span>
+        <span id="dashDOB" style="font-weight: 700; color: var(--primary); font-size: 0.85rem;">---</span>
+    </div>
+    <div style="padding: 15px; border-bottom: 1px solid #f5f5f5; display: flex; justify-content: space-between;">
+        <span style="color: #888; font-size: 0.8rem;">Emergency Phone</span>
+        <span id="dashPhone" style="font-weight: 700; color: var(--primary); font-size: 0.85rem;">---</span>
+    </div>
+    <div style="padding: 15px; display: flex; justify-content: space-between;">
+        <span style="color: #888; font-size: 0.8rem;">Date of Joining</span>
+        <span id="dashJoin" style="font-weight: 700; color: var(--primary); font-size: 0.85rem;">---</span>
+    </div>
+</div>
+        <button class="logout-btn" onclick="location.reload()">
+            <i class="fas fa-sign-out-alt"></i> SECURE LOGOUT
+        </button>
+    </div>
+</div>
+
+<script>
+// --- DATABASE INITIALIZATION ---
+const firebaseConfig = { 
+    apiKey: "AIzaSyDRYk9KOK-ga0c88dnYMsAoifW2NJTd_Y8", 
+    databaseURL: "https://paramount-school-d55bc-default-rtdb.firebaseio.com", 
+    projectId: "paramount-school-d55bc" 
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+// --- THE MASTER STUDENT DATA ---
+const studentList = {
+    const studentList = {
+    "1472070": { Name: "Hanish Macharla", Father: "M.Vinay", Class: "Pre-KG (Diamond)", Phone: "9182861346", Adm: "2052", Gender: "Male", DOB: "N/A", Join: "2025-08-04" },
+    "1478225": { Name: "Arjun Vihaar Illandula", Father: "Illandula Ravi.", Class: "Pre-KG (Diamond)", Phone: "9848742172", Adm: "2061", Gender: "Male", DOB: "2022-11-22", Join: "2025-10-16" },
+    "1469391": { Name: "Thanu sree Allakunta", Father: "Srinu", Class: "Pre-KG (Diamond)", Phone: "9533030806", Adm: "2047", Gender: "Female", DOB: "2022-01-26", Join: "2025-07-25" },
+    "1459555": { Name: "Aadhya Gangaraboina", Father: "Vijjay", Class: "Pre-KG (Diamond)", Phone: "8686191768", Adm: "2024", Gender: "Female", DOB: "2022-10-19", Join: "2025-05-01" },
+    "1459560": { Name: "Aadhya Sri Oggula", Father: "Raju", Class: "Pre-KG (Diamond)", Phone: "9704592874", Adm: "2017", Gender: "Female", DOB: "2022-03-16", Join: "2025-05-01" },
+    "1474500": { Name: "Aadhyasri Shivagoni", Father: "S.Abhinav", Class: "Pre-KG (Diamond)", Phone: "8074771010", Adm: "2058", Gender: "Female", DOB: "2022-10-03", Join: "2025-08-26" },
+    "1460680": { Name: "Afraha Begum", Father: "Amjad Khan", Class: "Pre-KG (Diamond)", Phone: "9440107489", Adm: "2043", Gender: "Female", DOB: "2021-10-07", Join: "2025-07-08" },
+    "1472299": { Name: "Aliya Sultana", Father: "MD.Allayar Khan", Class: "Pre-KG (Diamond)", Phone: "6304312988", Adm: "2054", Gender: "Female", DOB: "2021-11-14", Join: "2025-08-07" },
+    "1459683": { Name: "Anvika Bandi", Father: "Sridhar", Class: "Pre-KG (Diamond)", Phone: "9398418487", Adm: "2020", Gender: "Female", DOB: "2022-05-28", Join: "2025-06-09" },
+    "1459620": { Name: "Aradana Devara konda", Father: "Rajendraprasad", Class: "Pre-KG (Diamond)", Phone: "6305756873", Adm: "2016", Gender: "Female", DOB: "2022-02-18", Join: "2025-05-05" },
+    "1459605": { Name: "Devansh Bandi", Father: "Rajukumar", Class: "Pre-KG (Diamond)", Phone: "9121285781", Adm: "2030", Gender: "Male", DOB: "2022-02-04", Join: "2025-06-13" },
+    "1472069": { Name: "Hanvitha Mulkalapelli", Father: "M.Rajkumar", Class: "Pre-KG (Diamond)", Phone: "7780262276", Adm: "2050", Gender: "Female", DOB: "2022-04-01", Join: "2025-08-01" },
+    "1472723": { Name: "Harsha Vardhan Seenapelli", Father: "S.Prashanth", Class: "Pre-KG (Diamond)", Phone: "9515837322", Adm: "2056", Gender: "Male", DOB: "2023-08-03", Join: "2025-08-12" },
+    "1459658": { Name: "Hiranya Bandi", Father: "Ramesh", Class: "Pre-KG (Diamond)", Phone: "8790611868", Adm: "2033", Gender: "Female", DOB: "2022-02-18", Join: "2025-06-17" },
+    "1478248": { Name: "Jashritha Boina", Father: "B.Poorna Chander", Class: "Pre-KG (Diamond)", Phone: "6302186195", Adm: "2060", Gender: "Female", DOB: "2023-05-11", Join: "2025-10-09" },
+    "1481135": { Name: "Konreddy Shreyanvi (no image)", Father: "K.Akhil", Class: "Pre-KG (Diamond)", Phone: "8179316869", Adm: "0", Gender: "Female", DOB: "2022-03-11", Join: "2025-12-08" },
+    "1459568": { Name: "Kriyansh Sammeta", Father: "Shivakumar", Class: "Pre-KG (Diamond)", Phone: "7842370658", Adm: "2014", Gender: "Male", DOB: "2022-01-24", Join: "2025-05-28" },
+    "1459652": { Name: "Mohammed Mohiuddin Sayyad", Father: "Sayeed", Class: "Pre-KG (Diamond)", Phone: "9948172033", Adm: "2023", Gender: "Female", DOB: "2022-10-04", Join: "2025-06-06" },
+    "1459636": { Name: "Nethra Narkurthi", Father: "Shivaram", Class: "Pre-KG (Diamond)", Phone: "9347825403", Adm: "2019", Gender: "Female", DOB: "2022-05-27", Join: "2025-06-01" },
+    "1463720": { Name: "Reeyansh Bandi", Father: "Ramesh", Class: "Pre-KG (Diamond)", Phone: "7386940719", Adm: "2045", Gender: "Male", DOB: "2022-08-26", Join: "2025-07-11" },
+    "1459582": { Name: "Rishi Manupati", Father: "Kittu", Class: "Pre-KG (Diamond)", Phone: "9391993955", Adm: "2039", Gender: "Male", DOB: "2021-09-02", Join: "2025-06-24" },
+    "1459607": { Name: "Rudransh Bandi", Father: "Raju", Class: "Pre-KG (Diamond)", Phone: "8686262543", Adm: "2041", Gender: "Male", DOB: "2022-07-13", Join: "2025-07-01" },
+    "1459604": { Name: "Rudransh Bandi", Father: "Ramulu", Class: "Pre-KG (Diamond)", Phone: "7893718047", Adm: "2032", Gender: "Male", DOB: "2023-03-24", Join: "2025-06-16" },
+    "1459625": { Name: "Sanvika Bandi", Father: "Bixapathi", Class: "Pre-KG (Diamond)", Phone: "7702551738", Adm: "2038", Gender: "Female", DOB: "2022-07-04", Join: "2025-06-23" },
+    "1472074": { Name: "Shanvith Khatha", Father: "K.Venkateshwarlu", Class: "Pre-KG (Diamond)", Phone: "8712525233", Adm: "2053", Gender: "Male", DOB: "2022-10-12", Join: "2025-08-04" },
+    "1469395": { Name: "Shishira Jalagam", Father: "Yaka Swami", Class: "Pre-KG (Diamond)", Phone: "9052020711", Adm: "2042", Gender: "Female", DOB: "2021-12-10", Join: "2025-07-02" },
+    "1456748": { Name: "Shiva Sai Mekala", Father: "VASU", Class: "Pre-KG (Diamond)", Phone: "9912101753", Adm: "2013", Gender: "Male", DOB: "N/A", Join: "2025-07-02" },
+    "1459687": { Name: "Shree Rudhraveer Chevvu", Father: "Shivaramakrishna", Class: "Pre-KG (Diamond)", Phone: "9398065483", Adm: "2040", Gender: "Female", DOB: "2022-02-16", Join: "2025-06-27" },
+    "1459572": { Name: "Shreyansh Gangaraboina", Father: "Vijay", Class: "Pre-KG (Diamond)", Phone: "8686191768", Adm: "2012", Gender: "Male", DOB: "2021-05-17", Join: "2025-05-01" },
+    "1459643": { Name: "Sreeja Thalla", Father: "Arun", Class: "Pre-KG (Diamond)", Phone: "9346300709", Adm: "2029", Gender: "Female", DOB: "2021-07-22", Join: "2025-06-13" },
+    "1459603": { Name: "Srikrithini Myakala", Father: "Srikanth", Class: "Pre-KG (Diamond)", Phone: "8309708832", Adm: "2037", Gender: "Female", DOB: "2022-05-20", Join: "2025-06-23" },
+    "1472536": { Name: "Srivatsav Vanam", Father: "V.Kiran Kumar", Class: "Pre-KG (Diamond)", Phone: "9642539015", Adm: "2055", Gender: "Male", DOB: "2022-12-23", Join: "2025-08-08" },
+    "1456743": { Name: "Sriyansh Mekala", Father: "RANGITH", Class: "Pre-KG (Diamond)", Phone: "9949327643", Adm: "2025", Gender: "Male", DOB: "N/A", Join: "2025-07-02" },
+    "1473500": { Name: "Thanvika Lakka", Father: "L.Rahul", Class: "Pre-KG (Diamond)", Phone: "9010913855", Adm: "2057", Gender: "Female", DOB: "2022-07-29", Join: "2025-08-22" },
+    "1463724": { Name: "Thrilokansh Vudari", Father: "Bharat Kumar", Class: "Pre-KG (Diamond)", Phone: "8074833651", Adm: "2046", Gender: "Male", DOB: "2023-01-06", Join: "2025-07-12" },
+    "1459694": { Name: "Ujjwal Chekka", Father: "Kranthi", Class: "Pre-KG (Diamond)", Phone: "9963987952", Adm: "2022", Gender: "Male", DOB: "2022-08-19", Join: "2025-05-31" },
+    "1474815": { Name: "Vaishnavi Lakka", Father: "L.Shiva", Class: "Pre-KG (Diamond)", Phone: "9182045866", Adm: "2059", Gender: "Female", DOB: "2022-10-14", Join: "2025-09-15" },
+    "1460690": { Name: "Vedansh Myakala", Father: "Anil Kumar", Class: "Pre-KG (Diamond)", Phone: "9703293930", Adm: "2044", Gender: "Male", DOB: "N/A", Join: "2025-07-08" },
+    "1478250": { Name: "Vishnu Priya Molugu", Father: "MM Suresh kumar", Class: "Pre-KG (Diamond)", Phone: "8247448532", Adm: "2006", Gender: "Female", DOB: "2022-02-24", Join: "2025-06-12" },
+    "1413563": { Name: "Vyshnav Tej Boina", Father: "Shekar", Class: "Pre-KG (Diamond)", Phone: "7671807331", Adm: "2015", Gender: "Male", DOB: "2022-01-31", Join: "2024-11-12" },
+    "1459577": { Name: "Yafiah Mohammad", Father: "Yousuf Shareef", Class: "Pre-KG (Diamond)", Phone: "9392670257", Adm: "2018", Gender: "Female", DOB: "2022-05-05", Join: "2025-03-01" },
+    "1424084": { Name: "Aadhya Sri Amaravadi", Father: "Rakesh", Class: "KG-1 (Ruby)", Phone: "9502626801", Adm: "2007", Gender: "Female", DOB: "2021-10-09", Join: "2025-02-07" },
+    "1426519": { Name: "Aditya Manda", Father: "Mohan Lal", Class: "KG-1 (Ruby)", Phone: "8374173873", Adm: "2004", Gender: "Male", DOB: "2022-01-21", Join: "2025-01-20" },
+    "1426518": { Name: "Aadhya Jella", Father: "Bhikshapathi", Class: "KG-1 (Ruby)", Phone: "9959633484", Adm: "2003", Gender: "Female", DOB: "2022-05-25", Join: "2025-01-20" },
+    "1392920": { Name: "Advaita Gauri Bandi", Father: "B. Karnakar", Class: "KG-1 (Ruby)", Phone: "9550011612", Adm: "1993", Gender: "Female", DOB: "2021-07-31", Join: "2024-06-12" },
+    "1392683": { Name: "Aizah Amna Shaik", Father: "Jahed Ali", Class: "KG-1 (Ruby)", Phone: "9014984808", Adm: "1986", Gender: "Female", DOB: "2020-12-18", Join: "2024-06-12" },
+    "1472077": { Name: "Akshara Singaram", Father: "S.Prasanth", Class: "KG-1 (Ruby)", Phone: "7095527244", Adm: "2051", Gender: "Female", DOB: "2020-08-30", Join: "2025-08-01" },
+    "1469394": { Name: "Bhahuveer Raj Somishetti", Father: "Harinivas", Class: "KG-1 (Ruby)", Phone: "9951394609", Adm: "2048", Gender: "Male", DOB: "2021-10-12", Join: "2025-07-25" },
+    "1392676": { Name: "Gayathri Erroju", Father: "Rajesh", Class: "KG-1 (Ruby)", Phone: "9010050059", Adm: "1989", Gender: "Female", DOB: "2021-02-12", Join: "2024-06-12" },
+    "1390570": { Name: "Hanvika Mulkalapelli (no image)", Father: "Raju", Class: "KG-1 (Ruby)", Phone: "9177159519", Adm: "1977", Gender: "Female", DOB: "2020-10-16", Join: "2024-06-12" },
+    "1396188": { Name: "Manvith Kondoju", Father: "K.Sai Kumar", Class: "KG-1 (Ruby)", Phone: "7075175578", Adm: "1995", Gender: "Male", DOB: "2021-05-26", Join: "2024-07-23" },
+    "1392703": { Name: "Mariyam", Father: "Sayyad Vajeed", Class: "KG-1 (Ruby)", Phone: "8885451958", Adm: "1991", Gender: "Female", DOB: "2020-09-21", Join: "2024-06-12" },
+    "1412110": { Name: "Mekala Manu sri", Father: "Rangith", Class: "KG-1 (Ruby)", Phone: "7793959897", Adm: "1998", Gender: "Female", DOB: "2021-03-18", Join: "2024-10-20" },
+    "1392687": { Name: "Oliva Grace Vallapu", Father: "Naveen", Class: "KG-1 (Ruby)", Phone: "9951886334", Adm: "1990", Gender: "Female", DOB: "2021-03-20", Join: "2024-06-12" },
+    "1392696": { Name: "Rithwik Oggula", Father: "Sampath", Class: "KG-1 (Ruby)", Phone: "8464872522", Adm: "1984", Gender: "Male", DOB: "N/A", Join: "2024-06-12" },
+    "1413326": { Name: "Rithwika Kandagatla", Father: "Ajay", Class: "KG-1 (Ruby)", Phone: "8106023490", Adm: "2000", Gender: "Female", DOB: "2021-07-13", Join: "2024-10-17" },
+    "1392679": { Name: "Srimahi Chevvu", Father: "Gavaskaar", Class: "KG-1 (Ruby)", Phone: "9966573771", Adm: "1983", Gender: "Female", DOB: "2021-06-10", Join: "2024-06-12" },
+    "1459706": { Name: "Thanvesh Thalla", Father: "Rajesh", Class: "KG-1 (Ruby)", Phone: "9550995231", Adm: "2011", Gender: "Male", DOB: "2021-01-04", Join: "2025-05-22" },
+    "1317800": { Name: "Trishul Nanduri", Father: "Vijaykanth", Class: "KG-1 (Ruby)", Phone: "9949668558", Adm: "1969", Gender: "Male", DOB: "2020-08-24", Join: "2023-08-19" },
+    "1424085": { Name: "Yoganshika Nanduri", Father: "Vijay Kanth", Class: "KG-1 (Ruby)", Phone: "9949668558", Adm: "2005", Gender: "Female", DOB: "2022-01-09", Join: "2025-01-22" },
+    "1387264": { Name: "Yusra Mohammad", Father: "Yousuf Shareef", Class: "KG-1 (Ruby)", Phone: "9392661854", Adm: "1974", Gender: "Female", DOB: "2021-03-19", Join: "2024-06-12" },
+    "1402461": { Name: "Zainul Abideen Syed", Father: "Akbar", Class: "KG-1 (Ruby)", Phone: "8106972447", Adm: "1997", Gender: "Male", DOB: "2020-12-21", Join: "2024-08-05" },
+    "1298438": { Name: "Deekshanth Sammeta", Father: "Shivakumar", Class: "KG-2 (Amber)", Phone: "7842370658", Adm: "1946", Gender: "Male", DOB: "2018-07-09", Join: "2023-05-25" },
+    "1298439": { Name: "Hanshith Erroju", Father: "Rajesh", Class: "KG-2 (Amber)", Phone: "9010150059", Adm: "1960", Gender: "Male", DOB: "2019-08-17", Join: "2023-06-22" },
+    "1298447": { Name: "Harika Bandi", Father: "Raju", Class: "KG-2 (Amber)", Phone: "9573818773", Adm: "1968", Gender: "Female", DOB: "2020-06-14", Join: "2023-07-18" },
+    "1298432": { Name: "Himarsha Naini", Father: "Raju", Class: "KG-2 (Amber)", Phone: "7993636204", Adm: "1966", Gender: "Female", DOB: "2020-07-30", Join: "2023-08-07" },
+    "1298440": { Name: "Karthik Vallepu", Father: "Ramesh", Class: "KG-2 (Amber)", Phone: "9704840650", Adm: "1945", Gender: "Male", DOB: "2020-01-27", Join: "2023-01-05" },
+    "1298433": { Name: "Kruthika Bandi", Father: "Ramesh", Class: "KG-2 (Amber)", Phone: "8790611868", Adm: "1951", Gender: "Female", DOB: "2020-07-18", Join: "2023-11-06" },
+    "1298441": { Name: "Rajavardhan Gampala", Father: "Kanaka Raju", Class: "KG-2 (Amber)", Phone: "8074393994", Adm: "1950", Gender: "Male", DOB: "2018-10-01", Join: "2023-10-06" },
+    "1298443": { Name: "Roshan Kaitha", Father: "Rajashekar", Class: "KG-2 (Amber)", Phone: "6300582916", Adm: "1955", Gender: "Male", DOB: "2020-10-31", Join: "2023-06-16" },
+    "1298448": { Name: "Sri Anshu Ayaan Lyadala", Father: "Rajashekar", Class: "KG-2 (Amber)", Phone: "8008113407", Adm: "1965", Gender: "Male", DOB: "2020-06-10", Join: "2023-04-07" },
+    "1298444": { Name: "Srihansh Bandi", Father: "Sridhar", Class: "KG-2 (Amber)", Phone: "9398418487", Adm: "1947", Gender: "Male", DOB: "2020-08-17", Join: "2023-05-31" },
+    "1298435": { Name: "Srikshitha Guduri", Father: "Raju", Class: "KG-2 (Amber)", Phone: "9398716665", Adm: "1959", Gender: "Female", DOB: "2020-09-16", Join: "2023-06-21" },
+    "1298445": { Name: "Varshith Gonela", Father: "Ramu", Class: "KG-2 (Amber)", Phone: "9966960107", Adm: "1956", Gender: "Male", DOB: "2020-08-13", Join: "2023-06-17" },
+    "1392815": { Name: "Adyasri Makala", Father: "Laxmi Narayana", Class: "KG-2 (Amber)", Phone: "9985420659", Adm: "1988", Gender: "Female", DOB: "2020-07-22", Join: "2024-06-12" },
+    "1394463": { Name: "Anvik Boini", Father: "B.Raju", Class: "KG-2 (Amber)", Phone: "9705653666", Adm: "1995", Gender: "Male", DOB: "2020-10-20", Join: "2024-06-12" },
+    "1459764": { Name: "Anvith Pokanati", Father: "Keshavulu (Late)", Class: "KG-2 (Amber)", Phone: "6300854330", Adm: "2025", Gender: "Male", DOB: "2019-05-08", Join: "2025-07-13" },
+    "1459748": { Name: "Awais Ur Rehman Mohammad", Father: "Imran Mahammad", Class: "KG-2 (Amber)", Phone: "9705839237", Adm: "2010", Gender: "Male", DOB: "2020-10-06", Join: "2025-05-25" },
+    "1459742": { Name: "Dakshu Pothuganti", Father: "Rajashekhar", Class: "KG-2 (Amber)", Phone: "8074781031", Adm: "2027", Gender: "Male", DOB: "2020-10-03", Join: "2025-06-13" },
+    "1393477": { Name: "Hansith Reddy Katukuri", Father: "Thirupathi Reddy", Class: "KG-2 (Amber)", Phone: "7995553736", Adm: "1972", Gender: "Male", DOB: "2021-03-10", Join: "2024-06-12" },
+    "1459762": { Name: "Harshith Pokanati", Father: "Keshavulu (Late)", Class: "KG-2 (Amber)", Phone: "6300854330", Adm: "2026", Gender: "Male", DOB: "2019-05-08", Join: "2025-07-13" },
+    "1402310": { Name: "Jella Aditya", Father: "J. Bhikshapathi", Class: "KG-2 (Amber)", Phone: "6281221851", Adm: "1997", Gender: "Male", DOB: "2019-04-25", Join: "2024-08-05" },
+    "1390563": { Name: "Krishank Nallabothula", Father: "Lingaraju", Class: "KG-2 (Amber)", Phone: "9014498296", Adm: "1976", Gender: "Male", DOB: "2020-02-20", Join: "2024-06-12" },
+    "1459771": { Name: "Kundana Katkuri", Father: "Chiranjeevi", Class: "KG-2 (Amber)", Phone: "8247004380", Adm: "2008", Gender: "Female", DOB: "N/A", Join: "2025-06-20" },
+    "1307790": { Name: "Munukuntla Revanth Rudhra", Father: "Subhash", Class: "KG-2 (Amber)", Phone: "8686799532", Adm: "1967", Gender: "Male", DOB: "2019-03-09", Join: "2023-08-13" },
+    "1459758": { Name: "Niraja Nethri Siluveru", Father: "Kapil", Class: "KG-2 (Amber)", Phone: "7286805213", Adm: "2033", Gender: "Female", DOB: "2019-05-19", Join: "2025-06-18" },
+    "1459752": { Name: "Pranav Mattepelli", Father: "Vijay", Class: "KG-2 (Amber)", Phone: "9704839982", Adm: "2009", Gender: "Male", DOB: "2019-02-22", Join: "2025-05-22" },
+    "1390566": { Name: "Sreenith Yadav Naini", Father: "Ramesh", Class: "KG-2 (Amber)", Phone: "8121293251", Adm: "1975", Gender: "Male", DOB: "2020-03-31", Join: "2024-06-12" },
+    "1459756": { Name: "Uvan Reddy Dasari", Father: "Raghupathi Reddy", Class: "KG-2 (Amber)", Phone: "9573557696", Adm: "2030", Gender: "Male", DOB: "2020-03-01", Join: "2025-06-16" },
+    "1459775": { Name: "Zayan Mohammad", Father: "Zaffar", Class: "KG-2 (Amber)", Phone: "9182909190", Adm: "2034", Gender: "Male", DOB: "N/A", Join: "2025-06-20" },
+    "1459714": { Name: "Zoya Mohammed", Father: "Chand Pasha", Class: "KG-2 (Amber)", Phone: "9848465650", Adm: "2035", Gender: "Female", DOB: "2020-05-20", Join: "2025-07-21" },
+    "1298423": { Name: "Dheeraj Gattu", Father: "Raju", Class: "Grade-1 (Opal)", Phone: "9346457748", Adm: "151", Gender: "Male", DOB: "2018-07-12", Join: "2023-06-14" },
+    "1298425": { Name: "Preetham Sannayala", Father: "Shiva", Class: "Grade-1 (Opal)", Phone: "9000283858", Adm: "138", Gender: "Male", DOB: "2019-06-04", Join: "2022-06-13" },
+    "1298428": { Name: "Shiva nandu Gonela", Father: "Ramu", Class: "Grade-1 (Opal)", Phone: "9966960107", Adm: "137", Gender: "Male", DOB: "2018-12-20", Join: "2022-06-24" },
+    "1298429": { Name: "Shrayan Nuthanakanti", Father: "Sridhar", Class: "Grade-1 (Opal)", Phone: "7075567649", Adm: "148", Gender: "Male", DOB: "2020-03-26", Join: "2023-02-22" },
+    "1392864": { Name: "Sriyanksha Mandala", Father: "Arun Kumar", Class: "Grade-1 (Opal)", Phone: "8885767607", Adm: "143", Gender: "Female", DOB: "2019-04-30", Join: "2024-06-12" },
+    "1298411": { Name: "Advitha Garige", Father: "Chiranjeevi", Class: "Grade-1 (Opal)", Phone: "9959114639", Adm: "147", Gender: "Female", DOB: "2020-04-30", Join: "2023-07-02" },
+    "1298413": { Name: "Harika Bandi", Father: "Rajkumar", Class: "Grade-1 (Opal)", Phone: "8008707668", Adm: "145", Gender: "Female", DOB: "2020-06-01", Join: "2022-11-28" },
+    "1298414": { Name: "Himansi Kondoju", Father: "Sai kumar", Class: "Grade-1 (Opal)", Phone: "7075175578", Adm: "141", Gender: "Female", DOB: "2019-02-17", Join: "2022-06-27" },
+    "1392895": { Name: "Izhaan Rahamath Syed", Father: "Syed Fayaz", Class: "Grade-1 (Opal)", Phone: "8074667438", Adm: "154", Gender: "Male", DOB: "2019-01-08", Join: "2024-06-12" },
+    "1298424": { Name: "Jaisurya Myakala", Father: "Sravan Kumar", Class: "Grade-1 (Opal)", Phone: "9010506760", Adm: "136", Gender: "Male", DOB: "2018-08-20", Join: "2022-06-16" },
+    "1298415": { Name: "Khadeeja Fathima", Father: "Khaja Faheemuddin", Class: "Grade-1 (Opal)", Phone: "9959414786", Adm: "146", Gender: "Female", DOB: "2019-08-06", Join: "2023-09-01" },
+    "1298416": { Name: "Manaswini Dandugula", Father: "Srinivas", Class: "Grade-1 (Opal)", Phone: "7075342014", Adm: "150", Gender: "Female", DOB: "2017-10-18", Join: "2023-10-06" },
+    "1298417": { Name: "Manusri Bandi", Father: "Ramesh", Class: "Grade-1 (Opal)", Phone: "9177313069", Adm: "144", Gender: "Female", DOB: "2019-05-14", Join: "2022-11-22" },
+    "1298426": { Name: "Rithwik krishna Amaravadi", Father: "Rakesh", Class: "Grade-1 (Opal)", Phone: "9502626801", Adm: "149", Gender: "Male", DOB: "2020-03-26", Join: "2023-02-22" },
+    "1298427": { Name: "Rohan Bandi", Father: "Vijay kumar", Class: "Grade-1 (Opal)", Phone: "6309561181", Adm: "140", Gender: "Male", DOB: "2018-07-02", Join: "2022-08-30" },
+    "1392876": { Name: "Shiva Junnu", Father: "Parusharamulu", Class: "Grade-1 (Opal)", Phone: "8096253875", Adm: "152", Gender: "Male", DOB: "2018-10-13", Join: "2024-06-12" },
+    "1392885": { Name: "Shivanandh Bandi", Father: "Rajesh", Class: "Grade-1 (Opal)", Phone: "9848509341", Adm: "155", Gender: "Male", DOB: "N/A", Join: "2024-06-12" },
+    "1459709": { Name: "Sridha Thalla", Father: "Rajesh", Class: "Grade-1 (Opal)", Phone: "9550995231", Adm: "164", Gender: "Female", DOB: "2019-10-27", Join: "2025-05-22" },
+    "1298419": { Name: "Srinika Chengelly", Father: "Vykunta Chary", Class: "Grade-1 (Opal)", Phone: "9703045606", Adm: "139", Gender: "Female", DOB: "2019-03-02", Join: "2022-08-30" },
+    "1298420": { Name: "Sriyanshi Oggula", Father: "Sampath", Class: "Grade-1 (Opal)", Phone: "7730886474", Adm: "142", Gender: "Female", DOB: "2019-08-06", Join: "2022-08-30" },
+    "1298431": { Name: "Vishwak Chekka", Father: "Naresh", Class: "Grade-1 (Opal)", Phone: "9912945240", Adm: "143", Gender: "Male", DOB: "2019-10-18", Join: "2022-10-20" },
+    "1298397": { Name: "Aliza Manha Shaik", Father: "Moin Pasha", Class: "Grade-2 (Emerald)", Phone: "7989482920", Adm: "117", Gender: "Female", DOB: "2018-10-21", Join: "2023-06-19" },
+    "1298407": { Name: "Dhruvan Reddy Katukuri", Father: "Thirupathi Reddy", Class: "Grade-2 (Emerald)", Phone: "7995553736", Adm: "111", Gender: "Male", DOB: "2018-12-16", Join: "2022-06-25" },
+    "1298398": { Name: "Druthika Enugala", Father: "Karthik Reddy", Class: "Grade-2 (Emerald)", Phone: "8686077799", Adm: "116", Gender: "Female", DOB: "2019-04-15", Join: "2023-12-06" },
+    "1298399": { Name: "Manaswini Bandi", Father: "Bixapathi", Class: "Grade-2 (Emerald)", Phone: "7702551738", Adm: "115", Gender: "Female", DOB: "2017-09-07", Join: "2022-08-30" },
+    "1298408": { Name: "Rakshith Macharla", Father: "Ganesh", Class: "Grade-2 (Emerald)", Phone: "8074638822", Adm: "112", Gender: "Male", DOB: "2018-06-23", Join: "2022-06-29" },
+    "1298401": { Name: "Sathwika Katkuri", Father: "Shivaiah", Class: "Grade-2 (Emerald)", Phone: "6300199764", Adm: "113", Gender: "Female", DOB: "2018-05-03", Join: "2022-06-13" },
+    "1298402": { Name: "Shalini Uppala", Father: "Anji", Class: "Grade-2 (Emerald)", Phone: "9701160185", Adm: "109", Gender: "Female", DOB: "2017-12-21", Join: "2021-10-09" },
+    "1459786": { Name: "Chandu Devarakonda", Father: "Ramesh", Class: "Grade-2 (Emerald)", Phone: "9392270984", Adm: "161", Gender: "Male", DOB: "2017-11-11", Join: "2025-05-20" },
+    "1459815": { Name: "Gnaneshwar Pokanati", Father: "Keshavulu (Late)", Class: "Grade-2 (Emerald)", Phone: "6300854330", Adm: "162", Gender: "Male", DOB: "2017-04-25", Join: "2025-06-13" },
+    "1298409": { Name: "Hasnain Syed", Father: "Khader Syed", Class: "Grade-2 (Emerald)", Phone: "833021076", Adm: "118", Gender: "Male", DOB: "2018-10-09", Join: "2023-02-07" },
+    "1459832": { Name: "Koushik Siluveru", Father: "Kapil", Class: "Grade-2 (Emerald)", Phone: "7286805213", Adm: "167", Gender: "Male", DOB: "2017-08-06", Join: "2025-06-18" },
+    "1316732": { Name: "Senen Desabattula", Father: "Samuel Sparjan Babu", Class: "Grade-2 (Emerald)", Phone: "9052820502", Adm: "119", Gender: "Female", DOB: "2018-08-17", Join: "2023-09-02" },
+    "1459817": { Name: "Shivarajan Pothuganti", Father: "Rajashekhar", Class: "Grade-2 (Emerald)", Phone: "8074781031", Adm: "163", Gender: "Male", DOB: "2019-02-07", Join: "2025-06-13" },
+    "1298393": { Name: "Nagavelly Manikanta", Father: "Ravi kumar", Class: "Grade-3 (Crystal)", Phone: "9492098006", Adm: "73", Gender: "Male", DOB: "2016-11-16", Join: "2019-11-30" },
+    "1459834": { Name: "Mirja Ismail", Father: "Yusuf Baig", Class: "Grade-3 (Crystal)", Phone: "9989367263", Adm: "166", Gender: "Male", DOB: "2015-10-02", Join: "2025-06-18" },
+    "1298390": { Name: "Bandi Aryan", Father: "Anil", Class: "Grade-3 (Crystal)", Phone: "9502098594", Adm: "88", Gender: "Male", DOB: "2017-03-10", Join: "2023-09-06" },
+    "1298392": { Name: "Dandugula Mahesh Babu", Father: "Srinivas", Class: "Grade-3 (Crystal)", Phone: "7075342014", Adm: "91", Gender: "Male", DOB: "2015-08-15", Join: "2023-10-06" },
+    "1298387": { Name: "Bandi Tejasri", Father: "Raghu", Class: "Grade-3 (Crystal)", Phone: "9618791981", Adm: "102", Gender: "Female", DOB: "2017-05-25", Join: "2023-01-07" },
+    "1298391": { Name: "Bandi Harshavardhan", Father: "Rajkumar", Class: "Grade-3 (Crystal)", Phone: "8008707668", Adm: "99", Gender: "Male", DOB: "2017-09-10", Join: "2023-06-23" },
+    "1298389": { Name: "Gampala Vyshnavi", Father: "Kanakaraju", Class: "Grade-3 (Crystal)", Phone: "8074393994", Adm: "89", Gender: "Female", DOB: "2016-11-02", Join: "2023-10-06" },
+    "1298384": { Name: "Gampala Laxmi", Father: "Kanakaraju", Class: "Grade-3 (Crystal)", Phone: "8074393994", Adm: "90", Gender: "Female", DOB: "2017-02-05", Join: "2023-10-06" },
+    "1298410": { Name: "Garige Harshith", Father: "Chiranjeevi", Class: "Grade-3 (Crystal)", Phone: "9959114639", Adm: "106", Gender: "Male", DOB: "2017-09-10", Join: "2022-06-20" },
+    "1459844": { Name: "Katkuri Hanish", Father: "Katkuri Suryaprasad", Class: "Grade-3 (Crystal)", Phone: "9000557009", Adm: "169", Gender: "Male", DOB: "2015-08-25", Join: "2025-06-24" },
+    "1459798": { Name: "Katukuri Manideep", Father: "Chiranjeevi", Class: "Grade-3 (Crystal)", Phone: "8247004380", Adm: "172", Gender: "Male", DOB: "2016-05-15", Join: "2025-05-31" },
+    "1459805": { Name: "MD. Abdul Quddus", Father: "Raja.S", Class: "Grade-3 (Crystal)", Phone: "7300303319", Adm: "160", Gender: "Male", DOB: "2017-10-13", Join: "2025-06-02" },
+    "1298395": { Name: "Muppa Sathwik Patel", Father: "Janardhan", Class: "Grade-3 (Crystal)", Phone: "9553800447", Adm: "81", Gender: "Male", DOB: "2016-10-11", Join: "2023-05-30" },
+    "1298386": { Name: "Nuthanakanti Sansita", Father: "Sridhar", Class: "Grade-3 (Crystal)", Phone: "7989663380", Adm: "75", Gender: "Female", DOB: "2017-04-21", Join: "2022-06-27" },
+    "1298396": { Name: "Pasarakonda Ritwin", Father: "Karnakar", Class: "Grade-3 (Crystal)", Phone: "7702007402", Adm: "104", Gender: "Male", DOB: "2016-01-21", Join: "2023-05-07" },
+    "1459841": { Name: "Pinninti Rakshith Rao", Father: "Chander Rao (Late)", Class: "Grade-3 (Crystal)", Phone: "9848523514", Adm: "170", Gender: "Male", DOB: "2017-03-13", Join: "2025-06-24" },
+    "1400203": { Name: "Rayi Sriman Adithya", Father: "Venkataramana", Class: "Grade-3 (Crystal)", Phone: "6305872732", Adm: "135", Gender: "Male", DOB: "2016-05-02", Join: "2024-07-20" },
+    "1298376": { Name: "Abdul Saqib Mohammad", Father: "Abdul Rawoof", Class: "Grade-4 (Citrine)", Phone: "8328695850", Adm: "41", Gender: "Male", DOB: "2015-04-09", Join: "2022-12-06" },
+    "1298366": { Name: "Anudeep Chintha", Father: "Anil", Class: "Grade-4 (Citrine)", Phone: "9848448941", Adm: "64", Gender: "Female", DOB: "2015-08-27", Join: "2022-06-29" },
+    "1298368": { Name: "Bhavan Bandi", Father: "Devendar", Class: "Grade-4 (Citrine)", Phone: "8897141289", Adm: "95", Gender: "Male", DOB: "2014-11-26", Join: "2023-06-19" },
+    "1298370": { Name: "Harshavardhan Gonela", Father: "Raju", Class: "Grade-4 (Citrine)", Phone: "9391704022", Adm: "80", Gender: "Male", DOB: "2016-02-02", Join: "2023-05-29" },
+    "1298372": { Name: "Jayadev Chiluveru", Father: "Madhavarao", Class: "Grade-4 (Citrine)", Phone: "9700409933", Adm: "84", Gender: "Male", DOB: "2016-05-26", Join: "2023-07-06" },
+    "1298373": { Name: "Mahaboob Syed", Father: "Khader", Class: "Grade-4 (Citrine)", Phone: "8333021076", Adm: "103", Gender: "Male", DOB: "2016-05-12", Join: "2023-02-07" },
+    "1298374": { Name: "Nandith Reddy Enugala", Father: "Karthik Reddy", Class: "Grade-4 (Citrine)", Phone: "8686077799", Adm: "49", Gender: "Male", DOB: "2016-01-07", Join: "2022-06-13" },
+    "1392930": { Name: "Sai Charan Goud Mandala", Father: "Arun Kumar", Class: "Grade-4 (Citrine)", Phone: "8885767607", Adm: "123", Gender: "Male", DOB: "2015-09-01", Join: "2024-06-12" },
+    "1298380": { Name: "Sai Prasanna Keerthi", Father: "Venkateshwarlu", Class: "Grade-4 (Citrine)", Phone: "9951567253", Adm: "105", Gender: "Female", DOB: "2016-01-29", Join: "2023-06-07" },
+    "1298363": { Name: "Ajmeri Shaik", Father: "Hidayath Pasha", Class: "Grade-4 (Citrine)", Phone: "9302145468", Adm: "87", Gender: "Female", DOB: "2016-09-28", Join: "2023-09-06" },
+    "1392939": { Name: "Akshith Chiluveru", Father: "Kranthi Kumar", Class: "Grade-4 (Citrine)", Phone: "8179352423", Adm: "128", Gender: "Male", DOB: "2015-07-13", Join: "2024-06-12" },
+    "1298364": { Name: "Jayasri Myakala", Father: "Sravan kumar", Class: "Grade-4 (Citrine)", Phone: "9010506760", Adm: "68", Gender: "Female", DOB: "2016-02-06", Join: "2022-07-07" },
+    "1298381": { Name: "Rahul Kanjarla", Father: "Kumaraswamy", Class: "Grade-4 (Citrine)", Phone: "8897047979", Adm: "79", Gender: "Male", DOB: "2015-09-24", Join: "2023-05-27" },
+    "1459784": { Name: "Saketh Devarakonda", Father: "Ramesh", Class: "Grade-4 (Citrine)", Phone: "9392270984", Adm: "159", Gender: "Male", DOB: "2015-12-21", Join: "2025-05-20" },
+    "1298353": { Name: "Adya Reddy Vangala", Father: "Mahipal Reddy", Class: "Grade-5 (Moonstone)", Phone: "9949109221", Adm: "21", Gender: "Female", DOB: "2016-08-03", Join: "2021-12-06" },
+    "1298361": { Name: "Kowshik Patel Muppa", Father: "Janardhan", Class: "Grade-5 (Moonstone)", Phone: "9553800447", Adm: "77", Gender: "Male", DOB: "2014-09-03", Join: "2023-05-30" },
+    "1298355": { Name: "Siri Singaram", Father: "Madhu", Class: "Grade-5 (Moonstone)", Phone: "9550726263", Adm: "83", Gender: "Female", DOB: "2014-08-16", Join: "2023-06-06" },
+    "1298360": { Name: "Srikar Mandala", Father: "Ramesh", Class: "Grade-5 (Moonstone)", Phone: "9550073190", Adm: "76", Gender: "Male", DOB: "2013-11-28", Join: "2023-05-26" },
+    "1459801": { Name: "Abdus Salaam MD.", Father: "Raja.S", Class: "Grade-5 (Moonstone)", Phone: "7300303319", Adm: "158", Gender: "Male", DOB: "2015-08-22", Join: "2025-06-02" },
+    "1392968": { Name: "Akshith Ram Kalvacharla", Father: "Hareen Chary", Class: "Grade-5 (Moonstone)", Phone: "7672058517", Adm: "126", Gender: "Male", DOB: "2015-08-21", Join: "2024-06-12" },
+    "1392965": { Name: "Jaffar Anas Shaik", Father: "Khaja Pasha", Class: "Grade-5 (Moonstone)", Phone: "9391854024", Adm: "130", Gender: "Male", DOB: "2013-04-17", Join: "2024-06-12" },
+    "1298359": { Name: "Khaja Azeemuddin Mohammed", Father: "Khaja Faheemuddin", Class: "Grade-5 (Moonstone)", Phone: "9959414786", Adm: "30", Gender: "Male", DOB: "2015-05-02", Join: "2021-01-09" },
+    "1459839": { Name: "Nihan Mohammed", Father: "Chand Pasha", Class: "Grade-5 (Moonstone)", Phone: "9848465650", Adm: "168", Gender: "Male", DOB: "2016-03-04", Join: "2025-06-21" },
+    "1392963": { Name: "Saif Shaik", Father: "Salmaan", Class: "Grade-5 (Moonstone)", Phone: "8179352120", Adm: "120", Gender: "Male", DOB: "2015-04-10", Join: "2024-06-12" },
+    "1459794": { Name: "Saketh Renukuntla", Father: "Rajesh", Class: "Grade-5 (Moonstone)", Phone: "7569518371", Adm: "157", Gender: "Male", DOB: "2014-04-20", Join: "2025-05-30" },
+    "1392955": { Name: "Sreeja Dasari", Father: "Kumar", Class: "Grade-5 (Moonstone)", Phone: "6301871704", Adm: "123", Gender: "Female", DOB: "2014-12-12", Join: "2024-06-12" },
+    "1459821": { Name: "Vidhaatri Sahani", Father: "Abhishek Sahani", Class: "Grade-5 (Moonstone)", Phone: "9704394869", Adm: "165", Gender: "Female", DOB: "2015-06-15", Join: "2025-06-18" },
+    "1298347": { Name: "Abdul Razzak Mohammad", Father: "Abdul Rawoof", Class: "Grade-6 (Alluri)", Phone: "9573226386", Adm: "19", Gender: "Male", DOB: "2013-11-19", Join: "2019-11-06" },
+    "1298341": { Name: "Anudeepthi Chintha", Father: "Anil", Class: "Grade-6 (Alluri)", Phone: "9052927765", Adm: "63", Gender: "Female", DOB: "2014-02-23", Join: "2022-06-29" },
+    "1298350": { Name: "Saketh Ranaveni", Father: "Sampath", Class: "Grade-6 (Alluri)", Phone: "8688129606", Adm: "61", Gender: "Male", DOB: "2013-10-24", Join: "2022-06-27" },
+    "1298346": { Name: "Shiva Sri Katukuri", Father: "Shivaiah", Class: "Grade-6 (Alluri)", Phone: "6300199764", Adm: "48", Gender: "Female", DOB: "2014-09-24", Join: "2022-06-13" },
+    "1298348": { Name: "Aklees Shaik", Father: "Hidayath Pasha", Class: "Grade-6 (Alluri)", Phone: "9302145468", Adm: "85", Gender: "Male", DOB: "2014-08-25", Join: "2019-09-06" },
+    "1392992": { Name: "Akshya Kalvacharla", Father: "Hareen Chary", Class: "Grade-6 (Alluri)", Phone: "7672058517", Adm: "125", Gender: "Female", DOB: "2013-11-16", Join: "2024-06-12" },
+    "1472577": { Name: "Prince Katkuri", Father: "Katkuri Suryaprasad", Class: "Grade-6 (Alluri)", Phone: "9000557009", Adm: "0", Gender: "Female", DOB: "2013-08-06", Join: "2025-08-11" },
+    "1298339": { Name: "Manikanta Sannayala", Father: "Shiva", Class: "Grade-7 (Kalam)", Phone: "9000283858", Adm: "38", Gender: "Male", DOB: "2013-05-31", Join: "2021-09-28" },
+    "1298340": { Name: "Sreeyan Reddy Karra", Father: "Krishna Reddy", Class: "Grade-7 (Kalam)", Phone: "9848774257", Adm: "33", Gender: "Male", DOB: "2012-01-08", Join: "2021-07-09" },
+    "1393008": { Name: "Jayadhithya Chiluveru", Father: "CH.Madhava Rao", Class: "Grade-7 (Kalam)", Phone: "8886826838", Adm: "131", Gender: "Male", DOB: "2013-02-08", Join: "2024-06-12" },
+    "1459846": { Name: "Akshaya Gampala", Father: "Balaiah", Class: "Grade-8 (Bhagat)", Phone: "9948184498", Adm: "171", Gender: "Female", DOB: "2009-02-09", Join: "2025-06-26" },
+    "1298335": { Name: "Ganesh Oggula", Father: "Cheralu", Class: "Grade-8 (Bhagat)", Phone: "6304381153", Adm: "56", Gender: "Male", DOB: "2011-06-11", Join: "2022-06-27" },
+    "1459792": { Name: "Gayathri Renukuntla", Father: "Rajesh", Class: "Grade-8 (Bhagat)", Phone: "7569518371", Adm: "156", Gender: "Female", DOB: "2012-05-11", Join: "2025-05-30" },
+    "1298337": { Name: "Khaja Sadeemuddin Mohammed", Father: "Khaja Faheemuddin", Class: "Grade-8 (Bhagat)", Phone: "9959414786", Adm: "28", Gender: "Male", DOB: "2012-08-11", Join: "2021-01-09" },
+    "1298333": { Name: "Sathwika Nagavelly", Father: "Ravi", Class: "Grade-8 (Bhagat)", Phone: "9492098006", Adm: "39", Gender: "Female", DOB: "2012-03-07", Join: "2021-04-10" },
+    "1298334": { Name: "Vyshnavi Uppala", Father: "Ramesh", Class: "Grade-8 (Bhagat)", Phone: "8179254251", Adm: "34", Gender: "Female", DOB: "2012-12-10", Join: "2021-09-16" }
+};
+};
+
+async function handleLogin() {
+    const roll = document.getElementById('rollNo').value.trim();
+    const enteredPassword = document.getElementById('pass').value.trim();
+    const student = studentList[roll];
+
+    // Password Transformation Logic:
+    // 1. Get Father's Name (e.g., "vinay")
+    // 2. Capitalize first letter + rest in lowercase (e.g., "Vinay")
+    // 3. Add suffix "@123" (e.g., "Vinay@123")
+    let expectedPassword = "";
+    if (student && student.Father) {
+        let fName = student.Father.toLowerCase();
+        expectedPassword = fName.charAt(0).toUpperCase() + fName.slice(1) + "@123";
+    }
+
+    if (student && enteredPassword === expectedPassword) {
+        Swal.fire({ title: 'Verifying Credentials...', timer: 1000, didOpen: () => Swal.showLoading() });
+        
+        // Update Dashboard UI
+        document.getElementById('dashName').innerText = student.Name;
+        document.getElementById('dashClass').innerText = student.Class;
+        document.getElementById('dashAdm').innerText = student.Adm;
+        document.getElementById('dashFather').innerText = student.Father;
+        document.getElementById('dashPhone').innerText = student.Phone;
+        document.getElementById('dashJoin').innerText = student.Join;
+        document.getElementById('dashDOB').innerText = student.DOB;
+        document.getElementById('dashImg').src = `students/${roll}.png`;
+
+        // Fetch Live Data from Firebase
+        fetchAttendance(student.Name, student.Class);
+        fetchFinance(student.Name, student.Class);
+
+        // Switch from Login to Dashboard
+        setTimeout(() => {
+            document.getElementById('loginOverlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainDashboard').style.display = 'block';
+            }, 300);
+        }, 1200);
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Access Denied',
+            text: 'Invalid Roll Number or Password. (Format: FatherName@123)',
+            confirmButtonColor: '#004d26'
+        });
+    }
+}
+
+async function fetchAttendance(name, className) {
+    const snap = await db.ref('daily_attendance').once('value');
+    let p = 0, t = 0;
+    if(snap.exists()){
+        snap.forEach(day => {
+            const records = day.child(`${className}/records`).val();
+            if(records && records[name] !== undefined){
+                t++; if(records[name] === true) p++;
+            }
+        });
+    }
+    const perc = t > 0 ? Math.round((p/t)*100) : 0;
+    document.getElementById('dashAtt').innerText = perc + "%";
+}
+
+async function fetchFinance(name, className) {
+    const snap = await db.ref(`fee_records/${className}/${name}`).once('value');
+    let paid = 0, total = 0;
+    if(snap.exists()){
+        snap.forEach(entry => {
+            const d = entry.val();
+            paid += parseFloat(d.paid || 0);
+            total = parseFloat(d.total || total);
+        });
+        const due = total - paid;
+        const perc = total > 0 ? Math.round((paid/total)*100) : 0;
+        
+        document.getElementById('dashDue').innerText = "₹ " + due.toLocaleString();
+        document.getElementById('dashFeePerc').innerText = perc + "%";
+        document.getElementById('dashCircle').style.strokeDashoffset = 226 - (226 * perc / 100);
+    }
+}
+</script>
+</body>
+</html>

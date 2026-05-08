@@ -28,6 +28,24 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #ffffff; display: flex; align-items: center; justify-content: center; z-index: 9999;
         }
+        /* CIRCULAR GAUGE FIX: Removes the black circle */
+.premium-ring { width: 120px; height: 120px; transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: #f0f0f0; stroke-width: 10; } /* Background ring */
+.ring-fill { 
+    fill: none; 
+    stroke: var(--success-glow); 
+    stroke-width: 10; 
+    stroke-linecap: round; 
+    stroke-dasharray: 283; 
+    stroke-dashoffset: 283; /* Controlled by JS */
+}
+
+/* SIDE BY SIDE GRID */
+.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+
+/* REFINED SECTION HEADERS */
+.section-tag { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.section-tag h4 { font-family: 'Montserrat'; letter-spacing: 2px; font-weight: 900; color: #ccc; font-size: 0.8rem; text-transform: uppercase; }
         .login-card {
             background: var(--luxury-glass); padding: 60px 45px; border-radius: 45px;
             width: 95%; max-width: 440px; text-align: center;
@@ -129,13 +147,13 @@
             <div class="section-tag"><i class="fas fa-fingerprint"></i><h4>Identity Registry</h4></div>
             <div class="identity-layout">
                 <img id="dashImg" src="logo.png" alt="Student">
-                <div class="student-bio" style="flex: 1;">
+                <div class="student-bio">
                     <h3 id="dashName">STUDENT NAME</h3>
                     <div class="bio-grid">
-                        <div class="bio-item"><span>Guardian</span><strong id="dashFather">---</strong></div>
-                        <div class="bio-item"><span>Class</span><strong id="dashClass">---</strong></div>
+                        <div class="bio-item"><span>Father's Name</span><strong id="dashFather">---</strong></div>
                         <div class="bio-item"><span>Date of Birth</span><strong id="dashDOB">---</strong></div>
-                        <div class="bio-item"><span>Gender</span><strong id="dashGender">---</strong></div>
+                        <div class="bio-item"><span>Gender Identity</span><strong id="dashGender">---</strong></div>
+                        <div class="bio-item"><span>Emergency Registry</span><strong id="dashPhone">---</strong></div>
                     </div>
                 </div>
             </div>
@@ -147,6 +165,7 @@
                 <h2 id="dashAtt" style="font-size: 3.5rem; color: var(--primary); font-weight: 900; margin: 10px 0;">0%</h2>
                 <p style="color: #888; font-weight: 700;">Academic Attendance</p>
             </div>
+
             <div class="metric-card modular-glass">
                 <div class="section-tag"><i class="fas fa-id-badge"></i><h4>Registry ID</h4></div>
                 <h2 id="dashAdm" style="font-size: 3.5rem; color: var(--primary); font-weight: 900; margin: 10px 0;">----</h2>
@@ -155,12 +174,12 @@
         </div>
 
         <section class="finance-card modular-glass">
-            <div class="section-tag"><i class="fas fa-file-invoice-dollar"></i><h4>Financial Statement</h4></div>
+            <div class="section-tag"><i class="fas fa-file-invoice-dollar"></i><h4>Financial Ledger</h4></div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <span style="color: #aaa; font-weight: 800; font-size: 0.75rem; text-transform: uppercase;">Outstanding Ledger</span>
+                    <span style="color: #aaa; font-weight: 800; font-size: 0.75rem; text-transform: uppercase;">Outstanding Balance</span>
                     <h2 id="dashDue" style="font-size: 3.5rem; color: var(--primary); font-weight: 900; margin: 10px 0;">₹ 0.00</h2>
-                    <p style="color: #888; font-weight: 700;">Enrolled: <span id="dashJoin">---</span> | Mobile: <span id="dashPhone">---</span></p>
+                    <p style="color: #888; font-weight: 700;">Enrolled on: <span id="dashJoin">---</span></p>
                 </div>
                 <div class="gauge-visual">
                     <svg class="premium-ring" viewBox="0 0 100 100">
@@ -171,6 +190,8 @@
                 </div>
             </div>
         </section>
+    </div>
+</div>
 
         <footer class="social-hub">
             <div class="icon-ring">
@@ -446,17 +467,22 @@ function togglePassVisibility() {
 }
 
 async function fetchAttendance(name, className) {
-    const snap = await db.ref('daily_attendance').once('value');
-    let p = 0, t = 0;
-    if(snap.exists()){
-        snap.forEach(day => {
-            const records = day.child(`${className}/records`).val();
-            if(records && records[name] !== undefined){
-                t++; if(records[name] === true) p++;
+    // Speed Update: Point directly to the student's class records
+    const snap = await db.ref(`daily_attendance`).once('value');
+    let presentCount = 0, totalDays = 0;
+
+    if (snap.exists()) {
+        const allDates = snap.val();
+        for (const date in allDates) {
+            // Only pull the specific class and record for this student
+            const record = allDates[date]?.[className]?.records?.[name];
+            if (record !== undefined) {
+                totalDays++;
+                if (record === true) presentCount++;
             }
-        });
+        }
     }
-    const perc = t > 0 ? Math.round((p/t)*100) : 0;
+    const perc = totalDays > 0 ? Math.round((presentCount / totalDays) * 100) : 0;
     document.getElementById('dashAtt').innerText = perc + "%";
 }
 

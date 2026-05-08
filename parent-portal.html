@@ -3,116 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parent Elite Portal | Paramount Institutions</title>
+    <title>Elite Portal | Paramount Institutions</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Montserrat:wght@900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <link rel="icon" type="image/png" href="logo.png">
 
     <style>
         :root {
             --primary: #004d26;
             --accent: #ffd700;
-            --glass: rgba(255, 255, 255, 0.95);
-            --text-dark: #1a1a1a;
-            --success: #22c55e;
+            --deep-obsidian: #0a0a0a;
+            --luxury-glass: rgba(15, 15, 15, 0.98);
+            --success-glow: #00ff88;
         }
 
-        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease; }
-        body { margin: 0; background: #f0f2f5; overflow-x: hidden; }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; transition: cubic-bezier(0.4, 0, 0.2, 1) 0.4s; }
+        
+        /* PURE WHITE MINIMALIST BACKGROUND */
+        body { margin: 0; background: #ffffff; overflow-x: hidden; min-height: 100vh; }
 
-        /* --- LOGIN SCREEN --- */
+        /* --- HIGH-END DARK ACCESS BOX --- */
         #loginOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--primary) 0%, #002d16 100%);
+            background: radial-gradient(circle at center, #ffffff 0%, #f0f0f0 100%);
             display: flex; align-items: center; justify-content: center; z-index: 9999;
         }
 
         .login-card {
-            background: var(--glass); padding: 40px; border-radius: 30px;
-            width: 90%; max-width: 400px; text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.2);
+            background: var(--luxury-glass); padding: 60px 45px; border-radius: 45px;
+            width: 95%; max-width: 440px; text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,215,0,0.15);
+            position: relative; overflow: hidden;
         }
 
-        .login-card img { height: 80px; margin-bottom: 20px; }
-        .login-card h2 { color: var(--primary); font-weight: 800; margin-bottom: 5px; }
-        .login-card p { color: #666; font-size: 0.9rem; margin-bottom: 30px; }
+        /* Gold Glow Effect */
+        .login-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--accent), transparent 30%);
+            animation: rotate 8s linear infinite; opacity: 0.1; z-index: -1;
+        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        .input-group { position: relative; margin-bottom: 20px; }
-        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); }
+        .login-card img { height: 100px; margin-bottom: 30px; filter: drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
+        
+        .login-card h2 { 
+            color: #ffffff; font-family: 'Montserrat', sans-serif; font-weight: 900; 
+            font-size: 2.2rem; letter-spacing: -1px; margin-bottom: 10px;
+        }
+        .login-card p { color: rgba(255,255,255,0.5); font-size: 0.9rem; font-weight: 500; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 2px; }
+
+        .input-group { position: relative; margin-bottom: 25px; }
+        .input-group i { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 1.2rem; }
+        
         .input-group input {
-            width: 100%; padding: 15px 15px 15px 45px; border-radius: 15px;
-            border: 2px solid #eee; outline: none; font-size: 1rem;
+            width: 100%; padding: 22px 22px 22px 60px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1); outline: none; font-size: 1.1rem;
+            background: rgba(255,255,255,0.03); color: #ffffff; font-weight: 600;
         }
-        .input-group input:focus { border-color: var(--accent); background: #fff; }
+        .input-group input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); box-shadow: 0 0 30px rgba(255,215,0,0.1); }
+
+        .eye-btn { position: absolute; right: 22px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.4); cursor: pointer; }
 
         .login-btn {
-            width: 100%; padding: 15px; border-radius: 15px; border: none;
-            background: var(--primary); color: white; font-weight: 700;
-            font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 22px; border-radius: 20px; border: none;
+            background: linear-gradient(135deg, var(--accent) 0%, #c5a000 100%);
+            color: var(--primary); font-weight: 900; font-size: 1.2rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            box-shadow: 0 15px 40px rgba(255,215,0,0.2); margin-top: 15px;
         }
-        .login-btn:hover { background: #00361b; transform: translateY(-2px); }
+        .login-btn:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 20px 50px rgba(255,215,0,0.4); }
 
-        /* --- DASHBOARD LAYOUT --- */
-        #mainDashboard { display: none; padding-bottom: 100px; }
-
+        /* --- LUXURY DASHBOARD --- */
+        #mainDashboard { display: none; background: #ffffff; padding-bottom: 50px; }
+        
         .premium-header {
-            background: var(--primary); color: white; padding: 40px 20px 80px;
-            border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
+            background: var(--primary); color: white; padding: 60px 20px 120px;
+            border-bottom-left-radius: 80px; border-bottom-right-radius: 80px;
             text-align: center; position: relative;
         }
+        .header-bg-glow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.1; }
 
         .user-profile-badge {
-            position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%);
-            background: white; padding: 10px; border-radius: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 15px;
-            width: 85%; max-width: 350px;
+            position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%);
+            background: white; padding: 15px; border-radius: 40px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 20px;
+            width: 90%; max-width: 450px; border: 1px solid #eee;
         }
-
-        .user-profile-badge img { width: 60px; height: 60px; border-radius: 18px; object-fit: cover; border: 2px solid var(--accent); }
+        .user-profile-badge img { width: 80px; height: 80px; border-radius: 25px; object-fit: cover; border: 3px solid var(--accent); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .user-profile-badge .info { text-align: left; }
-        .user-profile-badge .info h4 { margin: 0; color: var(--primary); font-size: 1rem; }
-        .user-profile-badge .info p { margin: 0; font-size: 0.75rem; color: #777; font-weight: 600; }
+        .user-profile-badge .info h4 { margin: 0; color: var(--primary); font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px; }
+        .user-profile-badge .info p { margin: 3px 0 0; font-size: 0.8rem; color: #888; font-weight: 700; background: #f0f0f0; padding: 2px 10px; border-radius: 10px; display: inline-block; }
 
-        /* --- CONTENT CARDS --- */
-        .container { padding: 70px 20px 20px; max-width: 800px; margin: 0 auto; }
-
-        .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .container { padding: 100px 20px 40px; max-width: 900px; margin: 0 auto; }
+        
+        /* Stats Luxury Grid */
+        .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
         .stat-card {
-            background: white; padding: 20px; border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;
+            background: #ffffff; padding: 30px; border-radius: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid #f0f0f0;
+            position: relative; overflow: hidden;
         }
-        .stat-card i { font-size: 1.5rem; color: var(--accent); margin-bottom: 10px; }
-        .stat-card h3 { margin: 0; font-size: 1.2rem; color: var(--primary); }
-        .stat-card p { margin: 5px 0 0; font-size: 0.8rem; color: #888; font-weight: 600; }
+        .stat-card i { font-size: 2rem; color: var(--accent); margin-bottom: 15px; opacity: 0.8; }
+        .stat-card h3 { margin: 0; font-size: 1.8rem; color: var(--primary); font-weight: 900; }
+        .stat-card p { margin: 5px 0 0; font-size: 0.9rem; color: #999; font-weight: 700; text-transform: uppercase; }
 
-        /* --- FEE PROGRESS --- */
+        /* CIRCULAR FEE PROGRESS */
         .fee-card {
-            background: white; padding: 25px; border-radius: 25px; margin-bottom: 25px;
+            background: #ffffff; padding: 40px; border-radius: 40px; margin-bottom: 30px;
             display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02); border: 1px solid #f0f0f0;
         }
-        .fee-circle { position: relative; width: 80px; height: 80px; }
-        .circle-svg { transform: rotate(-90deg); width: 80px; height: 80px; }
-        .circle-bg { fill: none; stroke: #eee; stroke-width: 8; }
-        .circle-bar { fill: none; stroke: var(--success); stroke-width: 8; stroke-dasharray: 226; stroke-dashoffset: 226; stroke-linecap: round; }
-        .fee-percent { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 800; font-size: 0.9rem; }
+        .fee-info h2 { margin: 10px 0; font-size: 2.2rem; font-weight: 900; color: var(--primary); }
+        .fee-circle { position: relative; width: 110px; height: 110px; }
+        .circle-svg { transform: rotate(-90deg); width: 110px; height: 110px; }
+        .circle-bg { fill: none; stroke: #f5f5f5; stroke-width: 10; }
+        .circle-bar { fill: none; stroke: var(--success-glow); stroke-width: 10; stroke-dasharray: 283; stroke-dashoffset: 283; stroke-linecap: round; filter: drop-shadow(0 0 5px var(--success-glow)); }
+        .fee-percent { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 900; font-size: 1.2rem; color: var(--primary); }
 
-        /* --- BUTTONS --- */
-        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .action-item {
-            background: white; border-radius: 15px; padding: 15px 5px;
+        /* Clickable Premium Actions */
+        .action-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px; }
+        .action-btn {
+            background: #ffffff; border-radius: 25px; padding: 25px 10px;
             text-align: center; text-decoration: none; border: 1px solid #f0f0f0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
         }
-        .action-item i { display: block; font-size: 1.2rem; color: var(--primary); margin-bottom: 8px; }
-        .action-item span { font-size: 0.65rem; font-weight: 700; color: #444; text-transform: uppercase; }
-        .action-item:active { transform: scale(0.95); background: var(--accent); }
+        .action-btn i { display: block; font-size: 1.5rem; color: var(--primary); margin-bottom: 10px; }
+        .action-btn span { font-size: 0.75rem; font-weight: 800; color: #555; text-transform: uppercase; }
+        .action-btn:hover { background: var(--primary); border-color: var(--primary); }
+        .action-btn:hover i, .action-btn:hover span { color: var(--accent); }
+
+        .detail-list { background: #fafafa; border-radius: 40px; overflow: hidden; border: 1px solid #eee; }
+        .detail-row { padding: 22px 35px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-row span:first-child { color: #aaa; font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .detail-row span:last-child { font-weight: 800; color: var(--primary); font-size: 1.1rem; }
 
         .logout-btn {
-            margin-top: 30px; width: 100%; padding: 15px; border-radius: 15px;
-            background: #fff0f0; color: #ef4444; border: none; font-weight: 700; cursor: pointer;
+            margin-top: 50px; width: 100%; padding: 22px; border-radius: 25px;
+            background: #000; color: #ff4444; border: none; font-weight: 900; cursor: pointer;
+            letter-spacing: 2px; text-transform: uppercase; font-size: 1rem;
         }
     </style>
 </head>
@@ -120,30 +153,31 @@
 
 <div id="loginOverlay">
     <div class="login-card">
-        <img src="logo.png" alt="Logo">
-        <h2>Parent Login</h2>
-        <p>Enter Student Credentials</p>
+        <img src="logo.png" alt="Institutional Logo">
+        <h2>ELITE ACCESS</h2>
+        <p>Parent Integration Portal</p>
         
         <div class="input-group">
             <i class="fas fa-id-card"></i>
-            <input type="text" id="rollNo" placeholder="Roll Number">
+            <input type="text" id="rollNo" placeholder="Student Roll Number">
         </div>
         <div class="input-group">
-            <i class="fas fa-lock"></i>
+            <i class="fas fa-fingerprint"></i>
             <input type="password" id="pass" placeholder="Password (Father@123)">
-            <i class="fas fa-eye" id="togglePassword" onclick="togglePassVisibility()" 
-               style="left: auto; right: 18px; cursor: pointer; color: #666;"></i>
+            <i class="fas fa-eye eye-btn" id="toggleIcon" onclick="togglePass()"></i>
         </div>
         
         <button class="login-btn" onclick="handleLogin()">
-            SECURE LOGIN <i class="fas fa-chevron-right"></i>
+            VERIFY IDENTITY <i class="fas fa-arrow-right"></i>
         </button>
     </div>
 </div>
+
 <div id="mainDashboard">
     <div class="premium-header">
-        <h2 style="font-weight: 800; letter-spacing: 1px;">PARAMOUNT EMS</h2>
-        <p style="opacity: 0.8; font-size: 0.9rem;">Parent-Student Integrated System</p>
+        <div class="header-bg-glow"></div>
+        <h2 style="font-family: 'Montserrat'; font-weight: 900; font-size: 2.5rem; letter-spacing: 5px;">PARAMOUNT</h2>
+        <p style="opacity: 0.6; letter-spacing: 3px; font-weight: 600;">PRIVATE PARENT DASHBOARD</p>
         
         <div class="user-profile-badge">
             <img id="dashImg" src="logo.png" alt="Student">
@@ -151,8 +185,8 @@
                 <h4 id="dashName">Student Name</h4>
                 <p id="dashClass">Class & Section</p>
             </div>
-            <div style="margin-left: auto; padding-right: 10px;">
-                <i class="fas fa-shield-check" style="color: var(--success); font-size: 1.2rem;"></i>
+            <div style="margin-left: auto; padding-right: 15px; color: var(--success-glow);">
+                <i class="fas fa-shield-check" style="font-size: 2rem;"></i>
             </div>
         </div>
     </div>
@@ -160,63 +194,55 @@
     <div class="container">
         <div class="grid-stats">
             <div class="stat-card">
-                <i class="fas fa-calendar-check"></i>
+                <i class="fas fa-chart-line-up"></i>
                 <h3 id="dashAtt">0%</h3>
-                <p>Attendance</p>
+                <p>Academic Attendance</p>
             </div>
             <div class="stat-card">
-                <i class="fas fa-medal"></i>
+                <i class="fas fa-id-badge"></i>
                 <h3 id="dashAdm">---</h3>
-                <p>Admission No</p>
+                <p>Registry Number</p>
             </div>
         </div>
 
         <div class="fee-card">
-            <div>
-                <h4 style="margin:0; color: #777; font-size: 0.8rem; text-transform: uppercase;">Fee Status</h4>
-                <h2 id="dashDue" style="margin: 5px 0; color: var(--primary);">₹ 0.00</h2>
-                <p style="margin:0; font-size: 0.7rem; color: #999;">Pending Balance Due</p>
+            <div class="fee-info">
+                <span style="color: #bbb; font-weight: 800; font-size: 0.8rem; text-transform: uppercase;">Finance Status</span>
+                <h2 id="dashDue">₹ 0.00</h2>
+                <p style="margin:0; font-size: 0.8rem; color: var(--success-glow); font-weight: 800;"><i class="fas fa-sync fa-spin"></i> ENCRYPTED SYNC ACTIVE</p>
             </div>
             <div class="fee-circle">
-                <svg class="circle-svg">
-                    <circle class="circle-bg" cx="40" cy="40" r="36"></circle>
-                    <circle id="dashCircle" class="circle-bar" cx="40" cy="40" r="36"></circle>
+                <svg class="circle-svg" viewBox="0 0 100 100">
+                    <circle class="circle-bg" cx="50" cy="50" r="45"></circle>
+                    <circle id="dashCircle" class="circle-bar" cx="50" cy="50" r="45"></circle>
                 </svg>
                 <div class="fee-percent" id="dashFeePerc">0%</div>
             </div>
         </div>
 
         <div class="action-grid">
-            <a href="homework.html" class="action-item"><i class="fas fa-book"></i><span>Work</span></a>
-            <a href="timetable.html" class="action-item"><i class="fas fa-clock"></i><span>Time</span></a>
-            <a href="reports.html" class="action-item"><i class="fas fa-file-invoice"></i><span>Tests</span></a>
-            <a href="store.html" class="action-item"><i class="fas fa-shopping-bag"></i><span>Store</span></a>
+            <a href="homework.html" class="action-btn"><i class="fas fa-book-sparkles"></i><span>Task</span></a>
+            <a href="timetable.html" class="action-btn"><i class="fas fa-calendar-star"></i><span>Plan</span></a>
+            <a href="reports.html" class="action-btn"><i class="fas fa-file-chart-column"></i><span>Stats</span></a>
+            <a href="store.html" class="action-btn"><i class="fas fa-bag-shopping"></i><span>Club</span></a>
         </div>
-<div style="margin-top: 25px; background: white; border-radius: 20px; padding: 10px;">
-    <div style="padding: 15px; border-bottom: 1px solid #f5f5f5; display: flex; justify-content: space-between;">
-        <span style="color: #888; font-size: 0.8rem;">Father's Name</span>
-        <span id="dashFather" style="font-weight: 700; color: var(--primary); font-size: 0.85rem;">---</span>
-    </div>
-    <div style="padding: 15px; border-bottom: 1px solid #f5f5f5; display: flex; justify-content: space-between;">
-        <span style="color: #888; font-size: 0.8rem;">Date of Birth</span>
-        <span id="dashDOB" style="font-weight: 700; color: var(--primary); font-size: 0.85rem;">---</span>
-    </div>
-    <div style="padding: 15px; border-bottom: 1px solid #f5f5f5; display: flex; justify-content: space-between;">
-        <span style="color: #888; font-size: 0.8rem;">Emergency Phone</span>
-        <span id="dashPhone" style="font-weight: 700; color: var(--primary); font-size: 0.85rem;">---</span>
-    </div>
-    <div style="padding: 15px; display: flex; justify-content: space-between;">
-        <span style="color: #888; font-size: 0.8rem;">Date of Joining</span>
-        <span id="dashJoin" style="font-weight: 700; color: var(--primary); font-size: 0.85rem;">---</span>
-    </div>
-</div>
+
+        <div style="background: #fafafa; border-radius: 35px; border: 1px solid #eee; overflow: hidden;">
+            <div class="detail-row"><span>Father's Name</span><span id="dashFather">---</span></div>
+            <div class="detail-row"><span>Date of Birth</span><span id="dashDOB">---</span></div>
+            <div class="detail-row"><span>Gender Identity</span><span id="dashGender">---</span></div>
+            <div class="detail-row"><span>Primary Contact</span><span id="dashPhone">---</span></div>
+            <div class="detail-row"><span>Enrollment Date</span><span id="dashJoin">---</span></div>
+        </div>
+
         <button class="logout-btn" onclick="location.reload()">
-            <i class="fas fa-sign-out-alt"></i> SECURE LOGOUT
+            <i class="fas fa-lock-keyhole"></i> TERMINATE SESSION
         </button>
     </div>
 </div>
 
 <script>
+// INITIALIZATION
 const firebaseConfig = { 
     apiKey: "AIzaSyDRYk9KOK-ga0c88dnYMsAoifW2NJTd_Y8", 
     databaseURL: "https://paramount-school-d55bc-default-rtdb.firebaseio.com", 
@@ -225,9 +251,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// CLEANED STUDENT LIST (Declaration occurs only once here)
+// STUDENT DATA
 const studentList = {
-     "1472070": { Name: "Hanish Macharla", Father: "M.Vinay", Class: "Pre-KG (Diamond)", Phone: "9182861346", Adm: "2052", Gender: "Male", DOB: "N/A", Join: "2025-08-04" },
+    "1472070": { Name: "Hanish Macharla", Father: "M.Vinay", Class: "Pre-KG (Diamond)", Phone: "9182861346", Adm: "2052", Gender: "Male", DOB: "N/A", Join: "2025-08-04" },
     "1478225": { Name: "Arjun Vihaar Illandula", Father: "Illandula Ravi.", Class: "Pre-KG (Diamond)", Phone: "9848742172", Adm: "2061", Gender: "Male", DOB: "2022-11-22", Join: "2025-10-16" },
     "1469391": { Name: "Thanu sree Allakunta", Father: "Srinu", Class: "Pre-KG (Diamond)", Phone: "9533030806", Adm: "2047", Gender: "Female", DOB: "2022-01-26", Join: "2025-07-25" },
     "1459555": { Name: "Aadhya Gangaraboina", Father: "Vijjay", Class: "Pre-KG (Diamond)", Phone: "8686191768", Adm: "2024", Gender: "Female", DOB: "2022-10-19", Join: "2025-05-01" },
@@ -412,37 +438,17 @@ const studentList = {
     "1298337": { Name: "Khaja Sadeemuddin Mohammed", Father: "Khaja Faheemuddin", Class: "Grade-8 (Bhagat)", Phone: "9959414786", Adm: "28", Gender: "Male", DOB: "2012-08-11", Join: "2021-01-09" },
     "1298333": { Name: "Sathwika Nagavelly", Father: "Ravi", Class: "Grade-8 (Bhagat)", Phone: "9492098006", Adm: "39", Gender: "Female", DOB: "2012-03-07", Join: "2021-04-10" },
     "1298334": { Name: "Vyshnavi Uppala", Father: "Ramesh", Class: "Grade-8 (Bhagat)", Phone: "8179254251", Adm: "34", Gender: "Female", DOB: "2012-12-10", Join: "2021-09-16" }
-
 };
-
-// 1. AUTO-FILL ON REFRESH LOGIC
-window.onload = () => {
-    const savedRoll = localStorage.getItem('paramount_roll');
-    const savedPass = localStorage.getItem('paramount_pass');
-    if(savedRoll && savedPass) {
-        document.getElementById('rollNo').value = savedRoll;
-        document.getElementById('pass').value = savedPass;
-    }
-};
-
-// 2. PASSWORD VISIBILITY TOGGLE
-function togglePassVisibility() {
-    const passInput = document.getElementById('pass');
-    const toggleIcon = document.getElementById('togglePassword');
-    if (passInput.type === "password") {
-        passInput.type = "text";
-        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
-    } else {
-        passInput.type = "password";
-        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
-    }
-}
 
 async function handleLogin() {
     const roll = document.getElementById('rollNo').value.trim();
     const enteredPassword = document.getElementById('pass').value.trim();
     const student = studentList[roll];
 
+    // Password Transformation Logic:
+    // 1. Get Father's Name (e.g., "vinay")
+    // 2. Capitalize first letter + rest in lowercase (e.g., "Vinay")
+    // 3. Add suffix "@123" (e.g., "Vinay@123")
     let expectedPassword = "";
     if (student && student.Father) {
         let fName = student.Father.toLowerCase();
@@ -450,39 +456,41 @@ async function handleLogin() {
     }
 
     if (student && enteredPassword === expectedPassword) {
-        // SAVE TO LOCAL STORAGE FOR REFRESH
-        localStorage.setItem('paramount_roll', roll);
-        localStorage.setItem('paramount_pass', enteredPassword);
-
-        Swal.fire({ title: 'Establishing Secure Session...', timer: 1000, didOpen: () => Swal.showLoading() });
+        Swal.fire({ title: 'Verifying Credentials...', timer: 1000, didOpen: () => Swal.showLoading() });
         
-        document.getElementById('dashName').innerText = student.Name;
-        document.getElementById('dashClass').innerText = student.Class;
-        document.getElementById('dashAdm').innerText = student.Adm;
-        document.getElementById('dashFather').innerText = student.Father;
-        document.getElementById('dashPhone').innerText = student.Phone;
-        document.getElementById('dashJoin').innerText = student.Join;
-        document.getElementById('dashDOB').innerText = student.DOB;
-        document.getElementById('dashImg').src = `students/${roll}.png`;
+        // Update Dashboard UI
+    // ... inside handleLogin function after the student check ...
+document.getElementById('dashName').innerText = student.Name;
+document.getElementById('dashClass').innerText = student.Class;
+document.getElementById('dashAdm').innerText = student.Adm;
+document.getElementById('dashFather').innerText = student.Father;
+document.getElementById('dashPhone').innerText = student.Phone;
+document.getElementById('dashJoin').innerText = student.Join;
+document.getElementById('dashDOB').innerText = student.DOB; // Added this line
+document.getElementById('dashImg').src = `students/${roll}.png`;
+// ... rest of the function ...
 
+        // Fetch Live Data from Firebase
         fetchAttendance(student.Name, student.Class);
         fetchFinance(student.Name, student.Class);
 
+        // Switch from Login to Dashboard
         setTimeout(() => {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('mainDashboard').style.display = 'block';
+            document.getElementById('loginOverlay').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainDashboard').style.display = 'block';
+            }, 300);
         }, 1200);
     } else {
         Swal.fire({
             icon: 'error',
-            title: 'Authentication Failed',
-            text: 'Invalid Roll Number or Password Format (e.g., Vinay@123)',
+            title: 'Access Denied',
+            text: 'Invalid Roll Number or Password. (Format: FatherName@123)',
             confirmButtonColor: '#004d26'
         });
     }
 }
-
-// Keep your existing fetchAttendance and fetchFinance functions below...
 
 async function fetchAttendance(name, className) {
     const snap = await db.ref('daily_attendance').once('value');
@@ -518,4 +526,4 @@ async function fetchFinance(name, className) {
 }
 </script>
 </body>
-</html>
+</html>      

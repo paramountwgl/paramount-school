@@ -153,22 +153,23 @@
 
 <div id="loginOverlay">
     <div class="login-card">
-        <img src="logo.png" alt="Institutional Logo">
-        <h2>ELITE ACCESS</h2>
-        <p>Parent Integration Portal</p>
+        <img src="logo.png" alt="Logo">
+        <h2>Parent Login</h2>
+        <p>Enter Student Credentials</p>
         
         <div class="input-group">
             <i class="fas fa-id-card"></i>
-            <input type="text" id="rollNo" placeholder="Student Roll Number">
+            <input type="text" id="rollNo" placeholder="Roll Number">
         </div>
         <div class="input-group">
-            <i class="fas fa-fingerprint"></i>
+            <i class="fas fa-lock"></i>
             <input type="password" id="pass" placeholder="Password (Father@123)">
-            <i class="fas fa-eye eye-btn" id="toggleIcon" onclick="togglePass()"></i>
+            <i class="fas fa-eye" id="togglePassword" onclick="togglePassVisibility()" 
+               style="left: auto; right: 18px; cursor: pointer; color: #666;"></i>
         </div>
         
         <button class="login-btn" onclick="handleLogin()">
-            VERIFY IDENTITY <i class="fas fa-arrow-right"></i>
+            SECURE LOGIN <i class="fas fa-chevron-right"></i>
         </button>
     </div>
 </div>
@@ -439,6 +440,28 @@ const studentList = {
     "1298333": { Name: "Sathwika Nagavelly", Father: "Ravi", Class: "Grade-8 (Bhagat)", Phone: "9492098006", Adm: "39", Gender: "Female", DOB: "2012-03-07", Join: "2021-04-10" },
     "1298334": { Name: "Vyshnavi Uppala", Father: "Ramesh", Class: "Grade-8 (Bhagat)", Phone: "8179254251", Adm: "34", Gender: "Female", DOB: "2012-12-10", Join: "2021-09-16" }
 };
+    // 1. AUTO-FILL ON REFRESH LOGIC
+window.onload = () => {
+    const savedRoll = localStorage.getItem('paramount_roll');
+    const savedPass = localStorage.getItem('paramount_pass');
+    if(savedRoll && savedPass) {
+        document.getElementById('rollNo').value = savedRoll;
+        document.getElementById('pass').value = savedPass;
+    }
+};
+
+// 2. PASSWORD VISIBILITY TOGGLE
+function togglePassVisibility() {
+    const passInput = document.getElementById('pass');
+    const toggleIcon = document.getElementById('togglePassword');
+    if (passInput.type === "password") {
+        passInput.type = "text";
+        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        passInput.type = "password";
+        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
 
 async function handleLogin() {
     const roll = document.getElementById('rollNo').value.trim();

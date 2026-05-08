@@ -153,27 +153,19 @@
 
 <div id="loginOverlay">
     <div class="login-card">
-        <img src="logo.png" alt="Logo">
-        <h2>Parent Login</h2>
-        <p>Enter Student Credentials</p>
-        
+        ...
         <div class="input-group">
             <i class="fas fa-id-card"></i>
-            <input type="text" id="rollNo" placeholder="Roll Number">
+            <input type="text" id="rollNo" placeholder="Student Roll Number" autocomplete="off">
         </div>
         <div class="input-group">
             <i class="fas fa-lock"></i>
-            <input type="password" id="pass" placeholder="Password (Father@123)">
-            <i class="fas fa-eye" id="togglePassword" onclick="togglePassVisibility()" 
-               style="left: auto; right: 18px; cursor: pointer; color: #666;"></i>
+            <input type="password" id="pass" placeholder="Enter Your Password" autocomplete="new-password">
+            <i class="fas fa-eye eye-icon" onclick="togglePassVisibility()"></i>
         </div>
-        
-        <button class="login-btn" onclick="handleLogin()">
-            SECURE LOGIN <i class="fas fa-chevron-right"></i>
-        </button>
+        ...
     </div>
 </div>
-
 <div id="mainDashboard">
     <div class="premium-header">
         <div class="header-bg-glow"></div>

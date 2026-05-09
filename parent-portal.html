@@ -303,17 +303,17 @@
                 </div>
                 <div class="fee-stat-item">
                     <span style="display:block; color:#aaa; font-size:0.65rem; font-weight:800; text-transform:uppercase;">Total Paid</span>
-                    <strong id="dashPaid" style="font-size: 1.2rem; color: var(--success-glow);">₹ 0</strong>
+                    <strong id="dashPaid" style="font-size: 1.2rem; color: #4caf50;">₹ 0</strong>
                 </div>
             </div>
         </div>
 
-        <div class="gauge-visual">
-            <svg class="premium-ring" viewBox="0 0 100 100">
-                <circle class="ring-bg" cx="50" cy="50" r="45" fill="none" stroke="#f5f5f5" stroke-width="10"></circle>
-                <circle id="dashCircle" class="ring-fill" cx="50" cy="50" r="45" fill="none" stroke="var(--success-glow)" stroke-width="10" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283"></circle>
+        <div class="gauge-visual" style="position: relative; display: flex; align-items: center; justify-content: center;">
+            <svg class="premium-ring" viewBox="0 0 100 100" style="width: 120px; height: 120px; transform: rotate(-90deg);">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#f5f5f5" stroke-width="10"></circle>
+                <circle id="dashCircle" cx="50" cy="50" r="45" fill="none" stroke="#00ff88" stroke-width="10" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283" style="transition: stroke-dashoffset 1.5s ease;"></circle>
             </svg>
-            <div id="dashFeePerc" class="ring-text" style="position: absolute; font-weight: 900; color: var(--primary);">0%</div>
+            <div id="dashFeePerc" style="position: absolute; font-weight: 900; color: var(--primary); font-size: 1.4rem;">0%</div>
         </div>
     </div>
 </section>
@@ -621,7 +621,9 @@ async function fetchAttendance(name, className) {
 
 async function fetchFinance(name, className) {
     try {
+        // Pointing directly to the student's unique fee path
         const feeSnap = await db.ref(`fee_records/${className}/${name}`).once('value');
+        
         let totalPaid = 0;
         let totalBaseFee = 0;
         let discountApplied = 0;
@@ -629,9 +631,11 @@ async function fetchFinance(name, className) {
         if (feeSnap.exists()) {
             feeSnap.forEach(child => {
                 const data = child.val();
+                
+                // 1. Sum up all payments made
                 totalPaid += parseFloat(data.paid || 0);
                 
-                // Get the maximum total and discount recorded for this student
+                // 2. Capture the fixed total and discount % from the records
                 const recordTotal = parseFloat(data.total || 0);
                 const recordDisc = parseFloat(data.discount || data.discountPct || 0);
                 
@@ -639,27 +643,39 @@ async function fetchFinance(name, className) {
                 if (recordDisc > discountApplied) discountApplied = recordDisc;
             });
 
-            // MATH LOGIC
+            // --- THE LIVE CALCULATION ---
+            // Apply the discount % to the base fee
             const discountAmount = (totalBaseFee * (discountApplied / 100));
             const netPayable = totalBaseFee - discountAmount;
+            
+            // Calculate final balance
             const balanceDue = netPayable - totalPaid;
+            
+            // Calculate progress percentage
             const paymentPct = netPayable > 0 ? Math.round((totalPaid / netPayable) * 100) : 0;
 
-            // UPDATE ALL UI ELEMENTS
-            document.getElementById('dashTotal').innerText = "₹ " + Math.round(netPayable).toLocaleString();
-            document.getElementById('dashPaid').innerText = "₹ " + Math.round(totalPaid).toLocaleString();
+            // --- UPDATE THE UI ---
+            document.getElementById('dashTotal').innerText = "₹ " + Math.round(netPayable).toLocaleString('en-IN');
+            document.getElementById('dashPaid').innerText = "₹ " + Math.round(totalPaid).toLocaleString('en-IN');
             
-            // Hero Balance: If fully paid, show 0 instead of negative numbers
-            document.getElementById('dashDue').innerText = "₹ " + (balanceDue > 0 ? Math.round(balanceDue).toLocaleString() : "0");
+            // Hero Balance: If balance is zero or less, show ₹ 0
+            document.getElementById('dashDue').innerText = "₹ " + (balanceDue > 0 ? Math.round(balanceDue).toLocaleString('en-IN') : "0");
             
             document.getElementById('dashFeePerc').innerText = paymentPct + "%";
 
-            // CIRCLE ANIMATION (Circumference 283)
+            // CIRCLE ANIMATION (Radius 45 = 283 circumference)
             const offset = 283 - (283 * (paymentPct > 100 ? 100 : paymentPct) / 100);
             document.getElementById('dashCircle').style.strokeDashoffset = offset;
+        } else {
+            // Reset to zero if no records found
+            document.getElementById('dashDue').innerText = "₹ 0";
+            document.getElementById('dashTotal').innerText = "₹ 0";
+            document.getElementById('dashPaid').innerText = "₹ 0";
+            document.getElementById('dashFeePerc').innerText = "0%";
+            document.getElementById('dashCircle').style.strokeDashoffset = 283;
         }
     } catch (error) {
-        console.error("Live Finance Error:", error);
+        console.error("Live Finance Sync Error:", error);
     }
 }
 </script>

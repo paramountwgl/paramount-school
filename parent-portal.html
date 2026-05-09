@@ -93,6 +93,48 @@
     text-align: center;
     border: 1px solid #eee;
 }
+        .finance-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.main-balance { flex: 1.5; min-width: 250px; }
+
+.finance-details-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    padding: 0 30px;
+}
+
+.fee-stat-item span {
+    display: block;
+    color: #aaa;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.fee-stat-item strong {
+    font-size: 1.4rem;
+    color: var(--primary);
+    font-weight: 800;
+}
+
+.enrolled-p { color: #888; font-weight: 700; font-size: 0.85rem; margin-top: 5px; }
+
+/* Responsive fix for mobile */
+@media (max-width: 768px) {
+    .finance-details-grid { border: none; padding: 20px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+    .finance-container { flex-direction: column; text-align: center; }
+}
 
 .google-style-card.active { display: block; }
         .login-card img { height: 100px; margin-bottom: 25px; }
@@ -246,22 +288,36 @@
             </div>
         </div>
 
-        <section class="finance-card modular-glass">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <span style="color: #aaa; font-weight: 800; font-size: 0.75rem; text-transform: uppercase;">Outstanding Ledger</span>
-                    <h2 id="dashDue" style="font-size: 3.5rem; color: var(--primary); font-weight: 900; margin: 10px 0;">₹ 0.00</h2>
-                
-                </div>
-                <div class="gauge-visual">
-                    <svg class="premium-ring" viewBox="0 0 100 100">
-                        <circle class="ring-bg" cx="50" cy="50" r="45"></circle>
-                        <circle id="dashCircle" class="ring-fill" cx="50" cy="50" r="45"></circle>
-                    </svg>
-                    <div id="dashFeePerc" class="ring-text">0%</div>
-                </div>
+       <section class="finance-card modular-glass">
+    <div class="section-tag"><i class="fas fa-file-invoice-dollar"></i><h4>Financial Ledger</h4></div>
+    
+    <div class="finance-container">
+        <div class="main-balance">
+            <span class="label">Outstanding Ledger</span>
+            <h2 id="dashDue">₹ 0.00</h2>
+            <p class="enrolled-p">Enrolled: <span id="dashJoin">---</span></p>
+        </div>
+
+        <div class="finance-details-grid">
+            <div class="fee-stat-item">
+                <span>Net Payable</span>
+                <strong id="dashTotal">₹ 0</strong>
             </div>
-        </section>
+            <div class="fee-stat-item">
+                <span>Total Paid</span>
+                <strong id="dashPaid" style="color: var(--success-glow);">₹ 0</strong>
+            </div>
+        </div>
+
+        <div class="gauge-visual">
+            <svg class="premium-ring" viewBox="0 0 100 100">
+                <circle class="ring-bg" cx="50" cy="50" r="45"></circle>
+                <circle id="dashCircle" class="ring-fill" cx="50" cy="50" r="45"></circle>
+            </svg>
+            <div id="dashFeePerc" class="ring-text">0%</div>
+        </div>
+    </div>
+</section>
 
         <footer style="text-align:center; padding-top:40px;">
             <p style="color:#aaa; font-weight:800; letter-spacing:2px; margin-bottom:20px;">CONNECT WITH COMMUNITY</p>
@@ -565,20 +621,43 @@ async function fetchAttendance(name, className) {
 }
 
 async function fetchFinance(name, className) {
-    const snap = await db.ref(`fee_records/${className}/${name}`).once('value');
-    let paid = 0, total = 0;
-    if(snap.exists()){
-        snap.forEach(entry => {
-            const d = entry.val();
-            paid += parseFloat(d.paid || 0);
-            total = parseFloat(d.total || total);
-        });
-        const due = total - paid;
-        const perc = total > 0 ? Math.round((paid/total)*100) : 0;
-        
-        document.getElementById('dashDue').innerText = "₹ " + due.toLocaleString('en-IN');
-        document.getElementById('dashFeePerc').innerText = perc + "%";
-        document.getElementById('dashCircle').style.strokeDashoffset = 283 - (283 * perc / 100);
+    try {
+        const feeSnap = await db.ref(`fee_records/${className}/${name}`).once('value');
+        let totalPaid = 0;
+        let totalBaseFee = 0;
+        let discountApplied = 0;
+
+        if (feeSnap.exists()) {
+            feeSnap.forEach(child => {
+                const data = child.val();
+                totalPaid += parseFloat(data.paid || 0);
+                
+                // Track highest base fee and discount recorded
+                const recordTotal = parseFloat(data.total || 0);
+                const recordDisc = parseFloat(data.discount || data.discountPct || 0);
+                
+                if (recordTotal > totalBaseFee) totalBaseFee = recordTotal;
+                if (recordDisc > discountApplied) discountApplied = recordDisc;
+            });
+
+            // PREMIUM MATH (Discount Calculation)
+            const discountAmount = (totalBaseFee * (discountApplied / 100));
+            const netPayable = totalBaseFee - discountAmount;
+            const balanceDue = netPayable - totalPaid;
+            const paymentPct = netPayable > 0 ? Math.round((totalPaid / netPayable) * 100) : 0;
+
+            // UI UPDATE
+            document.getElementById('dashTotal').innerText = "₹ " + Math.round(netPayable).toLocaleString();
+            document.getElementById('dashPaid').innerText = "₹ " + Math.round(totalPaid).toLocaleString();
+            document.getElementById('dashDue').innerText = "₹ " + (balanceDue > 0 ? Math.round(balanceDue).toLocaleString() : "0");
+            document.getElementById('dashFeePerc').innerText = paymentPct + "%";
+
+            // CIRCLE ANIMATION (Circumference 283)
+            const offset = 283 - (283 * (paymentPct > 100 ? 100 : paymentPct) / 100);
+            document.getElementById('dashCircle').style.strokeDashoffset = offset;
+        }
+    } catch (error) {
+        console.error("Finance Load Error:", error);
     }
 }
 </script>

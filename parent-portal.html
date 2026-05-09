@@ -288,33 +288,32 @@
             </div>
         </div>
 
-       <section class="finance-card modular-glass">
+      <section class="finance-card modular-glass">
     <div class="section-tag"><i class="fas fa-file-invoice-dollar"></i><h4>Financial Ledger</h4></div>
     
-    <div class="finance-container">
-        <div class="main-balance">
-            <span class="label">Outstanding Ledger</span>
-            <h2 id="dashDue">₹ 0.00</h2>
-            <p class="enrolled-p">Enrolled: <span id="dashJoin">---</span></p>
-        </div>
-
-        <div class="finance-details-grid">
-            <div class="fee-stat-item">
-                <span>Net Payable</span>
-                <strong id="dashTotal">₹ 0</strong>
-            </div>
-            <div class="fee-stat-item">
-                <span>Total Paid</span>
-                <strong id="dashPaid" style="color: var(--success-glow);">₹ 0</strong>
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px;">
+        <div style="flex: 2;">
+            <span style="color: #aaa; font-weight: 800; font-size: 0.7rem; text-transform: uppercase;">Outstanding Ledger</span>
+            <h2 id="dashDue" style="font-size: 3rem; color: var(--primary); font-weight: 900; margin: 5px 0;">₹ 0</h2>
+            
+            <div style="display: flex; gap: 30px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #f5f5f5;">
+                <div class="fee-stat-item">
+                    <span style="display:block; color:#aaa; font-size:0.65rem; font-weight:800; text-transform:uppercase;">Net Payable</span>
+                    <strong id="dashTotal" style="font-size: 1.2rem; color: #444;">₹ 0</strong>
+                </div>
+                <div class="fee-stat-item">
+                    <span style="display:block; color:#aaa; font-size:0.65rem; font-weight:800; text-transform:uppercase;">Total Paid</span>
+                    <strong id="dashPaid" style="font-size: 1.2rem; color: var(--success-glow);">₹ 0</strong>
+                </div>
             </div>
         </div>
 
         <div class="gauge-visual">
             <svg class="premium-ring" viewBox="0 0 100 100">
-                <circle class="ring-bg" cx="50" cy="50" r="45"></circle>
-                <circle id="dashCircle" class="ring-fill" cx="50" cy="50" r="45"></circle>
+                <circle class="ring-bg" cx="50" cy="50" r="45" fill="none" stroke="#f5f5f5" stroke-width="10"></circle>
+                <circle id="dashCircle" class="ring-fill" cx="50" cy="50" r="45" fill="none" stroke="var(--success-glow)" stroke-width="10" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283"></circle>
             </svg>
-            <div id="dashFeePerc" class="ring-text">0%</div>
+            <div id="dashFeePerc" class="ring-text" style="position: absolute; font-weight: 900; color: var(--primary);">0%</div>
         </div>
     </div>
 </section>
@@ -632,7 +631,7 @@ async function fetchFinance(name, className) {
                 const data = child.val();
                 totalPaid += parseFloat(data.paid || 0);
                 
-                // Track highest base fee and discount recorded
+                // Get the maximum total and discount recorded for this student
                 const recordTotal = parseFloat(data.total || 0);
                 const recordDisc = parseFloat(data.discount || data.discountPct || 0);
                 
@@ -640,16 +639,19 @@ async function fetchFinance(name, className) {
                 if (recordDisc > discountApplied) discountApplied = recordDisc;
             });
 
-            // PREMIUM MATH (Discount Calculation)
+            // MATH LOGIC
             const discountAmount = (totalBaseFee * (discountApplied / 100));
             const netPayable = totalBaseFee - discountAmount;
             const balanceDue = netPayable - totalPaid;
             const paymentPct = netPayable > 0 ? Math.round((totalPaid / netPayable) * 100) : 0;
 
-            // UI UPDATE
+            // UPDATE ALL UI ELEMENTS
             document.getElementById('dashTotal').innerText = "₹ " + Math.round(netPayable).toLocaleString();
             document.getElementById('dashPaid').innerText = "₹ " + Math.round(totalPaid).toLocaleString();
+            
+            // Hero Balance: If fully paid, show 0 instead of negative numbers
             document.getElementById('dashDue').innerText = "₹ " + (balanceDue > 0 ? Math.round(balanceDue).toLocaleString() : "0");
+            
             document.getElementById('dashFeePerc').innerText = paymentPct + "%";
 
             // CIRCLE ANIMATION (Circumference 283)
@@ -657,7 +659,7 @@ async function fetchFinance(name, className) {
             document.getElementById('dashCircle').style.strokeDashoffset = offset;
         }
     } catch (error) {
-        console.error("Finance Load Error:", error);
+        console.error("Live Finance Error:", error);
     }
 }
 </script>

@@ -33,6 +33,68 @@
             width: 95%; max-width: 440px; text-align: center;
             box-shadow: 0 40px 100px rgba(0,0,0,0.3); border: 1px solid rgba(255,215,0,0.1);
         }
+        .premium-school-header {
+    background: var(--primary); /* Paramount Green */
+    border-bottom: 5px solid var(--accent); /* Gold Accent */
+    padding: 15px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.header-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.school-logo-main { height: 75px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3)); }
+
+.brand-info { line-height: 1; }
+
+.school-name-primary {
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 2.2rem;
+    margin: 0;
+    letter-spacing: 5px;
+}
+
+.school-name-secondary {
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin: 2px 0 0 0;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* DROP-DOWN MENU FIXES */
+.google-style-card {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 320px;
+    background: #fff;
+    border-radius: 28px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    padding: 30px;
+    display: none;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+.google-style-card.active { display: block; }
         .login-card img { height: 100px; margin-bottom: 25px; }
         .login-card h2 { color: #ffffff; font-family: 'Montserrat'; font-weight: 900; font-size: 2.2rem; margin-bottom: 5px; }
         .login-card p { color: rgba(255,255,255,0.4); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 35px; }
@@ -124,22 +186,33 @@
 </div>
 
 <div id="mainDashboard">
-    <nav class="elite-nav">
-        <img src="logo.png" class="nav-logo" alt="Logo">
-        <h4 style="color:white; margin:0; font-family:'Montserrat'; letter-spacing:2px; font-size:0.8rem;">PARAMOUNT EMS</h4>
-        <div class="profile-trigger" onclick="toggleDropdown()">
-            <img id="navAvatar" src="logo.png" alt="User">
-            <div class="profile-dropdown" id="profileDropdown">
-                <span class="drop-email" id="dropRoll">rollnumber</span>
-                <img id="dropAvatar" src="logo.png" class="drop-img">
-                <div class="drop-hi">Hi, <span id="dropFirstName">Parent</span>!</div>
-                <a href="parent-portal.html" class="drop-manage">Manage your Student Account</a>
-                <div class="drop-footer">
-                    <button class="drop-btn" onclick="location.reload()"><i class="fas fa-sign-out-alt"></i> Sign out</button>
+    <header class="premium-school-header">
+    <div class="header-inner">
+        <div class="header-brand">
+            <img src="logo.png" class="school-logo-main" alt="Paramount Logo">
+            <div class="brand-info">
+                <h1 class="school-name-primary">PARAMOUNT</h1>
+                <h2 class="school-name-secondary">ENGLISH MEDIUM SCHOOL</h2>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <div class="profile-trigger" onclick="toggleDropdown()">
+                <img id="navAvatar" src="logo.png" alt="Student Photo">
+                <div class="google-style-card" id="profileDropdown">
+                    <span class="account-email" id="dropRoll">rollnumber@paramount.com</span>
+                    <img id="dropAvatar" src="logo.png" class="large-drop-img">
+                    <div class="greeting">Hi, <span id="dropFirstName">Parent</span>!</div>
+                    <a href="#" class="btn-manage">Manage your account</a>
+                    <div class="card-footer">
+                        <button class="action-tile"><i class="fas fa-user-plus"></i> Add account</button>
+                        <button class="action-tile logout" onclick="location.reload()"><i class="fas fa-sign-out-alt"></i> Sign out</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+</header>
 
     <div class="portal-container">
         <section class="identity-card modular-glass">
@@ -479,13 +552,13 @@ async function fetchAttendance(name, className) {
     const snap = await db.ref(`daily_attendance`).once('value');
     let p = 0, t = 0;
     if(snap.exists()){
-        const all = snap.val();
-        for(let date in all){
-            const rec = all[date]?.[className]?.records?.[name];
-            if(rec !== undefined){
-                t++; if(rec === true) p++;
+        const data = snap.val();
+        Object.keys(data).forEach(date => {
+            const record = data[date]?.[className]?.records?.[name];
+            if(record !== undefined){
+                t++; if(record === true) p++;
             }
-        }
+        });
     }
     const perc = t > 0 ? Math.round((p/t)*100) : 0;
     document.getElementById('dashAtt').innerText = perc + "%";

@@ -604,83 +604,68 @@ async function handleLogin() {
 }
 
 async function fetchAttendance(name, className) {
-    const snap = await db.ref(`daily_attendance`).once('value');
-    let p = 0, t = 0;
-    if(snap.exists()){
-        const data = snap.val();
-        Object.keys(data).forEach(date => {
-            const record = data[date]?.[className]?.records?.[name];
-            if(record !== undefined){
-                t++; if(record === true) p++;
-            }
-        });
-    }
-    const perc = t > 0 ? Math.round((p/t)*100) : 0;
-    document.getElementById('dashAtt').innerText = perc + "%";
+    // CHANGED: .on instead of .once
+    db.ref(`daily_attendance`).on('value', (snap) => {
+        let p = 0, t = 0;
+        if(snap.exists()){
+            const data = snap.val();
+            Object.keys(data).forEach(date => {
+                const record = data[date]?.[className]?.records?.[name];
+                if(record !== undefined){
+                    t++; if(record === true) p++;
+                }
+            });
+        }
+        const perc = t > 0 ? Math.round((p/t)*100) : 0;
+        document.getElementById('dashAtt').innerText = perc + "%";
+    });
 }
-
 async function fetchFinance(name, className) {
     try {
-        // Pointing directly to the student's unique fee path in Firebase
-        const feeSnap = await db.ref(`fee_records/${className}/${name}`).once('value');
-        
-        let totalPaid = 0;
-        let baseFeeAmount = 0;
-        let discountPercentage = 0;
+        // CHANGED: .on('value') creates a live connection. 
+        // Whenever you save in fee.html, this function will trigger automatically here.
+        db.ref(`fee_records/${className}/${name}`).on('value', (feeSnap) => {
+            let totalPaid = 0;
+            let baseFeeAmount = 0;
+            let discountPercentage = 0;
 
-        if (feeSnap.exists()) {
-            feeSnap.forEach(child => {
-                const data = child.val();
+            if (feeSnap.exists()) {
+                feeSnap.forEach(child => {
+                    const data = child.val();
+                    totalPaid += parseFloat(data.paid || 0);
+                    
+                    const recordTotal = parseFloat(data.total || 0);
+                    const recordDisc = parseFloat(data.discount || data.discountPct || 0);
+                    
+                    if (recordTotal > baseFeeAmount) baseFeeAmount = recordTotal;
+                    if (recordDisc > discountPercentage) discountPercentage = recordDisc;
+                });
+
+                const discountValue = (baseFeeAmount * (discountPercentage / 100));
+                const finalPayable = baseFeeAmount - discountValue;
+                const balanceDue = finalPayable - totalPaid;
+                const paymentPct = finalPayable > 0 ? Math.round((totalPaid / finalPayable) * 100) : 0;
+
+                // UI UPDATE (Instant)
+                document.getElementById('dashDue').innerText = "₹ " + (balanceDue > 0 ? Math.round(balanceDue).toLocaleString('en-IN') : "0");
+                document.getElementById('dashTotal').innerText = "₹ " + Math.round(finalPayable).toLocaleString('en-IN');
+                document.getElementById('dashPaid').innerText = "₹ " + Math.round(totalPaid).toLocaleString('en-IN');
+                document.getElementById('dashFeePerc').innerText = paymentPct + "%";
                 
-                // 1. Sum up all payment installments
-                totalPaid += parseFloat(data.paid || 0);
-                
-                // 2. Sync with Fee Portal logic: Get the saved Base Fee and Discount %
-                // These are usually stored in every entry by the fee portal
-                const recordTotal = parseFloat(data.total || 0);
-                const recordDisc = parseFloat(data.discount || data.discountPct || 0);
-                
-                // We use the highest values found in the history to ensure accuracy
-                if (recordTotal > baseFeeAmount) baseFeeAmount = recordTotal;
-                if (recordDisc > discountPercentage) discountPercentage = recordDisc;
-            });
+                const offset = 283 - (283 * (paymentPct > 100 ? 100 : paymentPct) / 100);
+                document.getElementById('dashCircle').style.strokeDashoffset = offset;
 
-            // --- THE LIVE SYNC CALCULATION ---
-            // Step 1: Calculate the discount amount (e.g., 30000 * 10 / 100 = 3000)
-            const discountValue = (baseFeeAmount * (discountPercentage / 100));
-            
-            // Step 2: Final Price (Net Payable) (e.g., 30000 - 3000 = 27000)
-            const finalPayable = baseFeeAmount - discountValue;
-            
-            // Step 3: Outstanding Ledger (Balance Due)
-            const balanceDue = finalPayable - totalPaid;
-            
-            // Step 4: Progress Percentage
-            const paymentPct = finalPayable > 0 ? Math.round((totalPaid / finalPayable) * 100) : 0;
-
-            // --- UPDATE THE PREMIUM UI ---
-            // Hero Balance
-            document.getElementById('dashDue').innerText = "₹ " + (balanceDue > 0 ? Math.round(balanceDue).toLocaleString('en-IN') : "0");
-            
-            // Sub-details
-            document.getElementById('dashTotal').innerText = "₹ " + Math.round(finalPayable).toLocaleString('en-IN');
-            document.getElementById('dashPaid').innerText = "₹ " + Math.round(totalPaid).toLocaleString('en-IN');
-            
-            // Circle Gauge
-            document.getElementById('dashFeePerc').innerText = paymentPct + "%";
-            const offset = 283 - (283 * (paymentPct > 100 ? 100 : paymentPct) / 100);
-            document.getElementById('dashCircle').style.strokeDashoffset = offset;
-
-        } else {
-            // Reset if student has no fee records yet
-            document.getElementById('dashDue').innerText = "₹ 0";
-            document.getElementById('dashTotal').innerText = "₹ 0";
-            document.getElementById('dashPaid').innerText = "₹ 0";
-            document.getElementById('dashFeePerc').innerText = "0%";
-            document.getElementById('dashCircle').style.strokeDashoffset = 283;
-        }
+            } else {
+                // Reset if no data exists
+                document.getElementById('dashDue').innerText = "₹ 0";
+                document.getElementById('dashTotal').innerText = "₹ 0";
+                document.getElementById('dashPaid').innerText = "₹ 0";
+                document.getElementById('dashFeePerc').innerText = "0%";
+                document.getElementById('dashCircle').style.strokeDashoffset = 283;
+            }
+        });
     } catch (error) {
-        console.error("Firebase Fee Sync Error:", error);
+        console.error("Firebase Real-time Sync Error:", error);
     }
 }
 </script>

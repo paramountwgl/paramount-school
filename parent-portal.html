@@ -287,10 +287,7 @@
                 <p style="color:#888; font-weight:700;">Official Admission Number</p>
             </div>
         </div>
-
-      <section class="finance-card modular-glass">
-    <div class="section-tag"><i class="fas fa-file-invoice-dollar"></i><h4>Financial Ledger</h4></div>
-    
+<section class="finance-card modular-glass">
     <div style="display: flex; justify-content: space-between; align-items: center; gap: 20px;">
         <div style="flex: 2;">
             <span style="color: #aaa; font-weight: 800; font-size: 0.7rem; text-transform: uppercase;">Outstanding Ledger</span>
@@ -298,22 +295,22 @@
             
             <div style="display: flex; gap: 30px; margin-top: 15px; padding-top: 15px; border-top: 1px solid #f5f5f5;">
                 <div class="fee-stat-item">
-                    <span style="display:block; color:#aaa; font-size:0.65rem; font-weight:800; text-transform:uppercase;">Net Payable</span>
+                    <span style="color:#aaa; font-size:0.65rem; font-weight:800; text-transform:uppercase;">Net Payable</span>
                     <strong id="dashTotal" style="font-size: 1.2rem; color: #444;">₹ 0</strong>
                 </div>
                 <div class="fee-stat-item">
-                    <span style="display:block; color:#aaa; font-size:0.65rem; font-weight:800; text-transform:uppercase;">Total Paid</span>
+                    <span style="color:#aaa; font-size:0.65rem; font-weight:800; text-transform:uppercase;">Total Paid</span>
                     <strong id="dashPaid" style="font-size: 1.2rem; color: #4caf50;">₹ 0</strong>
                 </div>
             </div>
         </div>
 
-        <div class="gauge-visual" style="position: relative; display: flex; align-items: center; justify-content: center;">
-            <svg class="premium-ring" viewBox="0 0 100 100" style="width: 120px; height: 120px; transform: rotate(-90deg);">
+        <div class="gauge-visual">
+            <svg viewBox="0 0 100 100" style="width: 120px; height: 120px; transform: rotate(-90deg);">
                 <circle cx="50" cy="50" r="45" fill="none" stroke="#f5f5f5" stroke-width="10"></circle>
-                <circle id="dashCircle" cx="50" cy="50" r="45" fill="none" stroke="#00ff88" stroke-width="10" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283" style="transition: stroke-dashoffset 1.5s ease;"></circle>
+                <circle id="dashCircle" cx="50" cy="50" r="45" fill="none" stroke="#00ff88" stroke-width="10" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283" style="transition: 1.5s ease;"></circle>
             </svg>
-            <div id="dashFeePerc" style="position: absolute; font-weight: 900; color: var(--primary); font-size: 1.4rem;">0%</div>
+            <div id="dashFeePerc" style="position: absolute; font-weight: 900; color: var(--primary);">0%</div>
         </div>
     </div>
 </section>
@@ -622,9 +619,12 @@ async function fetchAttendance(name, className) {
 }
 async function fetchFinance(name, className) {
     try {
-        // CHANGED: .on('value') creates a live connection. 
-        // Whenever you save in fee.html, this function will trigger automatically here.
-        db.ref(`fee_records/${className}/${name}`).on('value', (feeSnap) => {
+        // FIX: The Fee Portal saves as "Pre-KG", but this page uses "Pre-KG (Diamond)"
+        // This line removes everything in brackets so it matches the database folder
+        const dbClass = className.split('(')[0].trim(); 
+
+        // CHANGED: .on('value') ensures real-time updates without refreshing
+        db.ref(`fee_records/${dbClass}/${name}`).on('value', (feeSnap) => {
             let totalPaid = 0;
             let baseFeeAmount = 0;
             let discountPercentage = 0;
@@ -634,6 +634,7 @@ async function fetchFinance(name, className) {
                     const data = child.val();
                     totalPaid += parseFloat(data.paid || 0);
                     
+                    // Pulling the latest fee/discount set in fee.html
                     const recordTotal = parseFloat(data.total || 0);
                     const recordDisc = parseFloat(data.discount || data.discountPct || 0);
                     
@@ -641,22 +642,24 @@ async function fetchFinance(name, className) {
                     if (recordDisc > discountPercentage) discountPercentage = recordDisc;
                 });
 
+                // CALCULATIONS
                 const discountValue = (baseFeeAmount * (discountPercentage / 100));
                 const finalPayable = baseFeeAmount - discountValue;
                 const balanceDue = finalPayable - totalPaid;
                 const paymentPct = finalPayable > 0 ? Math.round((totalPaid / finalPayable) * 100) : 0;
 
-                // UI UPDATE (Instant)
-                document.getElementById('dashDue').innerText = "₹ " + (balanceDue > 0 ? Math.round(balanceDue).toLocaleString('en-IN') : "0");
+                // INSTANT UI UPDATE
                 document.getElementById('dashTotal').innerText = "₹ " + Math.round(finalPayable).toLocaleString('en-IN');
                 document.getElementById('dashPaid').innerText = "₹ " + Math.round(totalPaid).toLocaleString('en-IN');
+                document.getElementById('dashDue').innerText = "₹ " + (balanceDue > 0 ? Math.round(balanceDue).toLocaleString('en-IN') : "0");
                 document.getElementById('dashFeePerc').innerText = paymentPct + "%";
-                
+
+                // GAUGE ANIMATION
                 const offset = 283 - (283 * (paymentPct > 100 ? 100 : paymentPct) / 100);
                 document.getElementById('dashCircle').style.strokeDashoffset = offset;
 
             } else {
-                // Reset if no data exists
+                // Default display if no record exists in the folder
                 document.getElementById('dashDue').innerText = "₹ 0";
                 document.getElementById('dashTotal').innerText = "₹ 0";
                 document.getElementById('dashPaid').innerText = "₹ 0";
@@ -665,7 +668,7 @@ async function fetchFinance(name, className) {
             }
         });
     } catch (error) {
-        console.error("Firebase Real-time Sync Error:", error);
+        console.error("Real-time Fee Sync Error:", error);
     }
 }
 </script>

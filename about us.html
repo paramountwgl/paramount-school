@@ -4,59 +4,132 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>About Our Legacy | Paramount English Medium High School</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="logo.png">
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@300;400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Montserrat:wght@300;400;500;700;900&display=swap');
 
         :root { 
             --p-green: #004d26; 
-            --p-dark-green: #00331a;
+            --p-dark-green: #002613;
             --p-gold: #ffd700; 
+            --p-gold-dark: #b39700;
             --p-blue: #003366;
+            --p-dark-blue: #001a35;
             --white: #ffffff;
+            --text-gray: #555555;
+            --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,245,240,0.9));
         }
 
-        * { box-sizing: border-box; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            scroll-behavior: smooth;
+        }
 
         body { 
             font-family: 'Montserrat', sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            background: #fafafa; 
+            background: #f4f7f5; 
             overflow-x: hidden; 
             width: 100%;
+            color: #222;
         }
 
-        /* ELITE NAVIGATION */
+        /* PREMIUM FLOATING HEADER */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 8%;
-            background: var(--white);
+            padding: 12px 6%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
             position: sticky;
             top: 0;
             z-index: 2000;
-            border-bottom: 4px solid var(--p-green);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-bottom: 3px solid var(--p-gold);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
         }
-        .header-brand { display: flex; align-items: center; gap: 12px; }
-        .header-logo { height: 45px; width: auto; }
-        .header-text .m-name { display: block; font-size: 1.1rem; font-weight: 900; color: var(--p-blue); letter-spacing: 1px; }
         
-        /* ULTRA-PREMIUM CINEMATIC HERO */
+        .header-brand { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            text-decoration: none;
+        }
+        
+        .header-logo { 
+            height: 55px; 
+            width: auto; 
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+            transition: transform 0.4s ease;
+        }
+        
+        .header-brand:hover .header-logo {
+            transform: scale(1.08) rotate(5deg);
+        }
+
+        .header-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-text .m-name { 
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem; 
+            font-weight: 900; 
+            color: var(--p-green); 
+            letter-spacing: 2px; 
+            line-height: 1.2;
+        }
+        
+        .header-text .m-sub {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--p-blue);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        
+        .nav-home-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none; 
+            color: var(--p-green); 
+            font-weight: 700; 
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            padding: 10px 22px;
+            border: 2px solid var(--p-green);
+            border-radius: 50px;
+            background: transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 0 0 0 var(--p-green);
+        }
+
+        .nav-home-btn:hover {
+            color: var(--white);
+            background: var(--p-green);
+            box-shadow: 0 5px 15px rgba(0, 77, 38, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* 3D CINEMATIC HERO SECTION */
         .hero {
-            min-height: 90vh;
-            background: linear-gradient(rgba(0, 77, 38, 0.75), rgba(0, 51, 102, 0.65)), url('leaders_images/campus.png');
+            min-height: 85vh;
+            background: linear-gradient(135deg, rgba(0, 41, 20, 0.85), rgba(0, 26, 53, 0.75)), url('leaders_images/campus.png');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed; /* Parallax effect */
+            background-attachment: fixed;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
+            position: relative;
+            perspective: 1000px;
         }
 
         .hero-branding-container {
@@ -65,263 +138,495 @@
             align-items: center;
             width: 100%;
             max-width: 1000px;
+            transform: translateZ(50px);
+            animation: floatAnimation 6s ease-in-out infinite;
+        }
+
+        @keyframes floatAnimation {
+            0%, 100% { transform: translateY(0px) rotateX(0deg); }
+            50% { transform: translateY(-12px) rotateX(2deg); }
         }
 
         .hero-logo-large {
-            height: clamp(100px, 15vh, 160px);
+            height: clamp(110px, 16vh, 170px);
             margin-bottom: 25px;
-            filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.4));
+            filter: drop-shadow(0 10px 25px rgba(255, 215, 0, 0.5));
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from { filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.4)); }
+            to { filter: drop-shadow(0 15px 35px rgba(255, 215, 0, 0.7)); }
         }
 
         .p-name-main {
             display: block;
             font-family: 'Cinzel', serif;
-            font-size: clamp(1.8rem, 8vw, 4rem);
+            font-size: clamp(2.2rem, 8vw, 4.5rem);
             font-weight: 900;
-            letter-spacing: clamp(5px, 2vw, 15px);
+            letter-spacing: clamp(6px, 2vw, 18px);
             color: var(--white);
-            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            line-height: 1.2;
+            text-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            line-height: 1.1;
         }
 
         .p-name-sub {
             display: block;
-            font-size: clamp(0.7rem, 2vw, 1.1rem);
+            font-size: clamp(0.75rem, 2vw, 1.2rem);
             font-weight: 700;
-            letter-spacing: clamp(3px, 1.5vw, 8px);
+            letter-spacing: clamp(4px, 1.5vw, 10px);
             color: var(--p-gold);
             margin-top: 15px;
             text-transform: uppercase;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.5);
         }
-        /* Premium Elite Footer */
-.premium-footer {
-    background: linear-gradient(180deg, #001a35 0%, var(--primary) 100%);
-    color: white;
-    padding: 80px 0 40px;
-    border-top: 4px solid var(--accent);
-    margin-top: 100px;
-}
-
-.footer-brand-title {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--accent);
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-}
-
-.footer-section-title {
-    font-size: 1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 25px;
-    color: var(--accent);
-    position: relative;
-}
-
-.footer-section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 40px;
-    height: 2px;
-    background: var(--accent);
-}
-
-/* Premium Social Buttons */
-.connect-container {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-.social-tool-premium {
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.social-tool-premium:hover {
-    background: var(--accent);
-    color: var(--primary);
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(197, 160, 89, 0.3);
-    border-color: var(--accent);
-}
-
-/* Info Items */
-.footer-info-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    margin-bottom: 20px;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.95rem;
-}
-
-.footer-info-item i {
-    color: var(--accent);
-    font-size: 1.2rem;
-    margin-top: 3px;
-}
-
-.footer-bottom-bar {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 50px;
-    padding-top: 30px;
-    text-align: center;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.6);
-}
 
         .hero-gold-line {
-            width: clamp(100px, 30%, 200px);
-            height: 3px;
-            background: linear-gradient(to right, transparent, var(--p-gold), transparent);
-            margin: clamp(15px, 4vh, 30px) 0;
+            width: clamp(150px, 40%, 300px);
+            height: 4px;
+            background: linear-gradient(to right, transparent, var(--p-gold), var(--white), var(--p-gold), transparent);
+            margin: clamp(20px, 4vh, 35px) 0;
+            border-radius: 2px;
         }
 
-        .hero-title p { font-size: clamp(0.9rem, 2.5vw, 1.2rem); color: #eee; letter-spacing: 3px; text-transform: uppercase; margin: 0; }
-        .hero-title h2 { font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 4vw, 2.5rem); color: var(--p-gold); margin: 10px 0 0; }
+        .hero-title p { 
+            font-size: clamp(0.9rem, 2.5vw, 1.2rem); 
+            color: #e0e0e0; 
+            letter-spacing: 4px; 
+            text-transform: uppercase; 
+            font-weight: 500;
+        }
+        
+        .hero-title h2 { 
+            font-family: 'Cinzel', serif; 
+            font-size: clamp(1.6rem, 4vw, 2.8rem); 
+            color: var(--p-gold); 
+            margin-top: 10px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
 
-        /* FOUNDER SECTION */
-        .section { padding: clamp(40px, 8vh, 100px) 10%; }
-        .founder-sec { 
-            background: var(--p-green); 
-            color: white; 
-            display: flex; 
-            align-items: center; 
-            gap: 60px; 
+        /* 3D GLASSMORPHIC SOCIETY OVERVIEW (NEW) */
+        .society-section {
+            background: linear-gradient(135deg, #f0f4f1 0%, #e6ece8 100%);
+            padding: 80px 10% 60px;
+            position: relative;
         }
-        .founder-img-box { flex: 1; min-width: 300px; }
-        .founder-img-box img { 
-            width: 100%; 
-            height: auto;
-            border-radius: 20px; 
-            border: 3px solid var(--p-gold); 
-            box-shadow: 20px 20px 0 rgba(197, 160, 89, 0.1); 
-        }
-        .founder-text { flex: 1.5; }
-        .founder-text h3 { font-family: 'Cinzel', serif; font-size: clamp(1.8rem, 5vw, 2.8rem); color: var(--p-gold); margin-bottom: 20px; }
-        .founder-text p { font-size: 1.1rem; line-height: 1.8; opacity: 0.95; }
 
-        /* ECOSYSTEM TOOLS */
-        .tool-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
-            gap: 25px; 
-            margin-top: 50px; 
+        .society-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0, 77, 38, 0.08), 
+                        inset 0 0 30px rgba(255,255,255,0.6);
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            transform: translateY(-50px);
+            z-index: 10;
+            position: relative;
         }
-        .tool-card {
-            background: white;
-            padding: 40px 25px;
-            border-radius: 25px;
-            text-align: center;
-            text-decoration: none;
-            color: var(--p-blue);
-            border: 1px solid #eee;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+
+        .society-badge {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, var(--p-dark-blue), var(--p-blue));
+            color: var(--white);
+            padding: 40px 30px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 51, 102, 0.25);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            min-width: 260px;
         }
-        .tool-card:hover { transform: translateY(-12px); background: var(--p-green); border-color: var(--p-gold); }
-        .tool-card:hover h4, .tool-card:hover p { color: white; }
-        .tool-card i { font-size: 3rem; color: var(--p-gold); margin-bottom: 20px; }
-        .tool-card h4 { margin: 0; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-        .tool-card p { margin-top: 10px; color: #666; transition: 0.3s; font-size: 0.9rem; }
 
-        /* ELITE FOOTER */
-        .elite-footer {
-            background: #001a0d;
-            padding: 80px 10% 40px;
-            color: white;
-            border-top: 8px solid var(--p-gold);
+        .society-badge i {
+            font-size: 3.5rem;
+            color: var(--p-gold);
+            margin-bottom: 15px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
+
+        .society-badge h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            color: var(--white);
+        }
+
+        .society-badge span {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--p-gold);
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .society-content {
+            flex: 2;
+        }
+
+        .society-content h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--p-green);
+            font-size: clamp(1.6rem, 3vw, 2.3rem);
+            margin-bottom: 15px;
+        }
+
+        .society-content p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-gray);
+        }
+
+        /* PREMIUM FOUNDER SECTION WITH LAYERED 3D EFFECT */
+        .section-founder { 
+            padding: 60px 10% 100px;
+            background: var(--p-green); 
+            color: var(--white); 
+            display: flex; 
+            align-items: center; 
+            gap: 70px; 
+            position: relative;
+            box-shadow: inset 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .founder-img-box { 
+            flex: 1; 
+            min-width: 320px; 
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .founder-img-box img { 
+            width: 100%; 
+            height: auto;
+            border-radius: 24px; 
+            border: 4px solid var(--p-gold); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            transform: rotateY(-10deg) rotateX(5deg);
+            transition: all 0.5s ease;
+        }
+
+        .founder-img-box:hover img {
+            transform: rotateY(0deg) rotateX(0deg) scale(1.03);
+            box-shadow: 0 35px 70px rgba(0,0,0,0.5);
+        }
+
+        .founder-text { flex: 1.5; }
+        
+        .founder-text h3 { 
+            font-family: 'Cinzel', serif; 
+            font-size: clamp(2rem, 4vw, 3rem); 
+            color: var(--p-gold); 
+            margin-bottom: 25px; 
+            text-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+        
+        .founder-text p { 
+            font-size: 1.1rem; 
+            line-height: 1.9; 
+            opacity: 0.9; 
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .quote-badge {
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 5px solid var(--p-gold);
+            padding: 15px 25px;
+            border-radius: 0 15px 15px 0;
+            font-style: italic;
+            font-size: 1.15rem;
+            margin-top: 30px;
+            display: inline-block;
+        }
+
+        /* HIGH-END 3D INTERACTIVE ECOSYSTEM WINGS */
+        .wings-section {
+            padding: 100px 8%;
+            background: #ffffff;
+        }
+
+        .section-header {
+            text-align: center; 
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 { 
+            color: var(--p-blue); 
+            font-family: 'Cinzel', serif; 
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 10px;
+        }
+        
+        .section-header p { 
+            color: var(--p-green); 
+            letter-spacing: 3px; 
+            font-size: 0.9rem; 
+            font-weight: 700;
+        }
+
+        .tool-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); 
+            gap: 35px; 
+        }
+
+        .tool-card {
+            background: var(--white);
+            padding: 45px 30px;
+            border-radius: 24px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--p-blue);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--p-green), var(--p-dark-green));
+            z-index: -1;
+            opacity: 0;
+            transition: all 0.4s ease;
+            transform: scale(0.9) translateY(20px);
+            border-radius: 24px;
+        }
+
+        .tool-card:hover { 
+            transform: translateY(-12px) scale(1.02); 
+            border-color: var(--p-gold); 
+            box-shadow: 0 25px 50px rgba(0, 77, 38, 0.2);
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .tool-card:hover h4, .tool-card:hover p { color: var(--white); }
+        
+        .tool-card .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(0, 77, 38, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            transition: all 0.4s ease;
+        }
+
+        .tool-card:hover .icon-wrapper {
+            background: rgba(255, 255, 255, 0.15);
+            transform: rotateY(180deg);
+        }
+
+        .tool-card i { 
+            font-size: 2.5rem; 
+            color: var(--p-green); 
+            transition: all 0.4s ease;
+        }
+        
+        .tool-card:hover i {
+            color: var(--p-gold);
+        }
+
+        .tool-card h4 { 
+            margin: 0; 
+            font-size: 1.15rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            font-weight: 700;
+            transition: 0.3s; 
+        }
+        
+        .tool-card p { 
+            margin-top: 12px; 
+            color: var(--text-gray); 
+            transition: 0.3s; 
+            font-size: 0.95rem; 
+            line-height: 1.5;
+        }
+
+        /* ULTRA-PREMIUM ELITE FOOTER */
+        .premium-footer {
+            background: linear-gradient(180deg, var(--p-dark-blue) 0%, #000d1a 100%);
+            color: var(--white);
+            padding: 80px 8% 40px;
+            border-top: 5px solid var(--p-gold);
+            position: relative;
+        }
+
         .footer-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
             gap: 50px; 
         }
-        .footer-links h5 { font-family: 'Cinzel', serif; color: var(--p-gold); font-size: 1.3rem; margin-bottom: 25px; letter-spacing: 2px; }
-        .footer-links p { opacity: 0.8; line-height: 1.8; font-size: 0.9rem; }
+
+        .footer-links h5 { 
+            font-family: 'Cinzel', serif; 
+            color: var(--p-gold); 
+            font-size: 1.3rem; 
+            margin-bottom: 25px; 
+            letter-spacing: 2px; 
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-links h5::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--p-gold);
+        }
+
+        .footer-links p { 
+            opacity: 0.85; 
+            line-height: 1.8; 
+            font-size: 0.95rem; 
+        }
+
+        .footer-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .footer-info-item i {
+            color: var(--p-gold);
+            font-size: 1.2rem;
+            margin-top: 4px;
+        }
         
-        /* SOCIAL ICONS */
-        .connect-us { margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap; }
-        .social-tool {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.05);
+        /* PREMIUM SOCIAL BUTTONS */
+        .connect-container { 
+            margin-top: 25px; 
+            display: flex; 
+            gap: 15px; 
+            flex-wrap: wrap; 
+        }
+
+        .social-tool-premium {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--white);
             text-decoration: none;
-            font-size: 1.3rem;
-            transition: 0.4s;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-        }
-        .social-tool:hover { 
-            transform: translateY(-8px) rotate(360deg); 
-            background: var(--p-gold); 
-            color: var(--p-blue); 
-            box-shadow: 0 0 20px var(--p-gold); 
+            font-size: 1.2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 215, 0, 0.15);
         }
 
-        .footer-bottom {
+        .social-tool-premium:hover { 
+            transform: translateY(-6px) scale(1.05); 
+            background: var(--p-gold); 
+            color: var(--p-blue); 
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3); 
+            border-color: var(--p-gold);
+        }
+
+        .quick-links-list {
+            list-style: none;
+        }
+
+        .quick-links-list li {
+            margin-bottom: 12px;
+        }
+
+        .quick-links-list a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .quick-links-list a:hover {
+            color: var(--p-gold);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom-bar {
             text-align: center;
             margin-top: 60px;
             padding-top: 30px;
-            border-top: 1px solid rgba(255,215,0,0.1);
-            font-size: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.8rem;
             letter-spacing: 2px;
-            opacity: 0.6;
+            color: rgba(255, 255, 255, 0.5);
             text-transform: uppercase;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* TABLET & MOBILE FIXES */
+        /* MEDIA QUERIES FOR RESPONSIVENESS */
         @media (max-width: 992px) {
             header { padding: 15px 5%; }
-            .hero { background-attachment: scroll; } /* Better performance on mobile */
-            .founder-sec { flex-direction: column; text-align: center; gap: 40px; }
-            .founder-img-box { width: 80%; max-width: 400px; }
-            .section { padding: 60px 5%; }
-            .footer-grid { text-align: center; }
-            .connect-us { justify-content: center; }
+            .hero { background-attachment: scroll; min-height: 70vh; } 
+            .society-card { flex-direction: column; text-align: center; gap: 30px; transform: translateY(-30px); padding: 35px 25px; }
+            .society-badge { width: 100%; }
+            .section-founder { flex-direction: column; text-align: center; gap: 40px; padding: 60px 6%; }
+            .founder-img-box { width: 75%; max-width: 380px; }
+            .founder-img-box img { transform: none !important; }
+            .wings-section { padding: 60px 5%; }
+            .footer-grid { text-align: left; }
         }
 
         @media (max-width: 480px) {
-            .header-text .m-name { font-size: 0.9rem; }
-            .hero { min-height: 80vh; }
+            .header-text .m-name { font-size: 1rem; }
+            .header-text .m-sub { font-size: 0.55rem; }
+            .nav-home-btn { padding: 8px 16px; font-size: 0.75rem; }
+            .hero { min-height: 65vh; }
             .tool-grid { grid-template-columns: 1fr; }
+            .society-card { padding: 25px 20px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- BRANDED INTERACTIVE HEADER -->
     <header>
-       
+        <a href="index.html" class="header-brand">
+            <img src="logo.png" alt="Paramount Logo" class="header-logo">
+            <div class="header-text">
+                <span class="m-name">PARAMOUNT</span>
+                <span class="m-sub">English Medium High School</span>
+            </div>
+        </a>
         <nav>
-            <a href="index.html" style="text-decoration: none; color: var(--p-blue); font-weight: 900; font-size: 0.9rem;"><i class="fas fa-home"></i> HOME</a>
+            <a href="index.html" class="nav-home-btn"><i class="fas fa-home"></i> HOME</a>
         </nav>
     </header>
 
+    <!-- 3D KINETIC HERO HERO -->
     <section class="hero">
         <div class="hero-branding-container">
             <img src="logo.png" alt="Paramount Logo" class="hero-logo-large">
@@ -337,87 +642,116 @@
         </div>
     </section>
 
-    <section class="section founder-sec">
+    <!-- NEW: SOCIETY MANAGEMENT GLASS SECTION -->
+    <section class="society-section">
+        <div class="society-card">
+            <div class="society-badge">
+                <i class="fas fa-shield-halved"></i>
+                <h4>07</h4>
+                <span>ZeroSeven Society</span>
+            </div>
+            <div class="society-content">
+                <h3>Governed by ZeroSeven Society</h3>
+                <p>Paramount English Medium High School is proudly managed and powered by the prestigious <strong>ZeroSeven Society</strong>. Under this elite governance, the institution receives advanced strategic administration, premium infrastructural updates, and a futuristic academic outlook that shapes raw potential into impactful real-world leaders.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CINEMATIC FOUNDER VISION -->
+    <section class="section-founder">
         <div class="founder-img-box">
             <img src="chairman.png" alt="Mr. Shaik Ahmad">
         </div>
         <div class="founder-text">
             <h3>The Founder's Vision</h3>
-            <p>Under the visionary leadership of 'Mr. Shaik Ahmad', Paramount English Medium School has emerged as a beacon of academic brilliance in Warangal. Since 2019, our commitment remains unshakable: providing a safe, tech-enabled, and ethically grounded environment where your child is not just a student, but a future leader.</p>
-            <p>“We don't just teach, we inspire.” — SHAIK AHMAD.</p>
+            <p>Under the visionary leadership of <strong>Mr. Shaik Ahmad</strong>, Paramount English Medium High School has emerged as a beacon of academic brilliance in Warangal. Since 2019, our commitment remains unshakable: providing a safe, tech-enabled, and ethically grounded environment where your child is not just a student, but a future leader.</p>
+            <div class="quote-badge">
+                “We don't just teach, we inspire.” — SHAIK AHMAD
+            </div>
         </div>
     </section>
 
-    <section class="section" style="background: #fff;">
-        <div style="text-align: center; margin-bottom: 50px;">
-            <h2 style="color: var(--p-blue); font-family: 'Cinzel', serif; font-size: clamp(1.8rem, 5vw, 2.8rem);">Our Specialized Wings</h2>
-            <p style="color: #666; letter-spacing: 2px; font-size: 0.85rem;">THE PARAMOUNT EDUCATIONAL ECOSYSTEM</p>
+    <!-- SPECIALIZED WINGS GRID WITH 3D EFFECT -->
+    <section class="wings-section">
+        <div class="section-header">
+            <h2>Our Specialized Wings</h2>
+            <p>THE PARAMOUNT EDUCATIONAL ECOSYSTEM</p>
         </div>
         <div class="tool-grid">
             <a href="index.html" class="tool-card">
-                <i class="fas fa-university"></i>
-                <h4>PARAMOUNT E/M SCHOOL</h4>
-                <p>Nursery to High School excellence.</p>
+                <div class="icon-wrapper"><i class="fas fa-university"></i></div>
+                <h4>PARAMOUNT E/M HIGH  SCHOOL</h4>
+                <p>Nursery to High School exceptional standard education.</p>
             </a>
             <a href="#" class="tool-card">
-                <i class="fas fa-compass-drafting"></i>
-                <h4>POLYCET & TSRJC CET coaching</h4>
-                <p>Technical entrance examination coaching.</p>
+                <div class="icon-wrapper"><i class="fas fa-compass-drafting"></i></div>
+                <h4>POLYCET & TSRJC CET</h4>
+                <p>Precision-focused technical entrance examination coaching.</p>
             </a>
             <a href="#" class="tool-card">
-                <i class="fas fa-chart-gantt"></i>
+                <div class="icon-wrapper"><i class="fas fa-chart-gantt"></i></div>
                 <h4>SI & PC Academy</h4>
-                <p>Training the law enforcement of Tomorrow.</p>
+                <p>Elite physical and cognitive training for future law enforcement officers.</p>
             </a>
             <a href="#" class="tool-card">
-                <i class="fas fa-hockey-puck"></i>
+                <div class="icon-wrapper"><i class="fas fa-hockey-puck"></i></div>
                 <h4>Hockey Academy</h4>
-                <p>Professional national level sports training.</p>
+                <p>Professional, Olympic-standard national level sports training.</p>
             </a>
-            
             <a href="#" class="tool-card">
-                <i class="fas fa-hand-holding-medical"></i>
-                <h4>Live Strong Health Care coaching</h4>
-                <p>Transform Your Health, Strengthen Your Life..</p>
+                <div class="icon-wrapper"><i class="fas fa-hand-holding-medical"></i></div>
+                <h4>Live Strong Health Care</h4>
+                <p>Transformative youth health, nutritional support, and fitness coaching.</p>
             </a>
-
             <a href="#" class="tool-card">
-                <i class="fas fa-chalkboard-user"></i>
-                <h4>Nursery -10th Class Daily Tutions</h4>
-                <p>Complete Academic Support from Nursery to 10th.</p>
+                <div class="icon-wrapper"><i class="fas fa-chalkboard-user"></i></div>
+                <h4>Daily Tutorials</h4>
+                <p>Complete conceptual academic support from Nursery to Class 10th.</p>
             </a>
         </div>
     </section>
 
-  <footer class="elite-footer">
+    <!-- ULTRA PREMIUM HIGH-CLICKABLE FOOTER -->
+    <footer class="premium-footer">
         <div class="footer-grid">
             <div class="footer-links">
                 <h5>Connect With Us</h5>
-                <p>Stay updated with the latest campus news and academic achievements through our official channels.</p>
-                <div class="connect-us">
-                    <a href="#" class="social-tool" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://instagram.com/paramount.07" target="_blank" class="social-tool" title="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://wa.me/919652188807" target="_blank" class="social-tool" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a href="tel:+919652188807" class="social-tool" title="Call Us"><i class="fas fa-phone-alt"></i></a>
-                    <a href="mailto:paramount0707@gmail.com" class="social-tool" title="Email Us"><i class="fas fa-envelope"></i></a>
+                <p style="margin-bottom: 15px;">Stay updated with the latest campus news, structural milestones, and achievements through our official premium social portals.</p>
+                <div class="connect-container">
+                    <a href="https://www.facebook.com/share/1bWb7kmiid/?mibextid=wwXIfr" target="_blank" class="social-tool-premium" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/paramount.07" target="_blank" class="social-tool-premium" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/919652188807" target="_blank" class="social-tool-premium" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="tel:+919652188807" class="social-tool-premium" title="Call Us"><i class="fas fa-phone-alt"></i></a>
+                    <a href="mailto:academicsupport@paramountschooledu.in" class="social-tool-premium" title="Email Us"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
+            
             <div class="footer-links">
-                <h5>The Campus</h5>
-                <p>Pensionpur, Thimmapur (H),<br>Khila Warangal, Warangal,<br>Telangana - 506005</p>
+                <h5>Our Campus</h5>
+                <div class="footer-info-item" style="margin-top: 5px;">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>Pensionpur, Thimmapur (H),<br>Khila Warangal, Warangal,<br>Telangana - 506005</p>
+                </div>
+                <div class="footer-info-item">
+                    <i class="fas fa-shield-halved"></i>
+                    <p>Management Hub: ZeroSeven Society Core Wing</p>
+                </div>
             </div>
+
             <div class="footer-links">
                 <h5>Quick Access</h5>
-                <p><a href="Student Portal.html" style="color: var(--p-gold); text-decoration: none;">Student Portal Login</a></p>
-                <p><a href="admissions.html" style="color: var(--p-gold); text-decoration: none;">2026-27 Admissions</a></p>
-                <p><a href="index.html" style="color: var(--p-gold); text-decoration: none;">Return to Home</a></p>
+                <ul class="quick-links-list">
+                    <li><a href="Student Portal.html"><i class="fas fa-angle-right"></i> Student Portal Login</a></li>
+                    <li><a href="admissions.html"><i class="fas fa-angle-right"></i> 2026-27 Admissions</a></li>
+                    <li><a href="index.html"><i class="fas fa-angle-right"></i> Return to Home</a></li>
+                </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            © 2026 PARAMOUNT ENGLISH MEDIUM SCHOOL. ALL RIGHTS RESERVED.
+        
+        <div class="footer-bottom-bar">
+            © 2026 PARAMOUNT ENGLISH MEDIUM HIGH SCHOOL. Proudly Powered by ZeroSeven Society. ALL RIGHTS RESERVED.
         </div>
     </footer>
-
 
 </body>
 </html>

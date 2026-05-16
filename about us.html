@@ -94,14 +94,33 @@
             padding: 0 20px;
         }
 
-        .hero-logo-large-box {
-            background: rgba(255, 255, 255, 0.02); padding: 25px; border-radius: 50%;
-            border: 1px solid var(--p-glass-border);
-            backdrop-filter: blur(15px); margin-bottom: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.05);
-            animation: floating 5s ease-in-out infinite;
-        }
-        .hero-logo-large { height: clamp(100px, 14vh, 150px); filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.4)); }
+       .hero-logo-large-box {
+    background: rgba(255, 255, 255, 0.02); 
+    padding: 0px; /* Removed padding entirely so the logo can grow */
+    border-radius: 50%;
+    border: none; /* Explicitly guarantees no border around the circle */
+    backdrop-filter: blur(15px); 
+    margin-bottom: 30px;
+    
+    /* Premium Ultra-Glow Effect */
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), 
+                0 0 60px rgba(255, 215, 0, 0.3), 
+                inset 0 0 15px rgba(255, 215, 0, 0.4);
+                
+    animation: floating 5s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+       .hero-logo-large { 
+    height: clamp(120px, 18vh, 180px); /* Increased sizes to make it look bigger */
+    width: auto;
+    object-fit: cover; /* Ensures it scales perfectly to the edges */
+    
+    /* Double-pass glow directly on the logo graphic transparent channels */
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.7)) drop-shadow(0 0 30px rgba(255, 215, 0, 0.4)); 
+}
 
         .p-name-main {
             display: block; font-family: 'Cinzel', serif;

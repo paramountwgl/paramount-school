@@ -4,1028 +4,474 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>About Our Legacy | Paramount English Medium High School</title>
+    <!-- Premium Font Load -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Animate On Scroll (AOS) CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="logo.png">
-    <!-- FontAwesome & Google Fonts -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Montserrat:wght@300;400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@300;400;500;700;900&display=swap');
 
         :root { 
             --p-green: #004d26; 
             --p-dark-green: #002613;
             --p-gold: #ffd700; 
-            --p-gold-dark: #b39700;
+            --p-gold-light: #ffeb99;
             --p-blue: #003366;
             --p-dark-blue: #001a35;
             --white: #ffffff;
-            --text-gray: #555555;
-            --card-gradient: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,245,240,0.9));
+            --text-dark: #333;
+            --p-glass: rgba(255, 255, 255, 0.03);
+            --p-glass-border: rgba(255, 215, 0, 0.15);
         }
 
         * { 
             box-sizing: border-box; 
+            outline: none; 
             margin: 0; 
-            padding: 0; 
-            scroll-behavior: smooth;
+            padding: 0;
         }
 
         body { 
             font-family: 'Montserrat', sans-serif; 
-            background: linear-gradient(-45deg, #f4f7f5, #e6ece8, #f4f7f5, #e0e7e1);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: #000503; /* Deep dark velvet green/black canvas */
+            color: #ddd;
             overflow-x: hidden; 
             width: 100%;
-            color: #222;
-            position: relative;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000704; z-index: 10000; display: flex;
+            justify-content: center; align-items: center;
         }
+        #preloader img { width: 90px; animation: pulsePreloader 1.5s infinite ease-in-out; }
+        @keyframes pulsePreloader { 0% { opacity: 0.3; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.3; transform: scale(0.95); } }
 
-        /* 3D PARTICLE BACKGROUND */
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            perspective: 1000px;
-        }
-
-        /* PREMIUM FLOATING HEADER */
+        /* --- PREMIUM FLOATING NAVIGATION --- */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 6%;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(15px);
-            position: sticky;
-            top: 0;
-            z-index: 2000;
-            border-bottom: 3px solid var(--p-gold);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: all 0.4s ease;
-            transform: translateZ(100px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 8%; background: rgba(0, 7, 4, 0.85);
+            position: fixed; top: 0; width: 100%; z-index: 2000;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.25);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
+        .header-brand { display: flex; align-items: center; gap: 15px; text-decoration: none; }
+        .header-logo { height: 48px; width: auto; filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.3)); }
+        .header-text .m-name { display: block; font-family: 'Cinzel', serif; font-size: 1.25rem; font-weight: 900; color: var(--white); letter-spacing: 2px; }
+        .header-text .m-branch { font-size: 0.7rem; color: #b3b3b3; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; }
         
-        .header-brand { 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            text-decoration: none;
+        .premium-home-btn {
+            background: linear-gradient(135deg, var(--p-gold) 0%, #b39700 100%);
+            color: var(--p-dark-green) !important;
+            padding: 10px 26px; border-radius: 30px; font-weight: 900;
+            text-decoration: none; font-size: 0.85rem; letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2); transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
-        
-        .header-logo { 
-            height: 55px; 
-            width: auto; 
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-            transition: transform 0.4s ease;
-        }
-        
-        .header-brand:hover .header-logo {
-            transform: scale(1.08) rotate(5deg);
-        }
+        .premium-home-btn:hover { box-shadow: 0 0 25px rgba(255, 215, 0, 0.5); transform: translateY(-2px); }
 
-        .header-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header-text .m-name { 
-            font-family: 'Cinzel', serif;
-            font-size: 1.3rem; 
-            font-weight: 900; 
-            color: var(--p-green); 
-            letter-spacing: 2px; 
-            line-height: 1.2;
-        }
-        
-        .header-text .m-sub {
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: var(--p-blue);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-        
-        .nav-home-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none; 
-            color: var(--p-green); 
-            font-weight: 700; 
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            padding: 10px 22px;
-            border: 2px solid var(--p-green);
-            border-radius: 50px;
-            background: transparent;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: inset 0 0 0 0 var(--p-green);
-        }
-
-        .nav-home-btn:hover {
-            color: var(--white);
-            background: var(--p-green);
-            box-shadow: 0 5px 15px rgba(0, 77, 38, 0.3);
-            transform: translateY(-2px);
-        }
-
-        /* 3D CINEMATIC HERO SECTION */
+        /* --- ULTRA-PREMIUM DIGITAL MATRIC HERO --- */
         .hero {
-            min-height: 85vh;
-            background: linear-gradient(135deg, rgba(0, 41, 20, 0.85), rgba(0, 26, 53, 0.75)), url('leaders_images/campus.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 60px 20px;
+            min-height: 90vh;
+            /* Replaced image background with luxury kinetic dual-tone radial array */
+            background: radial-gradient(circle at 30% 30%, #002613 0%, #000503 70%), 
+                        radial-gradient(circle at 80% 70%, #001a35 0%, transparent 50%);
+            background-blend-mode: screen;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            padding-top: 80px;
             position: relative;
-            perspective: 2000px;
-            transform-style: preserve-3d;
+            overflow: hidden;
         }
+
+        #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; }
 
         .hero-branding-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 1000px;
-            transform: translateZ(150px);
-            animation: floatAnimation 6s ease-in-out infinite;
+            z-index: 10;
+            display: flex; flex-direction: column; align-items: center;
+            width: 100%; max-width: 1000px;
+            padding: 0 20px;
         }
 
-        @keyframes floatAnimation {
-            0%, 100% { transform: translateY(0px) rotateX(0deg) translateZ(150px); }
-            50% { transform: translateY(-15px) rotateX(3deg) translateZ(180px); }
+        .hero-logo-large-box {
+            background: rgba(255, 255, 255, 0.02); padding: 25px; border-radius: 50%;
+            border: 1px solid var(--p-glass-border);
+            backdrop-filter: blur(15px); margin-bottom: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.05);
+            animation: floating 5s ease-in-out infinite;
         }
-
-        .hero-logo-large {
-            height: clamp(110px, 16vh, 170px);
-            margin-bottom: 25px;
-            filter: drop-shadow(0 15px 30px rgba(255, 215, 0, 0.6));
-            animation: pulseGlow 3s infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-            from { filter: drop-shadow(0 10px 20px rgba(255, 215, 0, 0.5)); }
-            to { filter: drop-shadow(0 20px 40px rgba(255, 215, 0, 0.8)); }
-        }
+        .hero-logo-large { height: clamp(100px, 14vh, 150px); filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.4)); }
 
         .p-name-main {
-            display: block;
-            font-family: 'Cinzel', serif;
-            font-size: clamp(2.2rem, 8vw, 4.5rem);
-            font-weight: 900;
+            display: block; font-family: 'Cinzel', serif;
+            font-size: clamp(2.2rem, 8vw, 4.6rem); font-weight: 900;
             letter-spacing: clamp(6px, 2vw, 18px);
-            color: var(--white);
-            text-shadow: 0 15px 30px rgba(0,0,0,0.7);
-            line-height: 1.1;
+            background: linear-gradient(to bottom, #ffffff 0%, var(--p-gold) 60%, #ccad00 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 15px rgba(0,0,0,0.6)); line-height: 1.1;
         }
 
         .p-name-sub {
-            display: block;
-            font-size: clamp(0.75rem, 2vw, 1.2rem);
-            font-weight: 700;
-            letter-spacing: clamp(4px, 1.5vw, 10px);
-            color: var(--p-gold);
-            margin-top: 15px;
-            text-transform: uppercase;
-            text-shadow: 0 5px 10px rgba(0,0,0,0.6);
+            display: block; font-size: clamp(0.75rem, 2vw, 1.2rem);
+            font-weight: 700; letter-spacing: clamp(4px, 1.5vw, 10px);
+            color: #b3b3b3; margin-top: 25px; text-transform: uppercase;
         }
 
         .hero-gold-line {
-            width: clamp(150px, 40%, 300px);
-            height: 4px;
+            width: clamp(120px, 35%, 260px); height: 2px;
             background: linear-gradient(to right, transparent, var(--p-gold), var(--white), var(--p-gold), transparent);
-            margin: clamp(20px, 4vh, 35px) 0;
-            border-radius: 2px;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+            margin: 30px 0;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
 
-        .hero-title p { 
-            font-size: clamp(0.9rem, 2.5vw, 1.2rem); 
-            color: #e0e0e0; 
-            letter-spacing: 4px; 
-            text-transform: uppercase; 
-            font-weight: 500;
-            text-shadow: 0 3px 6px rgba(0,0,0,0.5);
-        }
-        
-        .hero-title h2 { 
-            font-family: 'Cinzel', serif; 
-            font-size: clamp(1.6rem, 4vw, 2.8rem); 
-            color: var(--p-gold); 
-            margin-top: 10px;
-            text-shadow: 0 6px 12px rgba(0,0,0,0.5);
+        .hero-title h2 {
+            font-family: 'Cinzel', serif; font-size: clamp(1.4rem, 4vw, 2.5rem);
+            color: var(--p-gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+            letter-spacing: 2px;
         }
 
-        /* 3D GLASSMORPHIC SOCIETY OVERVIEW (NEW) */
-        .society-section {
-            padding: 80px 10% 60px;
-            position: relative;
-            perspective: 2000px;
+        @keyframes floating { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+
+        /* --- GOVERNANCE INTERACTIVE MATRIX BLOCK --- */
+        .premium-society-card-container {
+            background: #ffffff; padding: 120px 10% 100px; position: relative; z-index: 100;
+            border-radius: 40px 40px 0 0; margin-top: -40px;
+            box-shadow: 0 -15px 40px rgba(0,0,0,0.15);
         }
 
         .society-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            border-radius: 30px;
-            padding: 50px;
-            box-shadow: 0 30px 60px rgba(0, 77, 38, 0.12), 
-                        inset 0 0 40px rgba(255,255,255,0.5);
-            display: flex;
-            align-items: center;
-            gap: 50px;
-            transform: translateY(-50px) translateZ(100px) rotateX(5deg);
-            z-index: 10;
-            position: relative;
-            transition: transform 0.5s ease, box-shadow 0.5s ease;
-            transform-style: preserve-3d;
+            background: #fafafa; border-radius: 24px; padding: 50px;
+            display: flex; align-items: center; gap: 50px;
+            border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
-
-        .society-card:hover {
-            transform: translateY(-60px) translateZ(130px) rotateX(0deg) rotateY(2deg);
-            box-shadow: 0 40px 80px rgba(0, 77, 38, 0.18), 
-                        inset 0 0 50px rgba(255,255,255,0.6);
-        }
+        .society-card:hover { transform: translateY(-8px); box-shadow: 0 40px 80px rgba(0,0,0,0.08); }
 
         .society-badge {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(145deg, var(--p-dark-blue), var(--p-blue));
-            color: var(--white);
-            padding: 40px 30px;
-            border-radius: 24px;
-            text-align: center;
-            box-shadow: 0 20px 45px rgba(0, 51, 102, 0.35);
-            border: 2px solid rgba(255, 215, 0, 0.4);
-            min-width: 260px;
-            transform: translateZ(50px);
-            transition: transform 0.5s ease;
-        }
-
-        .society-card:hover .society-badge {
-            transform: translateZ(80px) rotateY(-5deg);
-        }
-
-        .society-logo-img {
-            height: 80px;
-            width: auto;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 8px 15px rgba(255, 215, 0, 0.5));
-            transition: transform 0.5s ease;
-        }
-
-        .society-card:hover .society-logo-img {
-            transform: scale(1.1) translateZ(30px);
-        }
-
-        .society-badge h4 {
-            font-family: 'Cinzel', serif;
-            font-size: 2.2rem;
-            letter-spacing: 2px;
-            color: var(--white);
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-
-        .society-badge span {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--p-gold);
-            font-weight: 700;
-            margin-top: 5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .society-content {
-            flex: 2;
-            transform: translateZ(30px);
-            transition: transform 0.5s ease;
-        }
-
-        .society-card:hover .society-content {
-            transform: translateZ(60px);
-        }
-
-        .society-content h3 {
-            font-family: 'Cinzel', serif;
-            color: var(--p-green);
-            font-size: clamp(1.6rem, 3vw, 2.3rem);
-            margin-bottom: 15px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .society-content p {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: var(--text-gray);
-        }
-
-        /* PREMIUM FOUNDER SECTION WITH LAYERED 3D EFFECT */
-        .section-founder { 
-            padding: 60px 10% 100px;
-            background: linear-gradient(135deg, var(--p-green), var(--p-dark-green));
-            color: var(--white); 
-            display: flex; 
-            align-items: center; 
-            gap: 70px; 
-            position: relative;
-            box-shadow: inset 0 25px 50px rgba(0,0,0,0.3);
-            perspective: 2000px;
-            transform-style: preserve-3d;
-        }
-
-        .founder-img-box { 
-            flex: 1; 
-            min-width: 320px; 
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s ease;
-        }
-
-        .founder-img-box img { 
-            width: 100%; 
-            height: auto;
-            border-radius: 24px; 
-            border: 4px solid var(--p-gold); 
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-            transform: rotateY(-15deg) rotateX(8deg) translateZ(50px);
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .section-founder:hover .founder-img-box img {
-            transform: rotateY(-5deg) rotateX(3deg) translateZ(100px);
-            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
-        }
-
-        .founder-text { 
-            flex: 1.5; 
-            transform: translateZ(80px);
-            transition: transform 0.6s ease;
-        }
-        
-        .section-founder:hover .founder-text {
-            transform: translateZ(120px);
-        }
-        
-        .founder-text h3 { 
-            font-family: 'Cinzel', serif; 
-            font-size: clamp(2rem, 4vw, 3rem); 
-            color: var(--p-gold); 
-            margin-bottom: 25px; 
-            text-shadow: 0 5px 10px rgba(0,0,0,0.3);
-        }
-        
-        .founder-text p { 
-            font-size: 1.1rem; 
-            line-height: 1.9; 
-            opacity: 0.95; 
-            margin-bottom: 20px;
-            font-weight: 400;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .quote-badge {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border-left: 5px solid var(--p-gold);
-            padding: 20px 30px;
-            border-radius: 0 15px 15px 0;
-            font-style: italic;
-            font-size: 1.15rem;
-            margin-top: 30px;
-            display: inline-block;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            transform: translateZ(30px);
-            transition: transform 0.6s ease;
-        }
-
-        .section-founder:hover .quote-badge {
-            transform: translateZ(60px) translateX(10px);
-        }
-
-        /* HIGH-END 3D INTERACTIVE ECOSYSTEM WINGS */
-        .wings-section {
-            padding: 100px 8%;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
-            position: relative;
-            perspective: 2000px;
-        }
-
-        .section-header {
-            text-align: center; 
-            margin-bottom: 60px;
-            transform: translateZ(50px);
-        }
-
-        .section-header h2 { 
-            color: var(--p-blue); 
-            font-family: 'Cinzel', serif; 
-            font-size: clamp(2rem, 5vw, 3rem);
-            margin-bottom: 15px;
-            text-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        }
-        
-        .section-header p { 
-            color: var(--p-green); 
-            letter-spacing: 3px; 
-            font-size: 0.95rem; 
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .tool-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); 
-            gap: 40px; 
-            transform-style: preserve-3d;
-        }
-
-        .tool-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(15px);
-            padding: 50px 35px;
-            border-radius: 24px;
-            text-align: center;
-            text-decoration: none;
-            color: var(--p-blue);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            transform: translateZ(0px);
-        }
-
-        .tool-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--p-green), var(--p-dark-green));
-            z-index: -1;
-            opacity: 0;
-            transition: all 0.5s ease;
-            transform: scale(1.1) translateY(30px);
-            border-radius: 24px;
-        }
-
-        .tool-card:hover { 
-            transform: translateY(-15px) translateZ(100px) rotateX(5deg); 
-            border-color: var(--p-gold); 
-            box-shadow: 0 30px 60px rgba(0, 77, 38, 0.25);
-        }
-
-        .tool-card:hover::before {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-
-        .tool-card:hover h4, .tool-card:hover p { color: var(--white); }
-        
-        .tool-card .icon-wrapper {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: rgba(0, 77, 38, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-            transition: all 0.5s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            transform: translateZ(20px);
-        }
-
-        .tool-card:hover .icon-wrapper {
-            background: rgba(255, 255, 255, 0.2);
-            transform: rotateY(180deg) translateZ(40px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
-
-        .tool-card i { 
-            font-size: 2.8rem; 
-            color: var(--p-green); 
-            transition: all 0.5s ease;
-        }
-        
-        .tool-card:hover i {
-            color: var(--p-gold);
-            transform: rotateY(180deg); /* Counter-rotate icon */
-        }
-
-        .tool-card h4 { 
-            margin: 0; 
-            font-size: 1.2rem; 
-            text-transform: uppercase; 
-            letter-spacing: 1.5px; 
-            font-weight: 700;
-            transition: all 0.5s ease;
-            transform: translateZ(15px);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        
-        .tool-card:hover h4 {
-            transform: translateZ(35px);
-            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
-        
-        .tool-card p { 
-            margin-top: 15px; 
-            color: var(--text-gray); 
-            transition: all 0.5s ease; 
-            font-size: 1rem; 
-            line-height: 1.6;
-            transform: translateZ(10px);
-        }
-
-        .tool-card:hover p {
-            transform: translateZ(25px);
-            opacity: 0.9;
-        }
-
-        /* ULTRA-PREMIUM ELITE FOOTER */
-        .premium-footer {
-            background: linear-gradient(180deg, var(--p-dark-blue) 0%, #000a14 100%);
-            color: var(--white);
-            padding: 100px 8% 50px;
-            border-top: 5px solid var(--p-gold);
-            position: relative;
-            box-shadow: 0 -20px 50px rgba(0,0,0,0.3);
-            perspective: 2000px;
-            transform-style: preserve-3d;
-        }
-
-        .footer-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 60px; 
-            transform: translateZ(50px);
-        }
-
-        .footer-links h5 { 
-            font-family: 'Cinzel', serif; 
-            color: var(--p-gold); 
-            font-size: 1.4rem; 
-            margin-bottom: 30px; 
-            letter-spacing: 2px; 
-            position: relative;
-            display: inline-block;
-            text-shadow: 0 3px 6px rgba(0,0,0,0.3);
-        }
-
-        .footer-links h5::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background: var(--p-gold);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
-        }
-
-        .footer-links p { 
-            opacity: 0.9; 
-            line-height: 1.9; 
-            font-size: 1rem; 
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .footer-info-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 18px;
-            margin-bottom: 22px;
-            transition: transform 0.3s ease;
-        }
-        
-        .footer-info-item:hover {
-            transform: translateX(5px);
-        }
-
-        .footer-info-item i {
-            color: var(--p-gold);
-            font-size: 1.3rem;
-            margin-top: 5px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-        }
-        
-        /* PREMIUM SOCIAL BUTTONS */
-        .connect-container { 
-            margin-top: 30px; 
-            display: flex; 
-            gap: 18px; 
-            flex-wrap: wrap; 
-        }
-
-        .social-tool-premium {
-            width: 50px;
-            height: 50px;
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(5px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            text-decoration: none;
-            font-size: 1.3rem;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            background: var(--p-dark-green); color: var(--p-gold);
+            padding: 40px 30px; border-radius: 20px; text-align: center;
+            min-width: 210px; box-shadow: 0 15px 35px rgba(0, 77, 38, 0.15);
             border: 1px solid rgba(255, 215, 0, 0.2);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
         }
+        .society-logo-img { height: 75px; margin-bottom: 15px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+        .society-badge h4 { font-family: 'Cinzel', serif; font-size: 2.4rem; margin: 0; line-height: 1; }
+        .society-badge span { text-transform: uppercase; font-size: 0.7rem; font-weight: 900; letter-spacing: 2.5px; margin-top: 5px; display: block;}
 
+        .society-content h3 { font-family: 'Cinzel', serif; color: var(--p-blue); font-size: 2.4rem; margin-bottom: 20px; }
+        .society-content p { color: var(--text-dark); font-size: 1.1rem; line-height: 1.85; margin: 0; opacity: 0.9; }
+
+        /* --- 3D FOUNDER SPACE --- */
+        .section { padding: 120px 10%; }
+        .founder-sec { 
+            background: linear-gradient(135deg, var(--p-green) 0%, var(--p-dark-green) 100%); 
+            color: white; display: flex; align-items: center; gap: 80px; 
+            border-radius: 32px; margin: 0 2%;
+            box-shadow: 0 40px 80px rgba(0, 51, 26, 0.3);
+        }
+        .founder-img-box { flex: 1; perspective: 1200px; }
+        .founder-img-box img { 
+            width: 100%; height: auto; border-radius: 20px; 
+            border: 3px solid var(--p-gold); 
+            box-shadow: 25px 25px 0 rgba(197, 160, 89, 0.08); 
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .founder-img-box:hover img { transform: rotateY(-12deg) rotateX(4deg) scale(1.03); box-shadow: 30px 30px 50px rgba(0,0,0,0.4); }
+
+        .founder-text { flex: 1.6; }
+        .founder-text h3 { 
+            font-family: 'Cinzel', serif; font-size: 3rem; 
+            background: linear-gradient(to bottom, var(--p-gold-light) 0%, var(--p-gold) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 25px; letter-spacing: 1px;
+        }
+        .founder-text p { font-size: 1.15rem; line-height: 1.9; opacity: 0.95; margin-bottom: 20px;}
+        .quote-signature { color: var(--p-gold); font-size: 1.2rem; font-weight: 700; margin-top: 30px; letter-spacing: 1px; font-style: italic; }
+
+        /* --- 3D INTERACTIVE ECOSYSTEM TILES --- */
+        .wings-sec { background: #020a06; color: #ddd; border-top: 1px solid rgba(255,255,255,0.03); }
+        .section-title-box { text-align: center; margin-bottom: 80px; }
+        .section-title-box h2 { 
+            font-family: 'Cinzel', serif; font-size: 3.2rem; color: #fff;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5); margin-bottom: 15px;
+        }
+        .section-title-box p { color: var(--p-gold); letter-spacing: 4px; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; }
+
+        .ecosystem-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 35px; 
+        }
+        .tile-link { text-decoration: none; }
+        .ecosystem-tile {
+            background: #05120a; padding: 60px 35px; border-radius: 24px;
+            text-align: center; color: #fff; border: 1px solid rgba(255,255,255,0.03);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .ecosystem-tile:hover { 
+            box-shadow: 0 30px 60px rgba(0, 77, 38, 0.15);
+            border-color: rgba(255,215,0,0.2);
+        }
+        .ecosystem-tile i { font-size: 3.2rem; color: var(--p-gold); margin-bottom: 30px; transition: all 0.4s ease; transform: translateZ(25px); }
+        .ecosystem-tile h4 { margin: 0; font-size: 1.35rem; text-transform: uppercase; letter-spacing: 1.5px; transform: translateZ(15px); font-weight: 700; }
+        .ecosystem-tile p { margin-top: 15px; color: #999; font-size: 0.95rem; opacity: 0.9; transform: translateZ(8px); line-height: 1.6; }
+
+        .ecosystem-tile:hover i { color: var(--white); transform: translateZ(40px) scale(1.05); filter: drop-shadow(0 0 10px var(--p-gold)); }
+
+        /* --- HIGH-PRESTIGE INTUITIVE FOOTER --- */
+        .ultimate-footer {
+            background: #000201; padding: 120px 10% 60px; color: #a6a6a6;
+            border-top: 6px solid var(--p-gold); position: relative;
+        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 70px; }
+        .footer-links h5 { font-family: 'Cinzel', serif; color: var(--p-gold); font-size: 1.4rem; margin-bottom: 35px; letter-spacing: 2px; }
+        .footer-links p { opacity: 0.85; line-height: 1.9; font-size: 0.95rem; }
+        
+        .connect-us { margin-top: 35px; display: flex; gap: 18px; flex-wrap: wrap; }
+        .social-tool-premium {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: rgba(255,255,255,0.02); display: flex;
+            align-items: center; justify-content: center;
+            color: #fff; text-decoration: none; font-size: 1.3rem;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); border: 1px solid rgba(255, 215, 0, 0.15);
+        }
         .social-tool-premium:hover { 
-            transform: translateY(-8px) translateZ(20px) scale(1.1); 
-            background: var(--p-gold); 
-            color: var(--p-blue); 
-            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4); 
-            border-color: var(--p-gold);
+            transform: translateY(-6px) rotate(360deg); 
+            background: var(--p-gold); color: var(--p-dark-green); 
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.5); 
         }
 
-        .quick-links-list {
-            list-style: none;
+        .quick-access-list { list-style: none; padding: 0; margin: 0; }
+        .quick-access-list li { margin-bottom: 18px; }
+        .quick-access-list a { color: #e6e6e6; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: all 0.3s ease; display: inline-block; }
+        .quick-access-list a:hover { color: var(--p-gold); transform: translateX(5px); }
+
+        .footer-bottom {
+            text-align: center; margin-top: 90px; padding-top: 40px;
+            border-top: 1px solid rgba(255,215,0,0.06); font-size: 0.8rem;
+            letter-spacing: 3px; opacity: 0.4; text-transform: uppercase;
         }
 
-        .quick-links-list li {
-            margin-bottom: 15px;
-            transform: translateZ(0px);
-            transition: transform 0.3s ease;
-        }
-        
-        .quick-links-list li:hover {
-            transform: translateZ(10px);
-        }
-
-        .quick-links-list a {
-            color: rgba(255,255,255,0.9);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .quick-links-list a:hover {
-            color: var(--p-gold);
-            transform: translateX(8px);
-        }
-        
-        .quick-links-list a i {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            transition: transform 0.3s ease;
-        }
-        
-        .quick-links-list a:hover i {
-            transform: scale(1.2);
-            opacity: 1;
-        }
-
-        .footer-bottom-bar {
-            text-align: center;
-            margin-top: 80px;
-            padding-top: 35px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.85rem;
-            letter-spacing: 2.5px;
-            color: rgba(255, 255, 255, 0.6);
-            text-transform: uppercase;
-            transform: translateZ(20px);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        /* MEDIA QUERIES FOR RESPONSIVENESS */
+        /* --- EXECUTIVE RESPONSIVE SCALING --- */
         @media (max-width: 992px) {
             header { padding: 15px 5%; }
-            .hero { background-attachment: scroll; min-height: 75vh; } 
-            .hero-branding-container { transform: translateZ(100px); animation: floatAnimationMobile 6s ease-in-out infinite; }
-            @keyframes floatAnimationMobile {
-                0%, 100% { transform: translateY(0px) translateZ(100px); }
-                50% { transform: translateY(-10px) translateZ(120px); }
-            }
-            .society-card { flex-direction: column; text-align: center; gap: 35px; transform: translateY(-30px) translateZ(50px) rotateX(0deg); padding: 40px 30px; }
-            .society-card:hover { transform: translateY(-35px) translateZ(60px); }
-            .society-badge { width: 100%; transform: translateZ(30px); }
-            .society-card:hover .society-badge { transform: translateZ(40px); }
-            .society-content { transform: translateZ(20px); }
-            .society-card:hover .society-content { transform: translateZ(30px); }
-            .section-founder { flex-direction: column; text-align: center; gap: 50px; padding: 80px 6%; }
-            .founder-img-box { width: 80%; max-width: 400px; transform: none !important; }
-            .founder-img-box img { transform: translateZ(30px) !important; }
-            .section-founder:hover .founder-img-box img { transform: translateZ(50px) !important; }
-            .founder-text { transform: translateZ(40px) !important; }
-            .section-founder:hover .founder-text { transform: translateZ(60px) !important; }
-            .wings-section { padding: 80px 5%; }
-            .tool-card:hover { transform: translateY(-10px) translateZ(50px) rotateX(0deg); }
+            .premium-society-card-container { padding: 100px 5% 80px; margin-top: 0; border-radius: 0; }
+            .society-card { flex-direction: column; text-align: center; gap: 35px; padding: 40px 30px; }
+            .founder-sec { flex-direction: column; text-align: center; gap: 50px; margin: 0; padding: 80px 5%; border-radius: 0;}
+            .founder-img-box { width: 75%; max-width: 380px; }
+            .section { padding: 100px 5%; }
+            .ecosystem-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+            .ultimate-footer { padding: 100px 5% 40px; }
             .footer-grid { gap: 50px; }
-            .premium-footer { padding: 80px 8% 40px; }
         }
 
         @media (max-width: 480px) {
             .header-text .m-name { font-size: 1.1rem; }
-            .header-text .m-sub { font-size: 0.6rem; }
-            .nav-home-btn { padding: 8px 18px; font-size: 0.8rem; }
-            .hero { min-height: 70vh; }
-            .hero-logo-large { height: 100px; }
-            .p-name-main { font-size: 2rem; letter-spacing: 4px; }
-            .society-card { padding: 30px 20px; gap: 25px; }
-            .society-logo-img { height: 60px; }
-            .society-badge h4 { font-size: 1.8rem; }
-            .tool-grid { grid-template-columns: 1fr; gap: 30px; }
-            .tool-card { padding: 40px 25px; }
-            .premium-footer { padding: 60px 5% 30px; }
-            .footer-links h5 { font-size: 1.2rem; }
-            .connect-container { gap: 12px; }
-            .social-tool-premium { width: 45px; height: 45px; font-size: 1.2rem; }
+            .p-name-main { font-size: 1.9rem; letter-spacing: 4px; }
+            .p-name-sub { font-size: 0.75rem; }
+            .society-badge { min-width: 100%; }
+            .ecosystem-grid { grid-template-columns: 1fr; }
+            .premium-home-btn { padding: 8px 18px; font-size: 0.8rem; }
+            .section-title-box h2 { font-size: 2.2rem; }
+            .founder-text h3 { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 3D PARTICLE BACKGROUND CONTAINER -->
-    <div id="particles-js"></div>
+    <!-- Ultra Premium Branded Preloader -->
+    <div id="preloader">
+        <img src="logo.png" alt="Paramount">
+    </div>
 
-    <!-- BRANDED INTERACTIVE HEADER -->
+    <!-- Executive Architectural Navigation -->
     <header>
         <a href="index.html" class="header-brand">
             <img src="logo.png" alt="Paramount Logo" class="header-logo">
             <div class="header-text">
                 <span class="m-name">PARAMOUNT</span>
-                <span class="m-sub">English Medium High School</span>
+                <span class="m-branch">English Medium High School</span>
             </div>
         </a>
         <nav>
-            <a href="index.html" class="nav-home-btn"><i class="fas fa-home"></i> HOME</a>
+            <a href="index.html" class="premium-home-btn"><i class="fas fa-home"></i> HOME</a>
         </nav>
     </header>
 
-    <!-- 3D KINETIC HERO SECTION -->
+    <!-- Ultra-Premium Abstract Light Matrix Hero -->
     <section class="hero">
-        <div class="hero-branding-container">
-            <img src="logo.png" alt="Paramount Logo" class="hero-logo-large">
+        <div id="particles-js"></div>
+        <div class="hero-branding-container" data-aos="fade-up" data-aos-duration="1500">
+            <div class="hero-logo-large-box">
+                <img src="logo.png" alt="Paramount Logo" class="hero-logo-large">
+            </div>
             <div class="hero-school-name">
                 <span class="p-name-main">PARAMOUNT</span>
                 <span class="p-name-sub">ENGLISH MEDIUM HIGH SCHOOL</span>
             </div>
             <div class="hero-gold-line"></div>
             <div class="hero-title">
-                <p>Institutional Legacy</p>
                 <h2>ESTABLISHED IN : 2019</h2>
             </div>
         </div>
     </section>
 
-    <!-- NEW: SOCIETY MANAGEMENT GLASS SECTION -->
-    <section class="society-section">
-       <div class="society-card">
+    <!-- Society Administrative Segment -->
+    <section class="premium-society-card-container">
+        <div class="society-card" data-aos="zoom-in" data-aos-duration="1200">
             <div class="society-badge">
-               <img src="society_logo.png" alt="ZeroSeven Society Logo" class="society-logo-img">
+                <img src="society_logo.png" alt="ZeroSeven Society Logo" class="society-logo-img">
                 <h4>07</h4>
                 <span>ZeroSeven Society</span>
             </div>
             <div class="society-content">
                 <h3>Governed by ZeroSeven Society</h3>
-                <p>Paramount English Medium High School is proudly managed and powered by the prestigious <strong>ZeroSeven Society</strong>. Under this elite governance, the institution receives advanced strategic administration, premium infrastructural updates, and a futuristic academic outlook that shapes raw potential into impactful real-world leaders.</p>
+                <p>Paramount English Medium High School operates under the elite administrative framework and strategic direction of the prestigious <strong>ZeroSeven Society</strong>. This unified governance brings world-class digital management, cutting-edge campus systems, and systemic educational engineering to foster multi-dimensional brilliance and elite leadership in your children.</p>
             </div>
         </div>
     </section>
 
-    <!-- CINEMATIC FOUNDER VISION -->
-    <section class="section-founder">
-        <div class="founder-img-box">
+    <!-- Sculpted Founder Panel -->
+    <section class="section founder-sec">
+        <div class="founder-img-box" data-aos="fade-right" data-aos-duration="1200">
             <img src="chairman.png" alt="Mr. Shaik Ahmad">
         </div>
-        <div class="founder-text">
+        <div class="founder-text" data-aos="fade-left" data-aos-duration="1200">
             <h3>The Founder's Vision</h3>
-            <p>Under the visionary leadership of <strong>Mr. Shaik Ahmad</strong>, Paramount English Medium High School has emerged as a beacon of academic brilliance in Warangal. Since 2019, our commitment remains unshakable: providing a safe, tech-enabled, and ethically grounded environment where your child is not just a student, but a future leader.</p>
-            <div class="quote-badge">
-                “We don't just teach, we inspire.” — SHAIK AHMAD
-            </div>
+            <p>Under the visionary leadership of 'Mr. Shaik Ahmad', Paramount English Medium High School has emerged as a beacon of academic brilliance in Warangal. Since 2019, our commitment remains unshakable: providing a safe, tech-enabled, and ethically grounded environment where your child is not just a student, but a future leader.</p>
+            <div class="quote-signature">“We don't just teach, we inspire.” — SHAIK AHMAD.</div>
         </div>
     </section>
 
-    <!-- SPECIALIZED WINGS GRID WITH 3D EFFECT -->
-    <section class="wings-section">
-        <div class="section-header">
+    <!-- 3D Ecosystem Architecture Wings -->
+    <section class="section wings-sec">
+        <div class="section-title-box" data-aos="fade-up" data-aos-duration="1200">
             <h2>Our Specialized Wings</h2>
             <p>THE PARAMOUNT EDUCATIONAL ECOSYSTEM</p>
         </div>
-        <div class="tool-grid">
-            <a href="index.html" class="tool-card">
-                <div class="icon-wrapper"><i class="fas fa-university"></i></div>
-                <h4>PARAMOUNT E/M HIGH SCHOOL</h4>
-                <p>Nursery to IXth English Medium School exceptional standard education.</p>
+        <div class="ecosystem-grid">
+            <a href="index.html" class="tile-link" data-aos="fade-up" data-aos-delay="50">
+                <div class="ecosystem-tile" data-tilt data-tilt-max="12" data-tilt-glare data-tilt-max-glare="0.15">
+                    <i class="fas fa-university"></i>
+                    <h4>PARAMOUNT E/M HIGH SCHOOL</h4>
+                    <p>Nursery to High School exceptional standard education.</p>
+                </div>
             </a>
-            <a href="#" class="tool-card">
-                <div class="icon-wrapper"><i class="fas fa-compass-drafting"></i></div>
-                <h4>POLYCET & TSRJC CET</h4>
-                <p>Precision-focused technical entrance examination coaching.</p>
+            <a href="#" class="tile-link" data-aos="fade-up" data-aos-delay="150">
+                <div class="ecosystem-tile" data-tilt data-tilt-max="12" data-tilt-glare data-tilt-max-glare="0.15">
+                    <i class="fas fa-compass-drafting"></i>
+                    <h4>POLYCET & TSRJC CET</h4>
+                    <p>Precision-focused technical entrance examination coaching.</p>
+                </div>
             </a>
-            <a href="#" class="tool-card">
-                <div class="icon-wrapper"><i class="fas fa-chart-gantt"></i></div>
-                <h4>SI & PC Academy</h4>
-                <p>Elite physical and cognitive training for future enforcement officers.</p>
+            <a href="#" class="tile-link" data-aos="fade-up" data-aos-delay="250">
+                <div class="ecosystem-tile" data-tilt data-tilt-max="12" data-tilt-glare data-tilt-max-glare="0.15">
+                    <i class="fas fa-chart-gantt"></i>
+                    <h4>SI & PC Academy</h4>
+                    <p>Elite physical and cognitive training for future law enforcement officers.</p>
+                </div>
             </a>
-            <a href="#" class="tool-card">
-                <div class="icon-wrapper"><i class="fas fa-hockey-puck"></i></div>
-                <h4>Hockey Academy</h4>
-                <p>Professional, Olympic-standard national level sports training.</p>
+            <a href="#" class="tile-link" data-aos="fade-up" data-aos-delay="350">
+                <div class="ecosystem-tile" data-tilt data-tilt-max="12" data-tilt-glare data-tilt-max-glare="0.15">
+                    <i class="fas fa-hockey-puck"></i>
+                    <h4>Hockey Academy</h4>
+                    <p>Professional, Olympic-standard national level sports training.</p>
+                </div>
             </a>
-            <a href="#" class="tool-card">
-                <div class="icon-wrapper"><i class="fas fa-hand-holding-medical"></i></div>
-                <h4>Live Strong Health Care</h4>
-                <p>Transformative youth health, nutritional support, and fitness coaching.</p>
+            <a href="#" class="tile-link" data-aos="fade-up" data-aos-delay="450">
+                <div class="ecosystem-tile" data-tilt data-tilt-max="12" data-tilt-glare data-tilt-max-glare="0.15">
+                    <i class="fas fa-hand-holding-medical"></i>
+                    <h4>Live Strong Health Care</h4>
+                    <p>Transformative youth health, nutritional support, and fitness coaching.</p>
+                </div>
             </a>
-            <a href="#" class="tool-card">
-                <div class="icon-wrapper"><i class="fas fa-chalkboard-user"></i></div>
-                <h4>Daily Tutorials</h4>
-                <p>Complete conceptual academic support from Nursery to Class IXth.</p>
+            <a href="#" class="tile-link" data-aos="fade-up" data-aos-delay="550">
+                <div class="ecosystem-tile" data-tilt data-tilt-max="12" data-tilt-glare data-tilt-max-glare="0.15">
+                    <i class="fas fa-chalkboard-user"></i>
+                    <h4>Daily Tutorials</h4>
+                    <p>Complete conceptual academic support from Nursery to Class 10th.</p>
+                </div>
             </a>
         </div>
     </section>
 
-    <!-- ULTRA PREMIUM HIGH-CLICKABLE FOOTER -->
-    <footer class="premium-footer">
+    <!-- High-Definition Luxury Footer -->
+    <footer class="ultimate-footer">
         <div class="footer-grid">
             <div class="footer-links">
                 <h5>Connect With Us</h5>
                 <p style="margin-bottom: 20px;">Stay updated with the latest campus news, structural milestones, and achievements through our official premium social portals.</p>
-                <div class="connect-container">
-                    <a href="https://www.facebook.com/share/1bWb7kmiid/?mibextid=wwXIfr" target="_blank" class="social-tool-premium" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://instagram.com/paramount.07" target="_blank" class="social-tool-premium" title="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://wa.me/919652188807" target="_blank" class="social-tool-premium" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a href="tel:+919652188807" class="social-tool-premium" title="Call Us"><i class="fas fa-phone-alt"></i></a>
-                    <a href="mailto:academicsupport@paramountschooledu.in" class="social-tool-premium" title="Email Us"><i class="fas fa-envelope"></i></a>
+                <div class="connect-us">
+                    <a href="https://www.facebook.com/share/1bWb7kmiid/?mibextid=wwXIfr" target="_blank" class="social-tool-premium"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://instagram.com/paramount.07" target="_blank" class="social-tool-premium"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/919652188807" target="_blank" class="social-tool-premium"><i class="fab fa-whatsapp"></i></a>
+                    <a href="tel:+919652188807" class="social-tool-premium"><i class="fas fa-phone-alt"></i></a>
+                    <a href="mailto:academicsupport@paramountschooledu.in" class="social-tool-premium"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
-            
             <div class="footer-links">
                 <h5>Our Campus</h5>
-                <div class="footer-info-item" style="margin-top: 10px;">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <p>Pensionpur, Thimmapur (H),<br>Khila Warangal, Warangal,<br>Telangana - 506005</p>
-                </div>
-                <div class="footer-info-item">
-                    <i class="fas fa-shield-halved"></i>
-                    <p>Management Hub: ZeroSeven Society Core Wing</p>
-                </div>
+                <p>Pensionpur, Thimmapur (H),<br> Khila Warangal, Warangal,<br> Telangana - 506005</p>
+                <p style="margin-top: 15px;"><i class="fas fa-cube" style="color:var(--p-gold); margin-right: 8px;"></i>ZeroSeven Society Administrative Wing</p>
             </div>
-
             <div class="footer-links">
-                <h5>Quick Access</h5>
-                <ul class="quick-links-list">
-                    <li><a href="Student Portal.html"><i class="fas fa-chevron-right"></i> Student Portal Login</a></li>
-                    <li><a href="admissions.html"><i class="fas fa-chevron-right"></i> 2026-27 Admissions</a></li>
-                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Return to Home</a></li>
+                <h5>Quick Access Hub</h5>
+                <ul class="quick-access-list">
+                    <li><a href="Student Portal.html"><i class="fas fa-chevron-right" style="color:var(--p-gold); font-size:0.8rem; margin-right: 8px;"></i> Student Portal Login</a></li>
+                    <li><a href="admissions.html"><i class="fas fa-chevron-right" style="color:var(--p-gold); font-size:0.8rem; margin-right: 8px;"></i> 2026-27 Admissions Open</a></li>
+                    <li><a href="index.html"><i class="fas fa-chevron-right" style="color:var(--p-gold); font-size:0.8rem; margin-right: 8px;"></i> Return to Home Platform</a></li>
                 </ul>
             </div>
         </div>
-        
-        <div class="footer-bottom-bar">
+        <div class="footer-bottom">
             © 2026 PARAMOUNT ENGLISH MEDIUM HIGH SCHOOL. Proudly Powered by ZeroSeven Society. ALL RIGHTS RESERVED.
         </div>
     </footer>
 
-    <!-- Particles.js Library -->
+    <!-- --- REQUIRED PREMIUM ANIMATION FRAMEWORKS --- -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
+
     <script>
-        /* Particles.js Configuration */
-        particlesJS('particles-js', {
-            "particles": {
-                "number": {
-                    "value": 40,
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": ["#ffd700", "#004d26", "#003366"]
-                },
-                "shape": {
-                    "type": "image",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    },
-                    "polygon": {
-                        "nb_sides": 5
-                    },
-                    "image": {
-                        "src": "logo.png",
-                        "width": 100,
-                        "height": 100
-                    }
-                },
-                "opacity": {
-                    "value": 0.15,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 1,
-                        "opacity_min": 0.05,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 25,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 2,
-                        "size_min": 10,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": false,
-                    "distance": 150,
-                    "color": "#ffffff",
-                    "opacity": 0.4,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 1.5,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": true,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
+        // Smooth Preloader Closer
+        $(window).on('load', function() {
+            $('#preloader').fadeOut(800);
+        });
+
+        // Initialize On-Scroll Layout Animations
+        AOS.init({
+            once: true,
+            duration: 1000
+        });
+
+        // Initialize 3D Vector Tilt on Ecosystem Cards
+        VanillaTilt.init(document.querySelectorAll(".ecosystem-tile"), {
+            max: 12,
+            speed: 500,
+            glare: true,
+            "max-glare": 0.15,
+        });
+
+        // Initialize Architectural Gold Particles Matrix Background
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 90, density: { enable: true, value_area: 800 } },
+                color: { value: ["#ffd700", "#ffffff", "#004d26"] },
+                shape: { type: "circle" },
+                opacity: { value: 0.6, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } },
+                size: { value: 3.5, random: true, anim: { enable: true, speed: 1.5, size_min: 0.5, sync: false } },
+                line_linked: { enable: true, distance: 140, color: "#ffd700", opacity: 0.25, width: 1 },
+                move: { enable: true, speed: 1.2, direction: "none", random: true, straight: false, out_mode: "out", bounce: false }
             },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "bubble"
-                    },
-                    "onclick": {
-                        "enable": true,
-                        "mode": "repulse"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 400,
-                        "line_linked": {
-                            "opacity": 1
-                        }
-                    },
-                    "bubble": {
-                        "distance": 250,
-                        "size": 35,
-                        "duration": 2,
-                        "opacity": 0.3,
-                        "speed": 3
-                    },
-                    "repulse": {
-                        "distance": 300,
-                        "duration": 0.4
-                    },
-                    "push": {
-                        "particles_nb": 4
-                    },
-                    "remove": {
-                        "particles_nb": 2
-                    }
-                }
+            interactivity: {
+                detect_on: "canvas",
+                events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true },
+                modes: { grab: { distance: 180, line_linked: { opacity: 0.4 } }, push: { particles_nb: 3 } }
             },
-            "retina_detect": true
+            retina_detect: true
         });
     </script>
 </body>
